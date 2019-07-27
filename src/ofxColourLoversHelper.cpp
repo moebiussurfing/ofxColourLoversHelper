@@ -151,7 +151,8 @@ void ofxColourLoversHelper::updateColourLab(){
     int padding = 5;
 //    int canvas_h = 500;
 
-    int width = size.x;
+//    int width = size.x;
+    int width = size.x/2;
 //    colourLab = new ofxUIScrollableCanvas(position.x, position.y+size.y+padding, size.x, canvas_h);
     colourLab = new ofxUIScrollableCanvas(position.x+size.x+padding, 0, width, ofGetHeight());
 
@@ -181,12 +182,15 @@ void ofxColourLoversHelper::updateColourLab(){
     int row=0;
 
     int startY = 50;
-    float guiWidth = 198;//ofxUI suddenly introduced odd padding, using x 0 and full width will hide btn. Hmm....
-//    float guiWidth = width-2or;//ofxUI suddenly introduced odd padding, using x 0 and full width will hide btn. Hmm....
+    //ofxUI suddenly introduced odd padding, using x 0 and full width will hide btn. Hmm....
+//    float guiWidth = 198;
+    float guiWidth = width-2;
 
     // colourLab->centerWidgets();
     colourLab->addWidgetDown(new ofxUILabel(lastSearch, OFX_UI_FONT_LARGE));
     colourLab->addWidgetDown(new ofxUISpacer(guiWidth-20, 2));
+
+    //-
 
 //    // 1. make sizes like in web palette
 //    for(int i=0;i<palettes.size();i++){
@@ -209,6 +213,8 @@ void ofxColourLoversHelper::updateColourLab(){
 //        }
 //    }
 
+    //-
+
     // 2. make all sizes the same in palette
     for(int i=0;i<palettes.size();i++){
         int currX = 1;
@@ -219,8 +225,8 @@ void ofxColourLoversHelper::updateColourLab(){
         {
             int numOfColorsInPalette = palettes[i].colours.size();
 
-            //For set colour issues, make sure to set fill colour after widget been added
-//            currW = palettes[i].colorWidths[c]*guiWidth;
+            // For set colour issues, make sure to set fill colour after widget been added
+            //currW = palettes[i].colorWidths[c]*guiWidth;
             currW = guiWidth / numOfColorsInPalette;
 
             ofxUIButton * btn = new ofxUIButton(("CL_"+ofToString(i)+"_"+ofToString(c)),false,currW,cdim,currX,i*(cdim+4)+startY);
@@ -269,7 +275,8 @@ void ofxColourLoversHelper::draw(){
 void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     int kind = e.widget->getKind();
-    cout << "got event from: " << name << endl;
+    ofLogNotice("ofxColourLoversHelper") << "got event from: " << name;
+    ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
 
     if(name == "search")
     {
@@ -278,7 +285,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
         ofxColourLovers::searchPalettes(textinput->getTextString(),40);
     }
 
-    if(name == "loverId")
+    else if(name == "loverId")
     {
         ofxUITextInput *textinput = (ofxUITextInput *) e.widget;
         lastSearch = textinput->getTextString();
@@ -287,14 +294,14 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
         ofxColourLovers::getTopPalettesForLover(s,40);
     }
 
-    if(name == "paletteId")
+    else if(name == "paletteId")
     {
         ofxUITextInput *textinput = (ofxUITextInput *) e.widget;
         lastSearch = textinput->getTextString();
         ofxColourLovers::getPalette(lastSearch);
     }
 
-    if(name=="FAVOURITE" && currPalette>-1)
+    else if(name=="FAVORITE" && currPalette>-1)
     {
         string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
         palettes[currPalette].save(str);
@@ -309,7 +316,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     {
         loadFavourites();
     }
-    if(name == "History")
+    else if(name == "History")
     {
         loadHistory();
     }

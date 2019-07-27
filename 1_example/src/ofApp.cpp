@@ -12,6 +12,11 @@ void ofApp::setup(){
     ColourLoversHelper.setPalette_BACK(myPalette);
     ColourLoversHelper.setPalette_Name_BACK(myPalette_Name);
 
+    myColor = ofColor::white;
+    myPalette.resize(2);
+    myPalette[0] = ofColor::white;
+    myPalette[0] = ofColor::black;
+    myPalette_Name = "NOT LOADED";
 }
 
 //--------------------------------------------------------------
@@ -23,25 +28,26 @@ void ofApp::update(){
 void ofApp::draw(){
     ColourLoversHelper.draw();
 
-    int x, y, w, h;
+    int x, y, w, h, pad;
     x = 10;
-    y = 750;
+    y = 10;
     w = h = 20;
+    pad = 2;
 
     ofPushStyle();
     ofFill();
-    ofSetColor(myColor);
 
+    ofSetColor(myColor);
     ofDrawRectangle(ofRectangle(x,y,w,h));
 
-    y = 775;
+    y += (h+pad);
     for (int i=0; i<myPalette.size(); i++)
     {
         ofSetColor(myPalette[i]);
         ofDrawRectangle(ofRectangle(x+i*w,y,w,h));
     }
 
-    y = 820;
+    y += 2*(h+pad);
     ofDrawBitmapStringHighlight(myPalette_Name, x, y, ofColor::black, ofColor::white);
 
     ofPopStyle();
