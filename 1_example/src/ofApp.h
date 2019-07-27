@@ -23,6 +23,7 @@ class ofApp: public ofBaseApp{
 		
 		ofxColourLoversHelper ColourLoversHelper;
 
+		string myPalette_Name = "";
 		ofColor myColor;
 		vector<ofColor> myPalette;
 };

@@ -13,6 +13,12 @@ void ofxColourLoversHelper::setPalette_BACK(vector<ofColor> &p)
 }
 
 //--------------------------------------------------------------
+void ofxColourLoversHelper::setPalette_Name_BACK(string &n)
+{
+    myPalette_Name_BACK = &n;
+}
+
+//--------------------------------------------------------------
 ofxColourLoversHelper::ofxColourLoversHelper()
 {
     addKeysListeners();
@@ -41,7 +47,7 @@ void ofxColourLoversHelper::setup(){
     gui = new ofxUICanvas(position.x, position.y, size.x, size.y);
 
     gui->setFont("assets/fonts/PragmataProR_0822.ttf");                     //This loads a new font and sets the GUI font
-    gui->setFontSize(OFX_UI_FONT_LARGE, 7);            //These call are optional, but if you want to resize the LARGE, MEDIUM, and SMALL fonts, here is how to do it.
+    gui->setFontSize(OFX_UI_FONT_LARGE, 6);            //These call are optional, but if you want to resize the LARGE, MEDIUM, and SMALL fonts, here is how to do it.
     gui->setFontSize(OFX_UI_FONT_MEDIUM, 6);
     gui->setFontSize(OFX_UI_FONT_SMALL, 6);
 
@@ -303,14 +309,24 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
     ColourLovePalette p = palettes[pId];
 
 //    bg = p.colours[cId];
-    ofLog() << "colourLabEvent: "<<name<<" "<<kind <<" "<<uid<<" colour :"<< p.colours[cId]<<" name: "<<p.title<<endl;
+    ofLog() << "colourLabEvent: "<<name<<" "<<kind <<" "<<uid<<" colour: "<< p.colours[cId]<<" name: "<<p.title<<endl;
 
+    //-
 
     // set BACK color clicked
-//    (*myColor_BACK) = ( p.colours[cId] );
-    myColor_BACK->set( p.colours[cId] );
+    if (myColor_BACK!=nullptr)
+    {
+        myColor_BACK->set( p.colours[cId] );
+        //    (*myColor_BACK) = ( p.colours[cId] );
+    }
 
-// set palette
+    // set BACK name clicked
+    if (myPalette_Name_BACK!=nullptr)
+    {
+        (*myPalette_Name_BACK) = p.title;
+    }
+
+    // set palette
     setPalette(pId);
 }
 
@@ -323,91 +339,117 @@ void ofxColourLoversHelper::setPalette(int pId){
     }
     currPalette = pId;
 
-    if(paletteView){
-        ofRemoveListener(paletteView->newGUIEvent, this, &ofxColourLoversHelper::colourPaletteEvent);
-        delete paletteView;
-        paletteView = 0;
-    }
-    paletteView  = new ofxUICanvas(palettesX, 0, ofGetWidth()-palettesX, ofGetHeight());
-    ofAddListener(paletteView->newGUIEvent, this, &ofxColourLoversHelper::colourPaletteEvent);
-
-    int cdist = 1;
-    int col=0;
-    int row=0;
-
-    int startY = 50;
-    float guiWidth = ofGetWidth()-palettesX-2;
-
-    int colourNum = 20;
+//    // create preview gradient
+//    if(paletteView)
+//    {
+//        ofRemoveListener(paletteView->newGUIEvent, this, &ofxColourLoversHelper::colourPaletteEvent);
+//        delete paletteView;
+//        paletteView = 0;
+//    }
+////    paletteView  = new ofxUICanvas(palettesX, 0, ofGetWidth()-palettesX, ofGetHeight());
+//    paletteView  = new ofxUICanvas(palettesX, 0, 300-palettesX, 400);
+//
+//    ofAddListener(paletteView->newGUIEvent, this, &ofxColourLoversHelper::colourPaletteEvent);
+//
+//    int cdist = 1;
+//    int col=0;
+//    int row=0;
+//
+//    int startY = 50;
+////    float guiWidth = ofGetWidth()-palettesX-2;
+//    float guiWidth = 300-palettesX-2;
+//
+//    int colourNum = 20;
     ColourLovePalette p = palettes[pId];
 
-    paletteView->addWidgetRight(new ofxUILabel(p.id+" - ", OFX_UI_FONT_LARGE));
-    paletteView->addWidgetRight(new ofxUILabel(p.title, OFX_UI_FONT_LARGE));
+    //--
 
-    paletteView->addWidget(new ofxUIImageButton(800,5,30,30,true,"GUI/images/fav.png","Favourite"));
-
-    paletteView->addWidgetDown(new ofxUISpacer(400, 2));
-
-    colourRanges.clear();
-
-    float cdim = (float)(ofGetHeight()-startY )/(float)colourNum;
-
-    vector<ofColor> colourRange;
-
-    int currX = 1;
-    int step = 2;
-    string hex;
-
-    for(int i=0;i<p.colours.size();i++){
-        float currW = 0;
-        currW = p.colorWidths[i]*guiWidth;
-
-        ofColor shade;
-        shade.set(p.colours[i].r,p.colours[i].g,p.colours[i].b);
-
-        int startBright = shade.getBrightness()+colourNum*step/2;
-        //cap within limits
-        startBright = max(0,startBright);
-        startBright = min(255-colourNum*step,startBright);
-
-        shade.setBrightness(startBright);
-
-        for(int c=0;c<colourNum;c++){
-            if(c==0){
-                hex = ofToString(p.colours[i]);
-            }else{
-                shade.setBrightness(shade.getBrightness()-step);
-                hex = ofToString(shade);
-            }
-
-
-            ofxUIButton * btn = new ofxUIButton(hex,false,currW,cdim,currX,(c)*(cdim)+startY);
-
-            // 
-
-            btn->setLabelVisible(0);
-            paletteView->addWidget(btn);
-            btn->setDrawFill(true);
-            if(c==0){
-                btn->setColorFill(p.colours[i]);
-                btn->setColorBack(p.colours[i]);
-            }else{
-                btn->setColorFill(shade);
-                btn->setColorBack(shade);
-            }
-
-
-            btn->setDrawBack(true);
-            colourRanges.push_back(btn);
-        }
-        currX+=currW;
-        /*if((cdist+cdim)*col+cdim<guiWidth-20){
-         col++;
-         }else{*/
-        //  col=0;
-        // row++;
-        //}
+    // get palettes BACK
+    int sizePalette = p.colours.size();
+    if (sizePalette>0 && myPalette_BACK!= nullptr)
+    {
+        myPalette_BACK->clear();
+        myPalette_BACK->resize(sizePalette);
+        (*myPalette_BACK) = p.colours;
     }
+
+    //--
+
+//    // create preview gradient
+//    paletteView->addWidgetRight(new ofxUILabel(p.id+" - ", OFX_UI_FONT_LARGE));
+//    paletteView->addWidgetRight(new ofxUILabel(p.title, OFX_UI_FONT_LARGE));
+//    paletteView->addWidget(new ofxUIImageButton(800,5,30,30,true,"GUI/images/fav.png","Favourite"));
+//    paletteView->addWidgetDown(new ofxUISpacer(400, 2));
+
+    //-
+
+//    // create preview gradient
+//
+//    colourRanges.clear();
+//
+////    float cdim = (float)(ofGetHeight()-startY )/(float)colourNum;
+//    float cdim = (float)(400-startY )/(float)colourNum;
+//
+//    vector<ofColor> colourRange;
+//
+//    int currX = 1;
+//    int step = 2;
+//    string hex;
+//
+//    for(int i=0;i<p.colours.size();i++)
+//    {
+//        float currW = 0;
+//        currW = p.colorWidths[i]*guiWidth;
+//
+//        ofColor shade;
+//        shade.set(p.colours[i].r,p.colours[i].g,p.colours[i].b);
+//
+//        int startBright = shade.getBrightness()+colourNum*step/2;
+//        //cap within limits
+//        startBright = max(0,startBright);
+//        startBright = min(255-colourNum*step,startBright);
+//
+//        shade.setBrightness(startBright);
+//
+//        for(int c=0;c<colourNum;c++)
+//        {
+//            if(c==0){
+//                hex = ofToString(p.colours[i]);
+//            }else{
+//                shade.setBrightness(shade.getBrightness()-step);
+//                hex = ofToString(shade);
+//            }
+//
+//
+//            ofxUIButton * btn = new ofxUIButton(hex,false,currW,cdim,currX,(c)*(cdim)+startY);
+//
+//            //
+//
+//            btn->setLabelVisible(0);
+//            paletteView->addWidget(btn);
+//            btn->setDrawFill(true);
+//            if(c==0){
+//                btn->setColorFill(p.colours[i]);
+//                btn->setColorBack(p.colours[i]);
+//            }else{
+//                btn->setColorFill(shade);
+//                btn->setColorBack(shade);
+//            }
+//
+//
+//            btn->setDrawBack(true);
+//            colourRanges.push_back(btn);
+//        }
+//        currX+=currW;
+//        /*if((cdist+cdim)*col+cdim<guiWidth-20){
+//         col++;
+//         }else{*/
+//        //  col=0;
+//        // row++;
+//        //}
+//    }
+
+    //--
 
     //gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));         
 }
@@ -427,8 +469,10 @@ void ofxColourLoversHelper::colourPaletteEvent(ofxUIEventArgs &e){
         int r = ofToInt(seg[0]);
         int g = ofToInt(seg[1]);
         int b = ofToInt(seg[2]);
+
 //        bg.set(r,g,b);
 //        bgLabel->setLabel("BG: "+ofxColourLovers::hexToWeb(bg));
+
         ofLog()<<"colourPaletteEvent: "<<r<<" g "<<g <<" b "<<b <<endl;
     }
 }

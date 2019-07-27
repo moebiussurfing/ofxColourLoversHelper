@@ -25,8 +25,10 @@ public:
 
     ofColor *myColor_BACK;
     vector<ofColor> *myPalette_BACK;
+    string *myPalette_Name_BACK;
     void setColor_BACK(ofColor &c);
     void setPalette_BACK(vector<ofColor> &p);
+    void setPalette_Name_BACK(string &n);
 
 
     //---
