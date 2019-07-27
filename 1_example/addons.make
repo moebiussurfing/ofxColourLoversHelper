@@ -1,0 +1,8 @@
+ofxColourLovers
+ofxColourLoversHelper
+ofxColourTheory
+ofxHttpUtils
+ofxPoco
+ofxRectangleUtils
+ofxUI
+ofxXmlSettings
