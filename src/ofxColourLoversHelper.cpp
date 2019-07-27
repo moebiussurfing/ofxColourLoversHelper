@@ -69,13 +69,16 @@ void ofxColourLoversHelper::setup(){
     gui->addWidgetDown(new ofxUILabelButton("Favs",false, 84, dim));
     gui->addWidgetRight(new ofxUILabelButton( "History",false, 84, dim));
 
+    gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
+    gui->addWidgetDown(new ofxUILabelButton("FAVORITE",false, 84, dim));
+
 //    bgLabel = new ofxUILabel("BG: "+ofxColourLovers::hexToWeb(bg), OFX_UI_FONT_MEDIUM);
 //    gui->addWidgetDown(bgLabel);
 
     //getTopPalettesForLover
     //searchPalettes
 
-    //    gui->addWidgetDown(new ofxUILabel("BUTTONS", OFX_UI_FONT_MEDIUM)); 
+    //    gui->addWidgetDown(new ofxUILabel("BUTTONS", OFX_UI_FONT_MEDIUM));
 
     currPalette=-1;
     paletteView = 0;
@@ -95,9 +98,9 @@ void ofxColourLoversHelper::setup(){
         colourLab->addSlider("SLIDER " +ofToString(i), 0, 100, i*3.3, length-xInit, dim);
         colourLab->addSpacer(length-xInit, 2);
     }
-    
+
     vector<ofxUIWidget*> spacers = colourLab->getWidgetsOfType(OFX_UI_WIDGET_SPACER);
-    
+
     for(int i = 0; i < spacers.size(); i++)
     {
         ofxUISpacer *s = (ofxUISpacer *) spacers[i];
@@ -134,17 +137,27 @@ void ofxColourLoversHelper::colourLoveEvent(ColourLoveEvent &e) {
 //--------------------------------------------------------------
 void ofxColourLoversHelper::updateColourLab(){
 
-    if(colourLab){
+    if(colourLab)
+    {
         ofRemoveListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
-
         delete colourLab;
         colourLab = 0;
     }
+
     int width = 200;
-
     colourLab = new ofxUIScrollableCanvas(width+20, 0, width, ofGetHeight());
-    colourLab->setScrollableDirections(false, true);
+    int padding = 5;
+    int canvas_h = 500;
+//    int width = size.x;
+//    colourLab = new ofxUIScrollableCanvas(position.x, position.y+size.y+padding, size.x, canvas_h);
+//    colourLab = new ofxUIScrollableCanvas(position.x+size.x+padding, position.y, size.x, canvas_h);
 
+    colourLab->setFont("assets/fonts/PragmataProR_0822.ttf");                     //This loads a new font and sets the GUI font
+    colourLab->setFontSize(OFX_UI_FONT_LARGE, 6);            //These call are optional, but if you want to resize the LARGE, MEDIUM, and SMALL fonts, here is how to do it.
+    colourLab->setFontSize(OFX_UI_FONT_MEDIUM, 6);
+    colourLab->setFontSize(OFX_UI_FONT_SMALL, 6);
+
+    colourLab->setScrollableDirections(false, true);
     colourLab->setScrollAreaToScreenHeight();
     // colourLab->setScrollAreaToScreen();
     //colourLab->autoSizeToFitWidgets();
@@ -166,6 +179,7 @@ void ofxColourLoversHelper::updateColourLab(){
 
     int startY = 50;
     float guiWidth = 198;//ofxUI suddenly introduced odd padding, using x 0 and full width will hide btn. Hmm....
+//    float guiWidth = width-2or;//ofxUI suddenly introduced odd padding, using x 0 and full width will hide btn. Hmm....
 
     // colourLab->centerWidgets();
     colourLab->addWidgetDown(new ofxUILabel(lastSearch, OFX_UI_FONT_LARGE));
@@ -277,6 +291,15 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
         ofxColourLovers::getPalette(lastSearch);
     }
 
+    if(name=="FAVOURITE" && currPalette>-1)
+    {
+        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
+        palettes[currPalette].save(str);
+        ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
+    }
+
+    //-
+
     currPalette=-1;
 
     if(name == "Favs")
@@ -289,13 +312,14 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     }
 }
 
+//--------------------------------------------------------------
+void ofxColourLoversHelper::nextPalette() {
+
+}
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
-    //if(mouseDown){
-    //    //gets event on both down and up
-    //   // return;
-    //}
+
     string name = e.widget->getName();
     int kind = e.widget->getKind();
     int uid = e.widget->getID();
@@ -308,8 +332,7 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
     int cId = ofToInt(seg[2]);
     ColourLovePalette p = palettes[pId];
 
-//    bg = p.colours[cId];
-    ofLog() << "colourLabEvent: "<<name<<" "<<kind <<" "<<uid<<" colour: "<< p.colours[cId]<<" name: "<<p.title<<endl;
+    ofLogNotice("ofxColourLoversHelper") << "colourLabEvent: "<<name<<" "<<kind <<" "<<uid<<" colour: "<< p.colours[cId]<<" name: "<<p.title;
 
     //-
 
@@ -317,7 +340,6 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
     if (myColor_BACK!=nullptr)
     {
         myColor_BACK->set( p.colours[cId] );
-        //    (*myColor_BACK) = ( p.colours[cId] );
     }
 
     // set BACK name clicked
@@ -332,8 +354,9 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
 
 
 //--------------------------------------------------------------
-void ofxColourLoversHelper::setPalette(int pId){
-    ofLog()<<"setPalette "<<pId<<endl;
+void ofxColourLoversHelper::setPalette(int pId)
+{
+    ofLogNotice("ofxColourLoversHelper")<<"setPalette "<<pId;
     if(currPalette == pId){
         return;
     }
@@ -360,11 +383,13 @@ void ofxColourLoversHelper::setPalette(int pId){
 //    float guiWidth = 300-palettesX-2;
 //
 //    int colourNum = 20;
+
     ColourLovePalette p = palettes[pId];
 
     //--
 
     // get palettes BACK
+
     int sizePalette = p.colours.size();
     if (sizePalette>0 && myPalette_BACK!= nullptr)
     {
@@ -451,29 +476,32 @@ void ofxColourLoversHelper::setPalette(int pId){
 
     //--
 
-    //gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));         
+    //gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
 }
 
 
 //--------------------------------------------------------------
-void ofxColourLoversHelper::colourPaletteEvent(ofxUIEventArgs &e){
+void ofxColourLoversHelper::colourPaletteEvent(ofxUIEventArgs &e)
+{
     string name = e.widget->getName();
     int kind = e.widget->getKind();
     int uid = e.widget->getID();
 
-    if(name=="Favourite" && currPalette>-1){
-        palettes[currPalette].save("palettes/favourites/"+palettes[currPalette].id+ ".xml");
-    }else{
-
+    // TODO: add button with same name
+    if(name=="FAVOURITE" && currPalette>-1)
+    {
+        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
+        palettes[currPalette].save(str);
+        ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
+    }
+    else
+    {
         vector<string> seg = ofSplitString(name,", ");
         int r = ofToInt(seg[0]);
         int g = ofToInt(seg[1]);
         int b = ofToInt(seg[2]);
 
-//        bg.set(r,g,b);
-//        bgLabel->setLabel("BG: "+ofxColourLovers::hexToWeb(bg));
-
-        ofLog()<<"colourPaletteEvent: "<<r<<" g "<<g <<" b "<<b <<endl;
+        ofLogNotice("ofxColourLoversHelper")<<"colourPaletteEvent: "<<r<<" g "<<g <<" b "<<b;
     }
 }
 
@@ -521,9 +549,11 @@ void ofxColourLoversHelper::keyPressed( ofKeyEventArgs& eventArgs )
 
     //-
 
-    if (key == 'm')
+    if (key == 'f')
     {
-
+        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
+        palettes[currPalette].save(str);
+        ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
     }
 }
 

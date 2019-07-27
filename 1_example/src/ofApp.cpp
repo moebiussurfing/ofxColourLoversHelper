@@ -6,8 +6,7 @@ void ofApp::setup(){
     ofSetFrameRate(30);
     ofBackground(16);
 
-    ColourLoversHelper.setup(glm::vec2(0,0), glm::vec2(200, 700));
-//    ColourLoversHelper.setup();
+    ColourLoversHelper.setup(glm::vec2(1000,0), glm::vec2(200, 200));
 
     ColourLoversHelper.setColor_BACK(myColor);
     ColourLoversHelper.setPalette_BACK(myPalette);
@@ -56,6 +55,7 @@ void ofApp::exit(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
+    ColourLoversHelper.nextPalette();
 }
 
 //--------------------------------------------------------------

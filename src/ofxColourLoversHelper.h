@@ -6,7 +6,6 @@
 
 #include "ofxUI.h"
 #include "ofxColourLovers.h"
-//#include "ofxColourTheory.h"
 
 class ofxColourLoversHelper {
 
@@ -30,6 +29,8 @@ public:
     void setPalette_BACK(vector<ofColor> &p);
     void setPalette_Name_BACK(string &n);
 
+    void nextPalette();
+    void prevPalette();
 
     //---
 
