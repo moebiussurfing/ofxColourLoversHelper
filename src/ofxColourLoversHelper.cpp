@@ -122,7 +122,7 @@ void ofxColourLoversHelper::colourLoveEvent(ColourLoveEvent &e) {
         return;
     }
 
-    // save favorites after succesfuly query search
+    // save results into history after succesfuly query search
     for(int i=0;i<palettes.size();i++){
         e.palettes[i].save("palettes/history/"+e.palettes[i].id+ ".xml");
     }
@@ -130,6 +130,7 @@ void ofxColourLoversHelper::colourLoveEvent(ColourLoveEvent &e) {
     //return;
 //    bg = palettes[0].sortedColours[0];
 //    bgLabel->setLabel("BG: "+ofxColourLovers::hexToWeb(bg));
+
     updateFlag = 1;
 }
 
@@ -144,16 +145,18 @@ void ofxColourLoversHelper::updateColourLab(){
         colourLab = 0;
     }
 
-    int width = 200;
-    colourLab = new ofxUIScrollableCanvas(width+20, 0, width, ofGetHeight());
-    int padding = 5;
-    int canvas_h = 500;
-//    int width = size.x;
-//    colourLab = new ofxUIScrollableCanvas(position.x, position.y+size.y+padding, size.x, canvas_h);
-//    colourLab = new ofxUIScrollableCanvas(position.x+size.x+padding, position.y, size.x, canvas_h);
+//    int width = 200;
+//    colourLab = new ofxUIScrollableCanvas(width+20, 0, width, ofGetHeight());
 
-    colourLab->setFont("assets/fonts/PragmataProR_0822.ttf");                     //This loads a new font and sets the GUI font
-    colourLab->setFontSize(OFX_UI_FONT_LARGE, 6);            //These call are optional, but if you want to resize the LARGE, MEDIUM, and SMALL fonts, here is how to do it.
+    int padding = 5;
+//    int canvas_h = 500;
+
+    int width = size.x;
+//    colourLab = new ofxUIScrollableCanvas(position.x, position.y+size.y+padding, size.x, canvas_h);
+    colourLab = new ofxUIScrollableCanvas(position.x+size.x+padding, 0, width, ofGetHeight());
+
+    colourLab->setFont("assets/fonts/PragmataProR_0822.ttf");
+    colourLab->setFontSize(OFX_UI_FONT_LARGE, 6);
     colourLab->setFontSize(OFX_UI_FONT_MEDIUM, 6);
     colourLab->setFontSize(OFX_UI_FONT_SMALL, 6);
 
@@ -161,7 +164,7 @@ void ofxColourLoversHelper::updateColourLab(){
     colourLab->setScrollAreaToScreenHeight();
     // colourLab->setScrollAreaToScreen();
     //colourLab->autoSizeToFitWidgets();
-    //
+
     ofAddListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
 
     /*
@@ -483,26 +486,26 @@ void ofxColourLoversHelper::setPalette(int pId)
 //--------------------------------------------------------------
 void ofxColourLoversHelper::colourPaletteEvent(ofxUIEventArgs &e)
 {
-    string name = e.widget->getName();
-    int kind = e.widget->getKind();
-    int uid = e.widget->getID();
-
-    // TODO: add button with same name
-    if(name=="FAVOURITE" && currPalette>-1)
-    {
-        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
-        palettes[currPalette].save(str);
-        ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
-    }
-    else
-    {
-        vector<string> seg = ofSplitString(name,", ");
-        int r = ofToInt(seg[0]);
-        int g = ofToInt(seg[1]);
-        int b = ofToInt(seg[2]);
-
-        ofLogNotice("ofxColourLoversHelper")<<"colourPaletteEvent: "<<r<<" g "<<g <<" b "<<b;
-    }
+//    string name = e.widget->getName();
+//    int kind = e.widget->getKind();
+//    int uid = e.widget->getID();
+//
+//    // TODO: add button with same name
+//    if(name=="FAVOURITE" && currPalette>-1)
+//    {
+//        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
+//        palettes[currPalette].save(str);
+//        ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
+//    }
+//    else
+//    {
+//        vector<string> seg = ofSplitString(name,", ");
+//        int r = ofToInt(seg[0]);
+//        int g = ofToInt(seg[1]);
+//        int b = ofToInt(seg[2]);
+//
+//        ofLogNotice("ofxColourLoversHelper")<<"colourPaletteEvent: "<<r<<" g "<<g <<" b "<<b;
+//    }
 }
 
 

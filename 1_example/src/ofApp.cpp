@@ -6,7 +6,7 @@ void ofApp::setup(){
     ofSetFrameRate(30);
     ofBackground(16);
 
-    ColourLoversHelper.setup(glm::vec2(1000,0), glm::vec2(200, 200));
+    ColourLoversHelper.setup(glm::vec2(1000,10), glm::vec2(200, 200));
 
     ColourLoversHelper.setColor_BACK(myColor);
     ColourLoversHelper.setPalette_BACK(myPalette);
