@@ -3,7 +3,14 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ColourLoversHelper.setup();
+    ofSetFrameRate(30);
+    ofBackground(16);
+
+    ColourLoversHelper.setup(glm::vec2(0,0), glm::vec2(200, 700));
+//    ColourLoversHelper.setup();
+
+    ColourLoversHelper.setColor_BACK(myColor);
+
 }
 
 //--------------------------------------------------------------
@@ -14,6 +21,14 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     ColourLoversHelper.draw();
+
+    ofPushStyle();
+    ofFill();
+    ofSetColor(myColor);
+
+    ofDrawRectangle(ofRectangle(10,750,100,100));
+
+    ofPopStyle();
 }
 
 //--------------------------------------------------------------

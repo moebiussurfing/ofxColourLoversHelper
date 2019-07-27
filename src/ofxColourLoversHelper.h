@@ -15,9 +15,19 @@ public:
     ofxColourLoversHelper();
     ~ofxColourLoversHelper();
     void setup();
+    void setup(glm::vec2 _position, glm::vec2 _size);
     void update();
     void draw();
     void exit();
+
+    glm::vec2 position;
+    glm::vec2 size;
+
+    ofColor *myColor_BACK;
+    vector<ofColor> *myPalette_BACK;
+    void setColor_BACK(ofColor &c);
+    void setPalette_BACK(vector<ofColor> &p);
+
 
     //---
 
