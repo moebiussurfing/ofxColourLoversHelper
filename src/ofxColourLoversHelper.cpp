@@ -57,7 +57,7 @@ void ofxColourLoversHelper::setup(){
     lastPaletteName_UI->setLabel(lastPaletteName);
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
-    gui->addWidgetDown(new ofxUILabelButton("FAVORITE",false, 84, dim));
+    gui->addWidgetDown(new ofxUILabelButton("Favourite",false, 84, dim));
 
     //getTopPalettesForLover
     //searchPalettes
@@ -281,7 +281,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
         ofxColourLovers::getPalette(lastSearch);
     }
 
-    else if(name=="FAVORITE" && currPalette>-1)
+    else if(name=="Favourite" && currPalette>-1)
     {
         string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
         palettes[currPalette].save(str);
@@ -290,9 +290,9 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
 
     //-
 
-    currPalette=-1;
+//    currPalette=-1;
 
-    if(name == "Favs")
+    else if(name == "Favs")
     {
         loadFavourites();
     }
@@ -300,6 +300,8 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     {
         loadHistory();
     }
+
+    currPalette=-1;
 }
 
 //--------------------------------------------------------------
