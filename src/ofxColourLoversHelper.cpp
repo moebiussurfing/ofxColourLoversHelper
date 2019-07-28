@@ -46,8 +46,17 @@ void ofxColourLoversHelper::setup(){
 
     gui->addWidgetDown(new ofxUILabelButton("Favs",false, 84, dim));
     gui->addWidgetRight(new ofxUILabelButton( "History",false, 84, dim));
+    gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
+
+    gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
+    gui->addWidgetDown(new ofxUILabel("Palette name:", OFX_UI_FONT_LARGE));
+    lastPaletteName_UI = new ofxUILabel(lastPaletteName, OFX_UI_FONT_LARGE);
+    gui->addWidgetDown(lastPaletteName_UI);
+    lastPaletteName_UI->setLabel(lastPaletteName);
+
+    gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
     gui->addWidgetDown(new ofxUILabelButton("FAVORITE",false, 84, dim));
 
     //getTopPalettesForLover
@@ -313,7 +322,10 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
     int cId = ofToInt(seg[2]);
     ColourLovePalette p = palettes[pId];
 
-    ofLogNotice("ofxColourLoversHelper") << "colourLabEvent: "<<name<<" "<<kind <<" "<<uid<<" colour: "<< p.colours[cId]<<" name: "<<p.title;
+    ofLogNotice("ofxColourLoversHelper") << "colourLabEvent: "<<name<<" "<<kind<<" "<<uid<<" colour: "<< p.colours[cId]<<" name: "<<p.title;
+
+    lastPaletteName = "'"+p.title+"'";
+    lastPaletteName_UI->setLabel(lastPaletteName);
 
     //-
 
@@ -367,6 +379,8 @@ void ofxColourLoversHelper::setPalette(int pId)
 
     ColourLovePalette p = palettes[pId];
 
+//    lastPaletteName = p.title;
+
     //--
 
     // get palettes BACK
@@ -377,6 +391,8 @@ void ofxColourLoversHelper::setPalette(int pId)
         myPalette_BACK->clear();
         myPalette_BACK->resize(sizePalette);
         (*myPalette_BACK) = p.colours;
+
+//        lastPaletteName = p.title;
     }
 
     //--

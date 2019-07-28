@@ -14,6 +14,11 @@ public:
     ofxColourLoversHelper();
     ~ofxColourLoversHelper();
 
+    glm::vec2 position;
+    glm::vec2 size;
+    glm::vec2 gridPosition;
+    glm::vec2 gridSize;
+
     void setup();
 
     //--
@@ -23,30 +28,25 @@ public:
     void setup(glm::vec2 _position, glm::vec2 _size);
     void setGrid(glm::vec2 _position, glm::vec2 _size);
 
+    void setColor_BACK(ofColor &c);
+    void setPalette_BACK(vector<ofColor> &p);
+    void setPalette_Name_BACK(string &n);
+    ofColor *myColor_BACK;
+    vector<ofColor> *myPalette_BACK;
+    string *myPalette_Name_BACK;
+
+    void nextPalette();
+    void prevPalette();
+
     //--
 
     void update();
     void draw();
     void exit();
 
-    glm::vec2 position;
-    glm::vec2 size;
-    glm::vec2 gridPosition;
-    glm::vec2 gridSize;
-
-    ofColor *myColor_BACK;
-    vector<ofColor> *myPalette_BACK;
-    string *myPalette_Name_BACK;
-    void setColor_BACK(ofColor &c);
-    void setPalette_BACK(vector<ofColor> &p);
-    void setPalette_Name_BACK(string &n);
-
-    void nextPalette();
-    void prevPalette();
-
     //---
 
-    ofxUILabel *bgLabel;
+//    ofxUILabel *bgLabel;
     ofxUICanvas *gui;
     ofxUIScrollableCanvas *colourLab;
     ofxUICanvas *paletteView;
@@ -59,16 +59,16 @@ public:
 
     void colourLoveEvent(ColourLoveEvent &e);
     void colourLabEvent(ofxUIEventArgs &e);
-
     void colourPaletteEvent(ofxUIEventArgs &e);
 
-    ofColor bg;
     bool updateFlag;
     void updateColourLab();
     vector<ofxUIButton *>   coloursPalette;
     vector<ofxUIButton *>   colourRanges;
     string lastSearch;
 
+    ofxUILabel * lastPaletteName_UI;
+    string lastPaletteName = "";
 
     void loadFavourites();
     void loadHistory();
