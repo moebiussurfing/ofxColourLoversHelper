@@ -6,16 +6,26 @@ void ofApp::setup(){
     ofSetFrameRate(30);
     ofBackground(16);
 
-    ColourLoversHelper.setup(glm::vec2(1000,10), glm::vec2(200, 200));
+    // set positions and panel sizes
+    glm::vec2 posGui(1000, 0);
+    glm::vec2 sizeGui(190, 190);
+    glm::vec2 posGrid(posGui.x+sizeGui.x+2, 0);
+    glm::vec2 sizeGrid(120, ofGetHeight());
 
+    //must be called before setup() to overwrite default settings
+    ColourLoversHelper.setGrid(posGrid, sizeGrid);
+    ColourLoversHelper.setup(posGui, sizeGui);
+
+    // receivers pointers
     ColourLoversHelper.setColor_BACK(myColor);
     ColourLoversHelper.setPalette_BACK(myPalette);
     ColourLoversHelper.setPalette_Name_BACK(myPalette_Name);
 
+    // initiation values
     myColor = ofColor::white;
-    myPalette.resize(2);
+    myPalette.resize(2);//pointer setter whill clear/resize. nevermind the vector size here
     myPalette[0] = ofColor::white;
-    myPalette[0] = ofColor::black;
+    myPalette[0] = ofColor::white;
     myPalette_Name = "NOT LOADED";
 }
 
@@ -26,28 +36,40 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ColourLoversHelper.draw();
+    // ColourLoversHelper.draw();//not req
 
-    int x, y, w, h, pad;
+    // preview receivers
+    int x, y, w, h, pad, lineH;
     x = 10;
-    y = 10;
-    w = h = 20;
-    pad = 2;
+    y = 30;
+    w = h = 40;
+    pad = 3;
+    lineH = 20;
 
     ofPushStyle();
     ofFill();
 
+    ofDrawBitmapStringHighlight("myColor:", x, y, ofColor::black, ofColor::white);
+    y += pad;
+
     ofSetColor(myColor);
     ofDrawRectangle(ofRectangle(x,y,w,h));
-
     y += (h+pad);
+
+    y += (lineH);
+    ofDrawBitmapStringHighlight("myPalette:", x, y, ofColor::black, ofColor::white);
+    y += pad;
+
     for (int i=0; i<myPalette.size(); i++)
     {
         ofSetColor(myPalette[i]);
-        ofDrawRectangle(ofRectangle(x+i*w,y,w,h));
+        ofDrawRectangle(ofRectangle(x+i*(w+pad),y,w,h));
     }
+    y += (h+pad);
 
-    y += 2*(h+pad);
+    y += (lineH);
+    ofDrawBitmapStringHighlight("myPalette_Name:", x, y, ofColor::black, ofColor::white);
+    y += (lineH);
     ofDrawBitmapStringHighlight(myPalette_Name, x, y, ofColor::black, ofColor::white);
 
     ofPopStyle();

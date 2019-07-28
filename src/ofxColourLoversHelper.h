@@ -13,14 +13,26 @@ public:
 
     ofxColourLoversHelper();
     ~ofxColourLoversHelper();
+
     void setup();
+
+    //--
+
+    // API
+
     void setup(glm::vec2 _position, glm::vec2 _size);
+    void setGrid(glm::vec2 _position, glm::vec2 _size);
+
+    //--
+
     void update();
     void draw();
     void exit();
 
     glm::vec2 position;
     glm::vec2 size;
+    glm::vec2 gridPosition;
+    glm::vec2 gridSize;
 
     ofColor *myColor_BACK;
     vector<ofColor> *myPalette_BACK;
