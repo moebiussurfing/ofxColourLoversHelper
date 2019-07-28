@@ -36,7 +36,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    // ColourLoversHelper.draw();//not req
+    // ColourLoversHelper.draw();//not required as drawing goes to ofxUI
 
     // preview receivers
     int x, y, w, h, pad, lineH;

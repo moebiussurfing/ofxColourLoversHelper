@@ -14,6 +14,9 @@ public:
     ofxColourLoversHelper();
     ~ofxColourLoversHelper();
 
+    bool isVisible = true;
+    bool isVisible_PRE = false;
+    void setVisible(bool b);
     glm::vec2 position;
     glm::vec2 size;
     glm::vec2 gridPosition;

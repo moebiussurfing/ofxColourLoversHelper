@@ -14,6 +14,11 @@ ofxColourLoversHelper::ofxColourLoversHelper()
 }
 
 //--------------------------------------------------------------
+void ofxColourLoversHelper::setVisible(bool b) {
+      isVisible = b;
+}
+
+//--------------------------------------------------------------
 void ofxColourLoversHelper::setup(){
 
     int width = size.x;
@@ -233,10 +238,21 @@ void ofxColourLoversHelper::updateColourLab(){
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::update(){
+
+    //TODO: should make with trig not in loop neither with PRE!
+    if (isVisible != isVisible_PRE)
+    {
+        colourLab->setVisible(isVisible);
+        gui->setVisible(isVisible);
+        isVisible_PRE = isVisible;
+    }
+
     if(updateFlag)
     {
         updateColourLab();
     }
+
+
 }
 
 
@@ -562,7 +578,7 @@ void ofxColourLoversHelper::setPalette_Name_BACK(string &n)
 void ofxColourLoversHelper::keyPressed( ofKeyEventArgs& eventArgs )
 {
     const int & key = eventArgs.key;
-    cout << "key: " << key << endl;
+//    cout << "key: " << key << endl;
 
     //-
 
