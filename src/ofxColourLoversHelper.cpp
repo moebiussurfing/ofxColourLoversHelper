@@ -58,7 +58,7 @@ void ofxColourLoversHelper::setup(){
     gui->addWidgetDown(new ofxUILabel("COLOUR LOVERS", OFX_UI_FONT_LARGE));
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
 
-    ofxUITextInput* textinput = new ofxUITextInput("search", "Search",width-xInit, OFX_UI_FONT_MEDIUM);
+    ofxUITextInput* textinput = new ofxUITextInput("search", "Search keyword",width-xInit, OFX_UI_FONT_MEDIUM);
     textinput->setTriggerOnClick(false);
     gui->addWidgetDown(textinput);
 
@@ -70,8 +70,8 @@ void ofxColourLoversHelper::setup(){
     textinput->setTriggerOnClick(false);
     gui->addWidgetDown(textinput);
 
-    gui->addWidgetDown(new ofxUILabelButton("Favs",false, 0.5*width-xInit, dim, OFX_UI_FONT_MEDIUM));
-    gui->addWidgetRight(new ofxUILabelButton( "History",false, 0.5*width-xInit, dim, OFX_UI_FONT_MEDIUM));
+    gui->addWidgetDown(new ofxUILabelButton("FAVS",false, 0.5*width-xInit, dim, OFX_UI_FONT_MEDIUM));
+    gui->addWidgetRight(new ofxUILabelButton( "HISTORY",false, 0.5*width-xInit, dim, OFX_UI_FONT_MEDIUM));
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
@@ -83,7 +83,7 @@ void ofxColourLoversHelper::setup(){
     lastPaletteName_UI->setLabel(lastPaletteName);
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
-    gui->addWidgetDown(new ofxUILabelButton("FAVOURITE",false, width-xInit, dim));
+    gui->addWidgetDown(new ofxUILabelButton("ADD FAVOURITE",false, width-xInit, dim));
 
     gui->addWidgetDown(new ofxUILabelButton("REMOVE FAVS",false, width-xInit, dim, OFX_UI_FONT_SMALL));
     gui->addWidgetDown(new ofxUILabelButton("REMOVE HISTORY",false, width-xInit, dim, OFX_UI_FONT_SMALL));
@@ -282,7 +282,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     if(name == "search")
     {
         ofxUITextInput *textinput = (ofxUITextInput *) e.widget;
-        lastSearch = textinput->getTextString();
+        lastSearch = "'"+textinput->getTextString()+"'";
         ofxColourLovers::searchPalettes(textinput->getTextString(),40);
     }
 
@@ -302,21 +302,21 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
         ofxColourLovers::getPalette(lastSearch);
     }
 
-    else if(name=="FAVOURITE" && currPalette>-1)
+    else if(name=="ADD FAVOURITE" && currPalette>-1)
     {
         string str = path+"favourites/"+palettes[currPalette].id+ ".xml";
         palettes[currPalette].save(str);
         ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
     }
 
-        //-
+    //-
 
 
-    else if(name == "Favs")
+    else if(name == "FAVS")
     {
         loadFavourites();
     }
-    else if(name == "History")
+    else if(name == "HISTORY")
     {
         loadHistory();
     }
@@ -477,7 +477,7 @@ void ofxColourLoversHelper::colourPaletteEvent(ofxUIEventArgs &e)
 //    int uid = e.widget->getID();
 //
 //    // TODO: add button with same name
-//    if(name=="FAVOURITE" && currPalette>-1)
+//    if(name=="ADD FAVOURITE" && currPalette>-1)
 //    {
 //        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
 //        palettes[currPalette].save(str);
@@ -508,7 +508,7 @@ void ofxColourLoversHelper::loadFavourites(){
         palettes.push_back(cp);
     }
 
-    lastSearch ="Favourites";
+    lastSearch ="FAVOURITES";
     updateColourLab();
 }
 
@@ -538,7 +538,7 @@ void ofxColourLoversHelper::loadHistory(){
         palettes.push_back(cp);
     }
 
-    lastSearch ="History";
+    lastSearch ="HISTORY";
     updateColourLab();
 }
 
