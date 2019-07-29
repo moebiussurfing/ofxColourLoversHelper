@@ -344,14 +344,57 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
 
 
 //--------------------------------------------------------------
+void ofxColourLoversHelper::refreshPalette()
+{
+    ofLogNotice("ofxColourLoversHelper") << "refreshPalette:currPalette: " << currPalette;
+    ColourLovePalette p = palettes[currPalette];
+    lastPaletteName = "'"+p.title+"'";
+    lastPaletteName_UI->setLabel(lastPaletteName);
+
+    //-
+
+    // set BACK name clicked
+    if (myPalette_Name_BACK!=nullptr)
+    {
+        (*myPalette_Name_BACK) = p.title;
+    }
+
+    // get and set palettes BACK
+    int sizePalette = p.colours.size();
+    if (sizePalette>0 && myPalette_BACK!= nullptr)
+    {
+        myPalette_BACK->clear();
+        myPalette_BACK->resize(sizePalette);
+        (*myPalette_BACK) = p.colours;
+    }
+
+    //-
+}
+
+
+//--------------------------------------------------------------
 void ofxColourLoversHelper::nextPalette() {
-    currPalette++;
+    ofLogNotice("ofxColourLoversHelper") << "nextPalette:";
+    if (currPalette==-1) return;
+
+    if (currPalette < palettes.size()-1)
+        currPalette++;
+    ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
+
+    refreshPalette();
 }
 
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::prevPalette() {
+    ofLogNotice("ofxColourLoversHelper") << "prevPalette:";
+    if (currPalette==-1) return;
+    
+    if (currPalette > 0)
+        currPalette--;
+    ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
 
+    refreshPalette();
 }
 
 

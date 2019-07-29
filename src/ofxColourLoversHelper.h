@@ -29,6 +29,7 @@ public:
 
     void nextPalette();
     void prevPalette();
+    void refreshPalette();
 
     void setVisible(bool b);
 
