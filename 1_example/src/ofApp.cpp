@@ -39,7 +39,8 @@ void ofApp::draw(){
 
     // preview receivers
 
-    if (SHOW_gui) {
+    if (SHOW_gui)
+    {
         int x, y, w, h, pad, lineH;
         x = 10;
         y = ofGetHeight() - 200;
@@ -50,22 +51,25 @@ void ofApp::draw(){
         ofPushStyle();
         ofFill();
 
+        ofDrawBitmapStringHighlight("RECEIVERS IN ofApp", x, y, ofColor::black, ofColor::white);
+        y += 3*pad+lineH;
+
         ofDrawBitmapStringHighlight("myColor:", x, y, ofColor::black, ofColor::white);
-        y += pad;
+        y += 3*pad;
 
         ofSetColor(myColor);
         ofDrawRectangle(ofRectangle(x, y, w, h));
-        y += (h + pad);
+        y += (h+pad);
 
         y += (lineH);
         ofDrawBitmapStringHighlight("myPalette:", x, y, ofColor::black, ofColor::white);
-        y += pad;
+        y += 3*pad;
 
         for (int i = 0; i < myPalette.size(); i++) {
             ofSetColor(myPalette[i]);
             ofDrawRectangle(ofRectangle(x + i * (w + pad), y, w, h));
         }
-        y += (h + pad);
+        y += (h+pad);
 
         y += (lineH);
         ofDrawBitmapStringHighlight("myPalette_Name:", x, y, ofColor::black, ofColor::white);
