@@ -411,9 +411,9 @@ void ofxColourLoversHelper::refreshPalette()
         (*myPalette_BACK) = p.colours;
 
         // mark update flag
-        if (bUpdated_BACK!=nullptr)
+        if (bUpdated_Palette_BACK!=nullptr)
         {
-            (*bUpdated_BACK) = true;
+            (*bUpdated_Palette_BACK) = true;
         }
     }
 
@@ -527,6 +527,12 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
         myColor_BACK->set( p.colours[cId] );
     }
 
+    // flag updater color ready
+    if (bUpdated_Color_BACK!=nullptr)
+    {
+        (*bUpdated_Color_BACK) = true;
+    }
+
     // set BACK name clicked
     if (myPalette_Name_BACK!=nullptr)
     {
@@ -549,7 +555,7 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
 void ofxColourLoversHelper::setPalette(int pId)
 {
     ofLogNotice("ofxColourLoversHelper")<<"setPalette "<<pId;
-    
+
     //skip if its already loaded?
     if(currPalette == pId){
         return;
@@ -616,7 +622,10 @@ void ofxColourLoversHelper::loadFavourites(){
     }
 
     lastSearch ="FAVOURITES";
-    updateColourLab();
+
+    // TODO: BUG: CRASHES IF EMPTY FOLDER
+    if( favs.numFiles()>0 )
+        updateColourLab();
 
 //    // TODO: startup
 //    currPalette = 0;
@@ -654,7 +663,10 @@ void ofxColourLoversHelper::loadHistory(){
     }
 
     lastSearch ="HISTORY";
-    updateColourLab();
+
+    // TODO: BUG: CRASHES IF EMPTY FOLDER
+    if( favs.numFiles()>0 )
+        updateColourLab();
 
 //    // TODO: startup
 //    currPalette = 1;
@@ -690,11 +702,20 @@ void ofxColourLoversHelper::setPalette_BACK(vector<ofColor> &p)
     myPalette_BACK = &p;
 }
 
+
 //--------------------------------------------------------------
-void ofxColourLoversHelper::setPalette_bUpdated_BACK(bool &b)
+void ofxColourLoversHelper::setPalette_bUpdated_Palette_BACK(bool &b)
 {
-    bUpdated_BACK = &b;
+    bUpdated_Palette_BACK = &b;
 }
+
+
+//--------------------------------------------------------------
+void ofxColourLoversHelper::setPalette_bUpdated_Color_BACK(bool &b)
+{
+    bUpdated_Color_BACK = &b;
+}
+
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPalette_Name_BACK(string &n)

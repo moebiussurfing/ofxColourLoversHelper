@@ -26,23 +26,36 @@ public:
     void setup(glm::vec2 _position, glm::vec2 _size);
     void setGrid(glm::vec2 _position, glm::vec2 _size);
 
+    void setVisible(bool b);
+
     // pointers back to 'communicate externally'
     void setColor_BACK(ofColor &c);
     void setPalette_BACK(vector<ofColor> &p);
     void setPalette_Name_BACK(string &n);
-    void setPalette_bUpdated_BACK(bool &b);
+    void setPalette_bUpdated_Palette_BACK(bool &b);
+    void setPalette_bUpdated_Color_BACK(bool &b);
 
     void nextPalette();
     void prevPalette();
-    void refreshPalette();
-
-    void setVisible(bool b);
-
-    bool MODE_fixedSize = true;
 
     //--
 
+    // pointers back to 'communicate externally'
+
+    ofColor *myColor_BACK;
+    vector<ofColor> *myPalette_BACK;
+    string *myPalette_Name_BACK;
+    bool *bUpdated_Palette_BACK;
+    bool *bUpdated_Color_BACK;
+
+    //----
+
 private:
+
+    void refreshPalette();
+    bool MODE_fixedSize = true;
+
+    //-
 
     ofxUICanvas *gui;
     ofxUIScrollableCanvas *colourLab;
@@ -75,11 +88,6 @@ private:
     ofColor colorMarked;
 
     //---
-
-    ofColor *myColor_BACK;
-    vector<ofColor> *myPalette_BACK;
-    string *myPalette_Name_BACK;
-    bool *bUpdated_BACK;
 
     bool isVisible = true;
     bool isKeysEnabled = true;
