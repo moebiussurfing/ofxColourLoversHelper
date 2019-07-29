@@ -549,28 +549,29 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
 void ofxColourLoversHelper::setPalette(int pId)
 {
     ofLogNotice("ofxColourLoversHelper")<<"setPalette "<<pId;
+    
     //skip if its already loaded?
     if(currPalette == pId){
         return;
     }
     currPalette = pId;
 
-    ColourLovePalette p = palettes[pId];
-//    lastPaletteName = p.title;
-
-    //--
-
-    // get palettes BACK
-
-            // TODO: not required?
-    int sizePalette = p.colours.size();
-    if (sizePalette>0 && myPalette_BACK!= nullptr)
-    {
-        myPalette_BACK->clear();
-        myPalette_BACK->resize(sizePalette);
-        (*myPalette_BACK) = p.colours;
-//        lastPaletteName = p.title;
-    }
+//    ColourLovePalette p = palettes[pId];
+////    lastPaletteName = p.title;
+//
+//    //--
+//
+//    // get palettes BACK
+//
+////            // TODO: not required?
+////    int sizePalette = p.colours.size();
+////    if (sizePalette>0 && myPalette_BACK!= nullptr)
+////    {
+////        myPalette_BACK->clear();
+////        myPalette_BACK->resize(sizePalette);
+////        (*myPalette_BACK) = p.colours;
+//////        lastPaletteName = p.title;
+////    }
 }
 
 
