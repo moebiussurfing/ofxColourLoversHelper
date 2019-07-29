@@ -13,6 +13,7 @@ ofxColourLoversHelper::ofxColourLoversHelper()
 //    setVisible(true);
     addKeysListeners();
     addMouseListeners();
+    isKeysEnabled = true;
 }
 
 
@@ -26,11 +27,13 @@ void ofxColourLoversHelper::setVisible(bool b) {
     {
         addKeysListeners();
         addMouseListeners();
+        isKeysEnabled = true;
     }
     else
     {
         removeKeysListeners();
         removeMouseListeners();
+        isKeysEnabled = false;
     }
 }
 
@@ -98,29 +101,16 @@ void ofxColourLoversHelper::setup(){
     ofAddListener(gui->newGUIEvent,this,&ofxColourLoversHelper::guiEvent);
     ofAddListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::colourLoveEvent);
 
-    palettesX = width*2+40;
-
-    // float length = 320-xInit;
-
-    /*
-    for(int i = 0; i < 30; i++)
-    {
-        colourLab->addSlider("SLIDER " +ofToString(i), 0, 100, i*3.3, length-xInit, dim);
-        colourLab->addSpacer(length-xInit, 2);
-    }
-
-    vector<ofxUIWidget*> spacers = colourLab->getWidgetsOfType(OFX_UI_WIDGET_SPACER);
-
-    for(int i = 0; i < spacers.size(); i++)
-    {
-        ofxUISpacer *s = (ofxUISpacer *) spacers[i];
-        s->toggleVisible();
-    }
-    */
-    //colourLab->autoSizeToFitWidgets();
-    //colourLab->getRect()->setWidth(ofGetWidth());
-
     loadFavourites();
+
+    // auto load first palette of favourites
+    if (palettes.size()>0)
+    {
+        currPalette = 0;
+        updateFlag = 1;
+//        setPalette(currPalette);
+        refreshPalette();
+    }
 }
 
 
@@ -374,8 +364,14 @@ void ofxColourLoversHelper::refreshPalette()
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::nextPalette() {
+    if (!isKeysEnabled) return;
+
     ofLogNotice("ofxColourLoversHelper") << "nextPalette:";
-    if (currPalette==-1) return;
+    if (currPalette==-1)
+    {
+        ofLogWarning("ofxColourLoversHelper") << "PALETTE NOT LOADED. SKIP jump:";
+        return;
+    }
 
     if (currPalette < palettes.size()-1)
         currPalette++;
@@ -387,9 +383,15 @@ void ofxColourLoversHelper::nextPalette() {
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::prevPalette() {
+    if (!isKeysEnabled) return;
+
     ofLogNotice("ofxColourLoversHelper") << "prevPalette:";
-    if (currPalette==-1) return;
-    
+    if (currPalette==-1)
+    {
+        ofLogWarning("ofxColourLoversHelper") << "PALETTE NOT LOADED. SKIP jump:";
+        return;
+    }
+
     if (currPalette > 0)
         currPalette--;
     ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
@@ -449,30 +451,7 @@ void ofxColourLoversHelper::setPalette(int pId)
     }
     currPalette = pId;
 
-//    // create preview gradient
-//    if(paletteView)
-//    {
-//        ofRemoveListener(paletteView->newGUIEvent, this, &ofxColourLoversHelper::colourPaletteEvent);
-//        delete paletteView;
-//        paletteView = 0;
-//    }
-////    paletteView  = new ofxUICanvas(palettesX, 0, ofGetWidth()-palettesX, ofGetHeight());
-//    paletteView  = new ofxUICanvas(palettesX, 0, 300-palettesX, 400);
-//
-//    ofAddListener(paletteView->newGUIEvent, this, &ofxColourLoversHelper::colourPaletteEvent);
-//
-//    int cdist = 1;
-//    int col=0;
-//    int row=0;
-//
-//    int startY = 50;
-////    float guiWidth = ofGetWidth()-palettesX-2;
-//    float guiWidth = 300-palettesX-2;
-//
-//    int colourNum = 20;
-
     ColourLovePalette p = palettes[pId];
-
 //    lastPaletteName = p.title;
 
     //--
@@ -485,89 +464,8 @@ void ofxColourLoversHelper::setPalette(int pId)
         myPalette_BACK->clear();
         myPalette_BACK->resize(sizePalette);
         (*myPalette_BACK) = p.colours;
-
 //        lastPaletteName = p.title;
     }
-
-    //--
-
-//    // create preview gradient
-//    paletteView->addWidgetRight(new ofxUILabel(p.id+" - ", OFX_UI_FONT_LARGE));
-//    paletteView->addWidgetRight(new ofxUILabel(p.title, OFX_UI_FONT_LARGE));
-//    paletteView->addWidget(new ofxUIImageButton(800,5,30,30,true,"GUI/images/fav.png","Favourite"));
-//    paletteView->addWidgetDown(new ofxUISpacer(400, 2));
-
-    //-
-
-//    // create preview gradient
-//
-//    colourRanges.clear();
-//
-////    float cdim = (float)(ofGetHeight()-startY )/(float)colourNum;
-//    float cdim = (float)(400-startY )/(float)colourNum;
-//
-//    vector<ofColor> colourRange;
-//
-//    int currX = 1;
-//    int step = 2;
-//    string hex;
-//
-//    for(int i=0;i<p.colours.size();i++)
-//    {
-//        float currW = 0;
-//        currW = p.colorWidths[i]*guiWidth;
-//
-//        ofColor shade;
-//        shade.set(p.colours[i].r,p.colours[i].g,p.colours[i].b);
-//
-//        int startBright = shade.getBrightness()+colourNum*step/2;
-//        //cap within limits
-//        startBright = max(0,startBright);
-//        startBright = min(255-colourNum*step,startBright);
-//
-//        shade.setBrightness(startBright);
-//
-//        for(int c=0;c<colourNum;c++)
-//        {
-//            if(c==0){
-//                hex = ofToString(p.colours[i]);
-//            }else{
-//                shade.setBrightness(shade.getBrightness()-step);
-//                hex = ofToString(shade);
-//            }
-//
-//
-//            ofxUIButton * btn = new ofxUIButton(hex,false,currW,cdim,currX,(c)*(cdim)+startY);
-//
-//            //
-//
-//            btn->setLabelVisible(0);
-//            paletteView->addWidget(btn);
-//            btn->setDrawFill(true);
-//            if(c==0){
-//                btn->setColorFill(p.colours[i]);
-//                btn->setColorBack(p.colours[i]);
-//            }else{
-//                btn->setColorFill(shade);
-//                btn->setColorBack(shade);
-//            }
-//
-//
-//            btn->setDrawBack(true);
-//            colourRanges.push_back(btn);
-//        }
-//        currX+=currW;
-//        /*if((cdist+cdim)*col+cdim<guiWidth-20){
-//         col++;
-//         }else{*/
-//        //  col=0;
-//        // row++;
-//        //}
-//    }
-
-    //--
-
-    //gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
 }
 
 
@@ -613,7 +511,6 @@ void ofxColourLoversHelper::loadFavourites(){
     lastSearch ="Favourites";
     updateColourLab();
 }
-
 
 
 //--------------------------------------------------------------

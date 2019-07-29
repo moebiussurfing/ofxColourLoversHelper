@@ -82,6 +82,8 @@ private:
     string *myPalette_Name_BACK;
 
     bool isVisible = true;
+    bool isKeysEnabled = true;
+
     glm::vec2 position;
     glm::vec2 size;
     glm::vec2 gridPosition;
