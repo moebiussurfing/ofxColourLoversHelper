@@ -404,11 +404,17 @@ void ofxColourLoversHelper::refreshPalette()
 
     // get and set palettes BACK
     int sizePalette = p.colours.size();
-    if (sizePalette>0 && myPalette_BACK!= nullptr)
+    if (sizePalette>0 && myPalette_BACK!=nullptr)
     {
         myPalette_BACK->clear();
         myPalette_BACK->resize(sizePalette);
         (*myPalette_BACK) = p.colours;
+
+        // mark update flag
+        if (bUpdated_BACK!=nullptr)
+        {
+            (*bUpdated_BACK) = true;
+        }
     }
 
     //-
@@ -484,6 +490,22 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
     int kind = e.widget->getKind();
     int uid = e.widget->getID();
 
+    //-
+
+    // filter mousePressed only
+    bool isButtonColor_click = false;
+    if (kind == OFX_UI_WIDGET_BUTTON)
+    {
+        ofxUIButton *but = e.getButton();
+        if(but->getValue())
+        {
+            isButtonColor_click = true;
+            return;
+        }
+    }
+
+    //-
+
     string whatList =  name.substr(0,2);
     string whatColId =  name.substr(3,name.length()-3);
 
@@ -540,6 +562,7 @@ void ofxColourLoversHelper::setPalette(int pId)
 
     // get palettes BACK
 
+            // TODO: not required?
     int sizePalette = p.colours.size();
     if (sizePalette>0 && myPalette_BACK!= nullptr)
     {
@@ -666,6 +689,11 @@ void ofxColourLoversHelper::setPalette_BACK(vector<ofColor> &p)
     myPalette_BACK = &p;
 }
 
+//--------------------------------------------------------------
+void ofxColourLoversHelper::setPalette_bUpdated_BACK(bool &b)
+{
+    bUpdated_BACK = &b;
+}
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPalette_Name_BACK(string &n)

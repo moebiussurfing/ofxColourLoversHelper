@@ -26,9 +26,11 @@ public:
     void setup(glm::vec2 _position, glm::vec2 _size);
     void setGrid(glm::vec2 _position, glm::vec2 _size);
 
+    // pointers back to 'communicate externally'
     void setColor_BACK(ofColor &c);
     void setPalette_BACK(vector<ofColor> &p);
     void setPalette_Name_BACK(string &n);
+    void setPalette_bUpdated_BACK(bool &b);
 
     void nextPalette();
     void prevPalette();
@@ -77,6 +79,7 @@ private:
     ofColor *myColor_BACK;
     vector<ofColor> *myPalette_BACK;
     string *myPalette_Name_BACK;
+    bool *bUpdated_BACK;
 
     bool isVisible = true;
     bool isKeysEnabled = true;
