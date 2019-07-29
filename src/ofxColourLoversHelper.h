@@ -51,7 +51,8 @@ private:
     ofxUICanvas *paletteView;
     void setPalette(int p);
     int palettesX;
-    int currPalette;
+
+    int currPalette; //last picked palette/color
     vector<ColourLovePalette> palettes;
 
     void guiEvent(ofxUIEventArgs &e);

@@ -43,7 +43,7 @@ void ofxColourLoversHelper::setup(){
 
     //-
 
-    // TODO: to enable windowResize
+    // TODO: to enable windowResize..
     if(colourLab)
     {
         ofRemoveListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
@@ -119,13 +119,17 @@ void ofxColourLoversHelper::setup(){
     ofAddListener(gui->newGUIEvent,this,&ofxColourLoversHelper::guiEvent);
     ofAddListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::colourLoveEvent);
 
+    //-
+
+    // STARTUP
+
     loadFavourites();
 
     // auto load first palette of favourites
     if (palettes.size()>0)
     {
         currPalette = 0;
-        updateFlag = 1;
+//        updateFlag = 1;
 //        setPalette(currPalette);
 //        refreshPalette();
     }
@@ -201,17 +205,16 @@ void ofxColourLoversHelper::updateColourLab(){
     int col=0;
     int row=0;
     int startY = 50;
-
     float guiWidth = width-2;
 
+    // height color/palette boxes
     //cdim = 20;
-    cdim = guiWidth/5.;
     //maybe some palette have less than 5 colors, ie: 4, and then can cause problems...
     // so we fix to 5 as usual they have..
+    cdim = guiWidth/5.;
 
     // colourLab->centerWidgets();
     colourLab->addWidgetDown(new ofxUILabel(lastSearch, OFX_UI_FONT_MEDIUM));
-//    colourLab->addWidgetDown(new ofxUISpacer(guiWidth-20, 2));
     colourLab->addWidgetDown(new ofxUISpacer(width-xInit, 2));
 
     //-
@@ -221,10 +224,19 @@ void ofxColourLoversHelper::updateColourLab(){
         int currX = 1;
         int currW = 0;
 
+
+//        // mark selected palette
+//        bool markPalette = false;
+//        if (i == currPalette || i == 2)
+//        {
+//            markPalette = true;
+//        }
+
+
         // colors in each palette
-        for(int c=0;c<palettes[i].colours.size();c++)
+        int numOfColorsInPalette = palettes[i].colours.size();
+        for(int c=0;c<numOfColorsInPalette;c++)
         {
-            int numOfColorsInPalette = palettes[i].colours.size();
 
             // For set colour issues, make sure to set fill colour after widget been added
 
@@ -239,16 +251,35 @@ void ofxColourLoversHelper::updateColourLab(){
                 currW = guiWidth / numOfColorsInPalette;
             }
 
-            ofxUIButton * btn = new ofxUIButton(("CL_"+ofToString(i)+"_"+ofToString(c)),false,
+            string butName = ("CL_"+ofToString(i)+"_"+ofToString(c));
+            ofxUIButton * btn = new ofxUIButton( butName,false,
                     currW, cdim,
-                    currX, i*(cdim+4)+startY);
+                    currX, i*(cdim+4)+startY );
 
             btn->setLabelVisible(0);
             colourLab->addWidget(btn);
+
+            // color filled box
             btn->setDrawFill(true);
             btn->setColorFill(palettes[i].colours[c]);
             btn->setColorBack(palettes[i].colours[c]);
             btn->setDrawBack(true);
+
+            // mark selector settings colors borders & disable
+            btn->setColorOutlineHighlight(ofColor::blue);
+            btn->setColorOutline(ofColor::red);
+            btn->setDrawOutlineHighLight(false);
+            btn->setDrawOutline(true);
+
+////                btn->setDrawOutlineHighLight(true);
+//            if (markPalette)
+//            {
+////                btn->setColorOutline(ofColor::red);
+////                btn->setColorOutlineHighlight(ofColor::black);
+//                btn->setDrawOutline(true);
+//                btn->setDrawOutlineHighLight(true);
+//            }
+
             coloursPalette.push_back(btn);
 
             currX+=currW;
@@ -318,8 +349,8 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
         if(but->getValue())
         {
             string str = path+"favourites/"+palettes[currPalette].id+ ".xml";
-        palettes[currPalette].save(str);
-        ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
+            palettes[currPalette].save(str);
+            ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
         }
     }
 
@@ -395,6 +426,35 @@ void ofxColourLoversHelper::refreshPalette()
     }
 
     //-
+
+    // colors in each palette
+
+    for(int i=0;i<palettes.size();i++)
+    {
+        int numOfColorsInPalette = palettes[i].colours.size();
+
+        for (int c = 0; c < numOfColorsInPalette; c++)
+        {
+            string butName = ("CL_"+ofToString(i)+"_"+ofToString(c));
+
+            auto e = colourLab->getWidget(butName);
+            ofxUIButton *btn = (ofxUIButton *) e;
+
+//            ofxUIButton *textinput = (ofxUIButton *) e.widget;
+//            ofxUIButton *btn = colourLab->getWidget(butName);
+
+            if (c == currPalette)
+            {
+                btn->setDrawOutline(true);
+                btn->setDrawOutlineHighLight(true);
+            }
+            else
+            {
+                btn->setDrawOutline(false);
+                btn->setDrawOutlineHighLight(false);
+            }
+        }
+    }
 }
 
 
