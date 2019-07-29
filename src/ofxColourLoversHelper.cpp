@@ -131,7 +131,7 @@ void ofxColourLoversHelper::setup(){
         currPalette = 0;
 //        updateFlag = 1;
 //        setPalette(currPalette);
-//        refreshPalette();
+        refreshPalette();
     }
 }
 
@@ -267,6 +267,11 @@ void ofxColourLoversHelper::updateColourLab(){
     colourLab->getRect()->setHeight(palettes.size()*(cdim+4)+startY);
     colourLab->setSnapping(0);
     updateFlag = 0;
+
+    // TODO: startup
+    currPalette = 0;
+    setPalette(currPalette);
+    refreshPalette();
 }
 
 
@@ -374,10 +379,11 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
 
     //-
 
-    currPalette=-1;
+    // TODO: disabled beacause dont know what does and blocks next/prev by keys
+//    currPalette=-1;
 }
 
-
+// sends back pointers color/palette/name and mark gui selected..
 //--------------------------------------------------------------
 void ofxColourLoversHelper::refreshPalette()
 {
@@ -405,7 +411,7 @@ void ofxColourLoversHelper::refreshPalette()
 
     //-
 
-    // colors in each palette
+    // mark borders in all colors in palette as active about currPalette
 
     for(int i=0;i<palettes.size();i++)
     {
@@ -435,10 +441,10 @@ void ofxColourLoversHelper::refreshPalette()
 void ofxColourLoversHelper::nextPalette() {
     if (!isKeysEnabled) return;
 
-    ofLogNotice("ofxColourLoversHelper") << "nextPalette:";
+    ofLogNotice("ofxColourLoversHelper") << "nextPalette:currPalette" << currPalette;
     if (currPalette==-1)
     {
-        ofLogWarning("ofxColourLoversHelper") << "PALETTE NOT LOADED. SKIP jump:";
+        ofLogWarning("ofxColourLoversHelper") << "PALETTE NOT LOADED. SKIP";
         return;
     }
 
@@ -454,10 +460,10 @@ void ofxColourLoversHelper::nextPalette() {
 void ofxColourLoversHelper::prevPalette() {
     if (!isKeysEnabled) return;
 
-    ofLogNotice("ofxColourLoversHelper") << "prevPalette:";
+    ofLogNotice("ofxColourLoversHelper") << "prevPalette:currPalette" << currPalette;
     if (currPalette==-1)
     {
-        ofLogWarning("ofxColourLoversHelper") << "PALETTE NOT LOADED. SKIP jump:";
+        ofLogWarning("ofxColourLoversHelper") << "PALETTE NOT LOADED. SKIP";
         return;
     }
 
@@ -508,6 +514,10 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
     ofLogNotice("ofxColourLoversHelper") << "colourLabEvent:setPalette:pId: "<<pId;
     ofLogNotice("ofxColourLoversHelper") << "colourLabEvent:currPalette: " << currPalette;
 
+    // TODO: startup
+    currPalette = pId;
+    setPalette(currPalette);
+    refreshPalette();
 }
 
 
@@ -515,6 +525,7 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
 void ofxColourLoversHelper::setPalette(int pId)
 {
     ofLogNotice("ofxColourLoversHelper")<<"setPalette "<<pId;
+    //skip if its already loaded?
     if(currPalette == pId){
         return;
     }
@@ -580,6 +591,12 @@ void ofxColourLoversHelper::loadFavourites(){
 
     lastSearch ="FAVOURITES";
     updateColourLab();
+
+//    // TODO: startup
+//    currPalette = 0;
+////    updateFlag = 1;
+//    setPalette(currPalette);
+//    refreshPalette();
 }
 
 
@@ -612,6 +629,12 @@ void ofxColourLoversHelper::loadHistory(){
 
     lastSearch ="HISTORY";
     updateColourLab();
+
+//    // TODO: startup
+//    currPalette = 1;
+////    updateFlag = 1;
+//    setPalette(currPalette);
+//    refreshPalette();
 }
 
 
