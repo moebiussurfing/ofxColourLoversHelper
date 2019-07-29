@@ -40,6 +40,7 @@ public:
     void update();
     void draw();
     void exit();
+    void windowResized(int w, int h);
 
     //---
 

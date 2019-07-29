@@ -131,7 +131,17 @@ void ofApp::mouseReleased(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
+    // set positions and panel sizes
+    glm::vec2 sizeGui(150, 400);
+    glm::vec2 sizeGrid(150, ofGetHeight());
+    glm::vec2 posGui(ofGetWidth()-(sizeGui.x+sizeGrid.x+4), 0);
+    glm::vec2 posGrid(posGui.x+sizeGui.x+2, 0);
 
+    //must be called before setup() to overwrite default settings
+    ColourLoversHelper.setGrid(posGrid, sizeGrid);
+    ColourLoversHelper.setup(posGui, sizeGui);
+
+    ColourLoversHelper.windowResized(w, h);
 }
 
 //--------------------------------------------------------------

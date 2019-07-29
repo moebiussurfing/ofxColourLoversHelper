@@ -41,6 +41,25 @@ void ofxColourLoversHelper::setVisible(bool b) {
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setup(){
 
+    //-
+
+    // TODO: to enable windowResize
+    if(colourLab)
+    {
+        ofRemoveListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
+        delete colourLab;
+        colourLab = 0;
+    }
+    if(gui)
+    {
+        ofRemoveListener(gui->newGUIEvent,this,&ofxColourLoversHelper::guiEvent);
+        ofRemoveListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::colourLoveEvent);
+        delete gui;
+        gui = 0;
+    }
+
+    //-
+
     int width = size.x;
     int xInit = 6;
     int dim = 30;
@@ -85,7 +104,7 @@ void ofxColourLoversHelper::setup(){
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
 
-    gui->addWidgetDown(new ofxUIToggle("FIXED WIDTHS",MODE_fixedSize, 10,10,5));
+    gui->addWidgetDown(new ofxUIToggle("Fixed widths",MODE_fixedSize, 10,10,4));
 
     //getTopPalettesForLover
     //searchPalettes
@@ -332,7 +351,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
             clearHistory();
     }
 
-    else if(name == "FIXED WIDTHS")
+    else if(name == "Fixed widths")
     {
         bool MODE_fixedSize_PRE = MODE_fixedSize;
         ofxUIToggle *toggle = e.getToggle();
@@ -694,6 +713,12 @@ ofxColourLoversHelper::~ofxColourLoversHelper()
 {
     removeKeysListeners();
     removeMouseListeners();
+}
+
+
+//--------------------------------------------------------------
+void ofxColourLoversHelper::windowResized(int w, int h){
+    updateColourLab();
 }
 
 
