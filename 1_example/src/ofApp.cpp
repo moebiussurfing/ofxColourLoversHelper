@@ -4,11 +4,11 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetFrameRate(30);
-    ofBackground(16);
+    ofBackground(64);
 
     // set positions and panel sizes
     glm::vec2 posGui(1000, 0);
-    glm::vec2 sizeGui(200, 240);
+    glm::vec2 sizeGui(200, 400);
     glm::vec2 posGrid(posGui.x+sizeGui.x+2, 0);
     glm::vec2 sizeGrid(120, ofGetHeight());
 
@@ -37,12 +37,12 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 
-    if (SHOW_gui) {
+    // preview receivers
 
-        // preview receivers
+    if (SHOW_gui) {
         int x, y, w, h, pad, lineH;
         x = 10;
-        y = ofGetHeight() - 100;
+        y = ofGetHeight() - 200;
         w = h = 40;
         pad = 3;
         lineH = 20;
@@ -75,6 +75,7 @@ void ofApp::draw(){
         ofPopStyle();
     }
 }
+
 
 //--------------------------------------------------------------
 void ofApp::exit(){

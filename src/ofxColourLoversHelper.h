@@ -26,9 +26,6 @@ public:
     void setColor_BACK(ofColor &c);
     void setPalette_BACK(vector<ofColor> &p);
     void setPalette_Name_BACK(string &n);
-    ofColor *myColor_BACK;
-    vector<ofColor> *myPalette_BACK;
-    string *myPalette_Name_BACK;
 
     void nextPalette();
     void prevPalette();
@@ -42,6 +39,8 @@ public:
     void exit();
 
     //---
+
+private:
 
     ofxUICanvas *gui;
     ofxUIScrollableCanvas *colourLab;
@@ -68,10 +67,18 @@ public:
 
     void loadFavourites();
     void loadHistory();
+    void clearFavourites();
+    void clearHistory();
+
+    string path = "colourLovers/";
 
     //---
 
-private:
+//private:
+
+    ofColor *myColor_BACK;
+    vector<ofColor> *myPalette_BACK;
+    string *myPalette_Name_BACK;
 
     bool isVisible = true;
     glm::vec2 position;

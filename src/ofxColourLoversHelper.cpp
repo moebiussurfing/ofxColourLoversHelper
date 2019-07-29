@@ -10,6 +10,7 @@ ofxColourLoversHelper::ofxColourLoversHelper()
     gridPosition = glm::vec2(1210,10);
     gridSize = glm::vec2(200, ofGetHeight());
 
+//    setVisible(true);
     addKeysListeners();
     addMouseListeners();
 }
@@ -20,6 +21,17 @@ void ofxColourLoversHelper::setVisible(bool b) {
     isVisible = b;
     colourLab->setVisible(isVisible);
     gui->setVisible(isVisible);
+
+    if(isVisible)
+    {
+        addKeysListeners();
+        addMouseListeners();
+    }
+    else
+    {
+        removeKeysListeners();
+        removeMouseListeners();
+    }
 }
 
 
@@ -27,14 +39,15 @@ void ofxColourLoversHelper::setVisible(bool b) {
 void ofxColourLoversHelper::setup(){
 
     int width = size.x;
-    int xInit = 20;
+//    int xInit = 20;
+    int xInit = 6;
     int dim = 30;
 
     gui = new ofxUICanvas(position.x, position.y, size.x, size.y);
 
     gui->setFont("assets/fonts/PragmataProR_0822.ttf");
-    gui->setFontSize(OFX_UI_FONT_LARGE, 6);
-    gui->setFontSize(OFX_UI_FONT_MEDIUM, 6);
+    gui->setFontSize(OFX_UI_FONT_LARGE, 9);
+    gui->setFontSize(OFX_UI_FONT_MEDIUM, 7);
     gui->setFontSize(OFX_UI_FONT_SMALL, 6);
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
@@ -42,32 +55,35 @@ void ofxColourLoversHelper::setup(){
     gui->addWidgetDown(new ofxUILabel("COLOUR LOVERS", OFX_UI_FONT_LARGE));
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
 
-    ofxUITextInput* textinput = new ofxUITextInput("search", "Search",width-xInit);
+    ofxUITextInput* textinput = new ofxUITextInput("search", "Search",width-xInit, OFX_UI_FONT_MEDIUM);
     textinput->setTriggerOnClick(false);
     gui->addWidgetDown(textinput);
 
-    textinput = new ofxUITextInput("loverId", "Lover id",width-xInit);
+    textinput = new ofxUITextInput("loverId", "Lover id",width-xInit, OFX_UI_FONT_MEDIUM);
     textinput->setTriggerOnClick(false);
     gui->addWidgetDown(textinput);
 
-    textinput = new ofxUITextInput("paletteId", "Palette id",width-xInit);
+    textinput = new ofxUITextInput("paletteId", "Palette id",width-xInit, OFX_UI_FONT_MEDIUM);
     textinput->setTriggerOnClick(false);
     gui->addWidgetDown(textinput);
 
-    gui->addWidgetDown(new ofxUILabelButton("Favs",false, 84, dim));
-    gui->addWidgetRight(new ofxUILabelButton( "History",false, 84, dim));
+    gui->addWidgetDown(new ofxUILabelButton("Favs",false, 0.5*width-xInit, dim, OFX_UI_FONT_MEDIUM));
+    gui->addWidgetRight(new ofxUILabelButton( "History",false, 0.5*width-xInit, dim, OFX_UI_FONT_MEDIUM));
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
-    gui->addWidgetDown(new ofxUILabel("Palette name:", OFX_UI_FONT_LARGE));
-    lastPaletteName_UI = new ofxUILabel(lastPaletteName, OFX_UI_FONT_LARGE);
+    gui->addWidgetDown(new ofxUILabel("PALETTE NAME:", OFX_UI_FONT_MEDIUM));
+    lastPaletteName_UI = new ofxUILabel(lastPaletteName, OFX_UI_FONT_MEDIUM);
     gui->addWidgetDown(lastPaletteName_UI);
     lastPaletteName_UI->setLabel(lastPaletteName);
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
-    gui->addWidgetDown(new ofxUILabelButton("Favourite",false, 84, dim));
+    gui->addWidgetDown(new ofxUILabelButton("FAVOURITE",false, width-xInit, dim));
+
+    gui->addWidgetDown(new ofxUILabelButton("REMOVE FAVS",false, width-xInit, dim, OFX_UI_FONT_SMALL));
+    gui->addWidgetDown(new ofxUILabelButton("REMOVE HISTORY",false, width-xInit, dim, OFX_UI_FONT_SMALL));
 
     //getTopPalettesForLover
     //searchPalettes
@@ -134,7 +150,7 @@ void ofxColourLoversHelper::colourLoveEvent(ColourLoveEvent &e) {
 
     // save results into history after succesfuly query search
     for(int i=0;i<palettes.size();i++){
-        e.palettes[i].save("palettes/history/"+e.palettes[i].id+ ".xml");
+        e.palettes[i].save(path+"history/"+e.palettes[i].id+ ".xml");
     }
 
     //return;
@@ -295,16 +311,15 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
         ofxColourLovers::getPalette(lastSearch);
     }
 
-    else if(name=="Favourite" && currPalette>-1)
+    else if(name=="FAVOURITE" && currPalette>-1)
     {
-        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
+        string str = path+"favourites/"+palettes[currPalette].id+ ".xml";
         palettes[currPalette].save(str);
         ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
     }
 
         //-
 
-//    currPalette=-1;
 
     else if(name == "Favs")
     {
@@ -314,14 +329,21 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     {
         loadHistory();
     }
-
+    else if(name == "REMOVE FAVS")
+    {
+        clearFavourites();
+    }
+    else if(name == "REMOVE HISTORY")
+    {
+        clearHistory();
+    }
     currPalette=-1;
 }
 
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::nextPalette() {
-
+    currPalette++;
 }
 
 
@@ -530,13 +552,13 @@ void ofxColourLoversHelper::colourPaletteEvent(ofxUIEventArgs &e)
 //--------------------------------------------------------------
 void ofxColourLoversHelper::loadFavourites(){
 
-    ofDirectory favs("palettes/favourites");
+    ofDirectory favs(path+"favourites");
     favs.listDir();
     palettes.clear();
 
     for(int i = 0; i < favs.numFiles(); i++){
         ColourLovePalette cp;
-        cp.load("palettes/favourites/"+favs.getName(i));
+        cp.load(path+"favourites/"+favs.getName(i));
         palettes.push_back(cp);
     }
 
@@ -545,21 +567,46 @@ void ofxColourLoversHelper::loadFavourites(){
 }
 
 
+
+//--------------------------------------------------------------
+void ofxColourLoversHelper::clearFavourites(){
+
+    ofDirectory favs(path+"favourites");
+    favs.listDir();
+
+    for(int i = 0; i < favs.numFiles(); i++){
+        favs[i].remove();
+    }
+}
+
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::loadHistory(){
 
-    ofDirectory favs("palettes/history");
+    ofDirectory favs(path+"history");
     favs.listDir();
     palettes.clear();
 
     for(int i = 0; i < favs.numFiles(); i++){
         ColourLovePalette cp;
-        cp.load("palettes/history/"+favs.getName(i));
+        cp.load(path+"history/"+favs.getName(i));
         palettes.push_back(cp);
     }
 
     lastSearch ="History";
     updateColourLab();
+}
+
+
+//--------------------------------------------------------------
+void ofxColourLoversHelper::clearHistory(){
+
+    ofDirectory favs(path+"/history");
+    favs.listDir();
+
+    for(int i = 0; i < favs.numFiles(); i++){
+        favs[i].remove();
+    }
 }
 
 
