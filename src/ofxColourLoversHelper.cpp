@@ -224,22 +224,10 @@ void ofxColourLoversHelper::updateColourLab(){
         int currX = 1;
         int currW = 0;
 
-
-//        // mark selected palette
-//        bool markPalette = false;
-//        if (i == currPalette || i == 2)
-//        {
-//            markPalette = true;
-//        }
-
-
         // colors in each palette
         int numOfColorsInPalette = palettes[i].colours.size();
         for(int c=0;c<numOfColorsInPalette;c++)
         {
-
-            // For set colour issues, make sure to set fill colour after widget been added
-
             if (!MODE_fixedSize)
             {
                 // different sizes with original colourLover Palettes
@@ -259,6 +247,7 @@ void ofxColourLoversHelper::updateColourLab(){
             btn->setLabelVisible(0);
             colourLab->addWidget(btn);
 
+            // For set colour issues, make sure to set fill colour after widget been added
             // color filled box
             btn->setDrawFill(true);
             btn->setColorFill(palettes[i].colours[c]);
@@ -266,19 +255,8 @@ void ofxColourLoversHelper::updateColourLab(){
             btn->setDrawBack(true);
 
             // mark selector settings colors borders & disable
-            btn->setColorOutlineHighlight(ofColor::blue);
-            btn->setColorOutline(ofColor::red);
-            btn->setDrawOutlineHighLight(false);
-            btn->setDrawOutline(true);
-
-////                btn->setDrawOutlineHighLight(true);
-//            if (markPalette)
-//            {
-////                btn->setColorOutline(ofColor::red);
-////                btn->setColorOutlineHighlight(ofColor::black);
-//                btn->setDrawOutline(true);
-//                btn->setDrawOutlineHighLight(true);
-//            }
+            btn->setColorOutline(ofColor::black);
+            btn->setDrawOutline(false);
 
             coloursPalette.push_back(btn);
 
@@ -440,18 +418,13 @@ void ofxColourLoversHelper::refreshPalette()
             auto e = colourLab->getWidget(butName);
             ofxUIButton *btn = (ofxUIButton *) e;
 
-//            ofxUIButton *textinput = (ofxUIButton *) e.widget;
-//            ofxUIButton *btn = colourLab->getWidget(butName);
-
-            if (c == currPalette)
+            if (i == currPalette)
             {
                 btn->setDrawOutline(true);
-                btn->setDrawOutlineHighLight(true);
             }
             else
             {
                 btn->setDrawOutline(false);
-                btn->setDrawOutlineHighLight(false);
             }
         }
     }
