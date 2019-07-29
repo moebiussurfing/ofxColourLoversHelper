@@ -42,7 +42,6 @@ void ofxColourLoversHelper::setVisible(bool b) {
 void ofxColourLoversHelper::setup(){
 
     int width = size.x;
-//    int xInit = 20;
     int xInit = 6;
     int dim = 30;
 
@@ -54,18 +53,15 @@ void ofxColourLoversHelper::setup(){
     gui->setFontSize(OFX_UI_FONT_SMALL, 6);
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
-
     gui->addWidgetDown(new ofxUILabel("COLOUR LOVERS", OFX_UI_FONT_LARGE));
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
 
     ofxUITextInput* textinput = new ofxUITextInput("search", "Search keyword",width-xInit, OFX_UI_FONT_MEDIUM);
     textinput->setTriggerOnClick(false);
     gui->addWidgetDown(textinput);
-
     textinput = new ofxUITextInput("loverId", "Lover id",width-xInit, OFX_UI_FONT_MEDIUM);
     textinput->setTriggerOnClick(false);
     gui->addWidgetDown(textinput);
-
     textinput = new ofxUITextInput("paletteId", "Palette id",width-xInit, OFX_UI_FONT_MEDIUM);
     textinput->setTriggerOnClick(false);
     gui->addWidgetDown(textinput);
@@ -73,7 +69,6 @@ void ofxColourLoversHelper::setup(){
     gui->addWidgetDown(new ofxUILabelButton("FAVS",false, 0.5*width-xInit, dim, OFX_UI_FONT_MEDIUM));
     gui->addWidgetRight(new ofxUILabelButton( "HISTORY",false, 0.5*width-xInit, dim, OFX_UI_FONT_MEDIUM));
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
-
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
@@ -81,6 +76,8 @@ void ofxColourLoversHelper::setup(){
     lastPaletteName_UI = new ofxUILabel(lastPaletteName, OFX_UI_FONT_SMALL);
     gui->addWidgetDown(lastPaletteName_UI);
     lastPaletteName_UI->setLabel(lastPaletteName);
+
+    gui->addWidgetDown(new ofxUIToggle("FIXED WIDTHS",MODE_fixedSize, 10,10,5));
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
     gui->addWidgetDown(new ofxUILabelButton("ADD FAVOURITE",false, width-xInit, dim));
@@ -107,9 +104,9 @@ void ofxColourLoversHelper::setup(){
     if (palettes.size()>0)
     {
         currPalette = 0;
-        updateFlag = 1;
+//        updateFlag = 1;
 //        setPalette(currPalette);
-        refreshPalette();
+//        refreshPalette();
     }
 }
 
@@ -161,7 +158,6 @@ void ofxColourLoversHelper::updateColourLab(){
         colourLab = 0;
     }
 
-    //    int xInit = 20;
     int xInit = 6;
     int padding = 5;
     int width;
@@ -169,26 +165,15 @@ void ofxColourLoversHelper::updateColourLab(){
 
     colourLab = new ofxUIScrollableCanvas(gridPosition.x, gridPosition.y, width, gridSize.y);
 
-    colourLab->addWidgetDown(new ofxUISpacer(width-xInit, 0));
-
     colourLab->setFont("assets/fonts/PragmataProR_0822.ttf");
     colourLab->setFontSize(OFX_UI_FONT_LARGE, 9);
     colourLab->setFontSize(OFX_UI_FONT_MEDIUM, 7);
     colourLab->setFontSize(OFX_UI_FONT_SMALL, 6);
-
     colourLab->setScrollableDirections(false, true);
     colourLab->setScrollAreaToScreenHeight();
-    // colourLab->setScrollAreaToScreen();
-    // colourLab->autoSizeToFitWidgets();
+    colourLab->addWidgetDown(new ofxUISpacer(width-xInit, 0));
 
     ofAddListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
-
-    /*
-    for(int i=0;i<coloursBasic.size();i++){
-        colourLab->removeWidget(coloursBasic[i]);
-    }
-    coloursBasic.erase(coloursBasic.begin(),coloursBasic.end());
-    */
 
     int cdim;
     int cdist = 1;
@@ -196,18 +181,17 @@ void ofxColourLoversHelper::updateColourLab(){
     int row=0;
     int startY = 50;
 
-    //ofxUI suddenly introduced odd padding, using x 0 and full width will hide btn. Hmm....
     float guiWidth = width-2;
 
     //cdim = 20;
-
     cdim = guiWidth/5.;
     //maybe some palette have less than 5 colors, ie: 4, and then can cause problems...
     // so we fix to 5 as usual they have..
 
     // colourLab->centerWidgets();
     colourLab->addWidgetDown(new ofxUILabel(lastSearch, OFX_UI_FONT_MEDIUM));
-    colourLab->addWidgetDown(new ofxUISpacer(guiWidth-20, 2));
+//    colourLab->addWidgetDown(new ofxUISpacer(guiWidth-20, 2));
+    colourLab->addWidgetDown(new ofxUISpacer(width-xInit, 2));
 
     //-
 
@@ -223,11 +207,16 @@ void ofxColourLoversHelper::updateColourLab(){
 
             // For set colour issues, make sure to set fill colour after widget been added
 
-            // different sizes with original colourLover Palettes
-            //currW = palettes[i].colorWidths[c]*guiWidth;
-
-            // same size for each color
-            currW = guiWidth / numOfColorsInPalette;
+            if (!MODE_fixedSize)
+            {
+                // different sizes with original colourLover Palettes
+                currW = palettes[i].colorWidths[c]*guiWidth;
+            }
+            else
+            {
+                // same size for each color
+                currW = guiWidth / numOfColorsInPalette;
+            }
 
             ofxUIButton * btn = new ofxUIButton(("CL_"+ofToString(i)+"_"+ofToString(c)),false,
                     currW, cdim,
@@ -309,7 +298,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
         ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
     }
 
-    //-
+        //-
 
 
     else if(name == "FAVS")
@@ -327,6 +316,19 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     else if(name == "REMOVE HISTORY")
     {
         clearHistory();
+    }
+
+    else if(name == "FIXED WIDTHS")
+    {
+//        cout << "FIXED WIDTHS" << endl;
+        bool MODE_fixedSize_PRE = MODE_fixedSize;
+        ofxUIToggle *toggle = e.getToggle();
+        MODE_fixedSize = toggle->getValue();
+        cout << MODE_fixedSize << endl;
+        if (MODE_fixedSize != MODE_fixedSize_PRE)
+        {
+            updateColourLab();
+        }
     }
 
     currPalette=-1;
@@ -497,6 +499,7 @@ void ofxColourLoversHelper::colourPaletteEvent(ofxUIEventArgs &e)
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::loadFavourites(){
+    ofLogNotice("ofxColourLoversHelper")<<"loadFavourites";
 
     ofDirectory favs(path+"favourites");
     favs.listDir();
@@ -515,6 +518,7 @@ void ofxColourLoversHelper::loadFavourites(){
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::clearFavourites(){
+    ofLogNotice("ofxColourLoversHelper")<<"clearFavourites";
 
     ofDirectory favs(path+"favourites");
     favs.listDir();
@@ -527,6 +531,7 @@ void ofxColourLoversHelper::clearFavourites(){
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::loadHistory(){
+    ofLogNotice("ofxColourLoversHelper")<<"loadHistory";
 
     ofDirectory favs(path+"history");
     favs.listDir();
@@ -545,6 +550,7 @@ void ofxColourLoversHelper::loadHistory(){
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::clearHistory(){
+    ofLogNotice("ofxColourLoversHelper")<<"clearHistory";
 
     ofDirectory favs(path+"/history");
     favs.listDir();

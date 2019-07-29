@@ -33,6 +33,8 @@ public:
 
     void setVisible(bool b);
 
+    bool MODE_fixedSize = true;
+
     //--
 
     void update();
