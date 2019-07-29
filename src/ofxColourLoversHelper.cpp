@@ -293,9 +293,13 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
 
     else if(name=="ADD FAVOURITE" && currPalette>-1)
     {
-        string str = path+"favourites/"+palettes[currPalette].id+ ".xml";
+        ofxUIButton *but = e.getButton();
+        if(but->getValue())
+        {
+            string str = path+"favourites/"+palettes[currPalette].id+ ".xml";
         palettes[currPalette].save(str);
         ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
+        }
     }
 
         //-
@@ -303,19 +307,27 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
 
     else if(name == "FAVS")
     {
-        loadFavourites();
+        ofxUIButton *but = e.getButton();
+        if(but->getValue())
+            loadFavourites();
     }
     else if(name == "HISTORY")
     {
-        loadHistory();
+        ofxUIButton *but = e.getButton();
+        if(but->getValue())
+            loadHistory();
     }
     else if(name == "REMOVE FAVS")
     {
-        clearFavourites();
+        ofxUIButton *but = e.getButton();
+        if(but->getValue())
+            clearFavourites();
     }
     else if(name == "REMOVE HISTORY")
     {
-        clearHistory();
+        ofxUIButton *but = e.getButton();
+        if(but->getValue())
+            clearHistory();
     }
 
     else if(name == "FIXED WIDTHS")
@@ -324,7 +336,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
         bool MODE_fixedSize_PRE = MODE_fixedSize;
         ofxUIToggle *toggle = e.getToggle();
         MODE_fixedSize = toggle->getValue();
-        cout << MODE_fixedSize << endl;
+//        cout << MODE_fixedSize << endl;
         if (MODE_fixedSize != MODE_fixedSize_PRE)
         {
             updateColourLab();
