@@ -75,7 +75,7 @@ void ofxColourLoversHelper::setup(){
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
     gui->addWidgetDown(new ofxUILabel("PALETTE NAME:", OFX_UI_FONT_MEDIUM));
-    lastPaletteName_UI = new ofxUILabel(lastPaletteName, OFX_UI_FONT_MEDIUM);
+    lastPaletteName_UI = new ofxUILabel(lastPaletteName, OFX_UI_FONT_SMALL);
     gui->addWidgetDown(lastPaletteName_UI);
     lastPaletteName_UI->setLabel(lastPaletteName);
 
@@ -171,7 +171,8 @@ void ofxColourLoversHelper::updateColourLab(){
         colourLab = 0;
     }
 
-    int xInit = 20;
+    //    int xInit = 20;
+    int xInit = 6;
     int padding = 5;
     int width;
     width = gridSize.x;
@@ -181,8 +182,8 @@ void ofxColourLoversHelper::updateColourLab(){
     colourLab->addWidgetDown(new ofxUISpacer(width-xInit, 0));
 
     colourLab->setFont("assets/fonts/PragmataProR_0822.ttf");
-    colourLab->setFontSize(OFX_UI_FONT_LARGE, 6);
-    colourLab->setFontSize(OFX_UI_FONT_MEDIUM, 6);
+    colourLab->setFontSize(OFX_UI_FONT_LARGE, 9);
+    colourLab->setFontSize(OFX_UI_FONT_MEDIUM, 7);
     colourLab->setFontSize(OFX_UI_FONT_SMALL, 6);
 
     colourLab->setScrollableDirections(false, true);
@@ -215,7 +216,7 @@ void ofxColourLoversHelper::updateColourLab(){
     // so we fix to 5 as usual they have..
 
     // colourLab->centerWidgets();
-    colourLab->addWidgetDown(new ofxUILabel(lastSearch, OFX_UI_FONT_LARGE));
+    colourLab->addWidgetDown(new ofxUILabel(lastSearch, OFX_UI_FONT_MEDIUM));
     colourLab->addWidgetDown(new ofxUISpacer(guiWidth-20, 2));
 
     //-
@@ -286,7 +287,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     int kind = e.widget->getKind();
     ofLogNotice("ofxColourLoversHelper") << "got event from: " << name;
-    ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
+//    ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
 
     if(name == "search")
     {
@@ -337,6 +338,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     {
         clearHistory();
     }
+
     currPalette=-1;
 }
 
@@ -389,6 +391,9 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
 
     // set palette
     setPalette(pId);
+    ofLogNotice("ofxColourLoversHelper") << "colourLabEvent:setPalette:pId: "<<pId;
+    ofLogNotice("ofxColourLoversHelper") << "colourLabEvent:currPalette: " << currPalette;
+
 }
 
 

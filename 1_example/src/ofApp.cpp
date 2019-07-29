@@ -7,10 +7,10 @@ void ofApp::setup(){
     ofBackground(64);
 
     // set positions and panel sizes
-    glm::vec2 posGui(1000, 0);
     glm::vec2 sizeGui(200, 400);
-    glm::vec2 posGrid(posGui.x+sizeGui.x+2, 0);
     glm::vec2 sizeGrid(120, ofGetHeight());
+    glm::vec2 posGui(ofGetWidth()-(sizeGui.x+sizeGrid.x+4), 0);
+    glm::vec2 posGrid(posGui.x+sizeGui.x+2, 0);
 
     //must be called before setup() to overwrite default settings
     ColourLoversHelper.setGrid(posGrid, sizeGrid);
