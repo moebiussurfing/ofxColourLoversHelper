@@ -1,5 +1,6 @@
 #include "ofxColourLoversHelper.h"
 
+
 //--------------------------------------------------------------
 ofxColourLoversHelper::ofxColourLoversHelper()
 {
@@ -13,10 +14,14 @@ ofxColourLoversHelper::ofxColourLoversHelper()
     addMouseListeners();
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setVisible(bool b) {
-      isVisible = b;
+    isVisible = b;
+    colourLab->setVisible(isVisible);
+    gui->setVisible(isVisible);
 }
+
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setup(){
@@ -102,6 +107,7 @@ void ofxColourLoversHelper::setup(){
     loadFavourites();
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setup(glm::vec2 _position, glm::vec2 _size){
     position = _position;
@@ -110,11 +116,13 @@ void ofxColourLoversHelper::setup(glm::vec2 _position, glm::vec2 _size){
     setup();
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setGrid(glm::vec2 _position, glm::vec2 _size){
     gridPosition = _position;
     gridSize = _size;
 }
+
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::colourLoveEvent(ColourLoveEvent &e) {
@@ -237,22 +245,12 @@ void ofxColourLoversHelper::updateColourLab(){
 
 
 //--------------------------------------------------------------
-void ofxColourLoversHelper::update(){
-
-    //TODO: should make with trig not in loop neither with PRE!
-    if (isVisible != isVisible_PRE)
-    {
-        colourLab->setVisible(isVisible);
-        gui->setVisible(isVisible);
-        isVisible_PRE = isVisible;
-    }
-
+void ofxColourLoversHelper::update()
+{
     if(updateFlag)
     {
         updateColourLab();
     }
-
-
 }
 
 
@@ -304,7 +302,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
         ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
     }
 
-    //-
+        //-
 
 //    currPalette=-1;
 
@@ -320,10 +318,18 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     currPalette=-1;
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::nextPalette() {
 
 }
+
+
+//--------------------------------------------------------------
+void ofxColourLoversHelper::prevPalette() {
+
+}
+
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
@@ -556,11 +562,13 @@ void ofxColourLoversHelper::loadHistory(){
     updateColourLab();
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setColor_BACK(ofColor &c)
 {
     myColor_BACK = &c;
 }
+
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPalette_BACK(vector<ofColor> &p)
@@ -568,11 +576,13 @@ void ofxColourLoversHelper::setPalette_BACK(vector<ofColor> &p)
     myPalette_BACK = &p;
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPalette_Name_BACK(string &n)
 {
     myPalette_Name_BACK = &n;
 }
+
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::keyPressed( ofKeyEventArgs& eventArgs )
@@ -590,6 +600,7 @@ void ofxColourLoversHelper::keyPressed( ofKeyEventArgs& eventArgs )
 //    }
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::keyReleased( ofKeyEventArgs& eventArgs )
 {
@@ -598,17 +609,20 @@ void ofxColourLoversHelper::keyReleased( ofKeyEventArgs& eventArgs )
     }
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::addKeysListeners()
 {
     ofAddListener( ofEvents().keyPressed, this, &ofxColourLoversHelper::keyPressed );
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::removeKeysListeners()
 {
     ofRemoveListener( ofEvents().keyPressed, this, &ofxColourLoversHelper::keyPressed );
 }
+
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::mouseDragged(ofMouseEventArgs& eventArgs){
@@ -618,6 +632,7 @@ void ofxColourLoversHelper::mouseDragged(ofMouseEventArgs& eventArgs){
 //    ofLogNotice("ofxColourLoversHelper") << "mouseDragged " <<  x << ", " << y << ", " << button;
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::mousePressed(ofMouseEventArgs& eventArgs){
     const int & x = eventArgs.x;
@@ -625,6 +640,7 @@ void ofxColourLoversHelper::mousePressed(ofMouseEventArgs& eventArgs){
     const int & button = eventArgs.button;
 //    ofLogNotice("ofxColourLoversHelper") << "mousePressed " <<  x << ", " << y << ", " << button;
 }
+
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::mouseReleased(ofMouseEventArgs& eventArgs){
@@ -634,6 +650,7 @@ void ofxColourLoversHelper::mouseReleased(ofMouseEventArgs& eventArgs){
 //    ofLogNotice("ofxColourLoversHelper") << "mouseReleased " <<  x << ", " << y << ", " << button;
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::addMouseListeners()
 {
@@ -641,6 +658,7 @@ void ofxColourLoversHelper::addMouseListeners()
     ofAddListener( ofEvents().mousePressed, this, &ofxColourLoversHelper::mousePressed );
     ofAddListener( ofEvents().mouseReleased, this, &ofxColourLoversHelper::mouseReleased );
 }
+
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::removeMouseListeners()
@@ -650,11 +668,13 @@ void ofxColourLoversHelper::removeMouseListeners()
     ofRemoveListener( ofEvents().mouseReleased, this, &ofxColourLoversHelper::mouseReleased );
 }
 
+
 //--------------------------------------------------------------
 void ofxColourLoversHelper::exit()
 {
 
 }
+
 
 //--------------------------------------------------------------
 ofxColourLoversHelper::~ofxColourLoversHelper()

@@ -14,19 +14,11 @@ public:
     ofxColourLoversHelper();
     ~ofxColourLoversHelper();
 
-    bool isVisible = true;
-    bool isVisible_PRE = false;
-    void setVisible(bool b);
-    glm::vec2 position;
-    glm::vec2 size;
-    glm::vec2 gridPosition;
-    glm::vec2 gridSize;
-
-    void setup();
-
     //--
 
     // API
+
+    void setup();
 
     void setup(glm::vec2 _position, glm::vec2 _size);
     void setGrid(glm::vec2 _position, glm::vec2 _size);
@@ -41,6 +33,8 @@ public:
     void nextPalette();
     void prevPalette();
 
+    void setVisible(bool b);
+
     //--
 
     void update();
@@ -49,7 +43,6 @@ public:
 
     //---
 
-//    ofxUILabel *bgLabel;
     ofxUICanvas *gui;
     ofxUIScrollableCanvas *colourLab;
     ofxUICanvas *paletteView;
@@ -66,8 +59,8 @@ public:
 
     bool updateFlag;
     void updateColourLab();
-    vector<ofxUIButton *>   coloursPalette;
-    vector<ofxUIButton *>   colourRanges;
+    vector<ofxUIButton *> coloursPalette;
+    vector<ofxUIButton *> colourRanges;
     string lastSearch;
 
     ofxUILabel * lastPaletteName_UI;
@@ -79,6 +72,12 @@ public:
     //---
 
 private:
+
+    bool isVisible = true;
+    glm::vec2 position;
+    glm::vec2 size;
+    glm::vec2 gridPosition;
+    glm::vec2 gridSize;
 
     void keyPressed( ofKeyEventArgs& eventArgs);
     void keyReleased( ofKeyEventArgs& eventArgs );

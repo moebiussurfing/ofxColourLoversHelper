@@ -36,43 +36,44 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    // ColourLoversHelper.draw();//not required as drawing goes to ofxUI
 
-    // preview receivers
-    int x, y, w, h, pad, lineH;
-    x = 10;
-    y = 30;
-    w = h = 40;
-    pad = 3;
-    lineH = 20;
+    if (SHOW_gui) {
 
-    ofPushStyle();
-    ofFill();
+        // preview receivers
+        int x, y, w, h, pad, lineH;
+        x = 10;
+        y = ofGetHeight() - 100;
+        w = h = 40;
+        pad = 3;
+        lineH = 20;
 
-    ofDrawBitmapStringHighlight("myColor:", x, y, ofColor::black, ofColor::white);
-    y += pad;
+        ofPushStyle();
+        ofFill();
 
-    ofSetColor(myColor);
-    ofDrawRectangle(ofRectangle(x,y,w,h));
-    y += (h+pad);
+        ofDrawBitmapStringHighlight("myColor:", x, y, ofColor::black, ofColor::white);
+        y += pad;
 
-    y += (lineH);
-    ofDrawBitmapStringHighlight("myPalette:", x, y, ofColor::black, ofColor::white);
-    y += pad;
+        ofSetColor(myColor);
+        ofDrawRectangle(ofRectangle(x, y, w, h));
+        y += (h + pad);
 
-    for (int i=0; i<myPalette.size(); i++)
-    {
-        ofSetColor(myPalette[i]);
-        ofDrawRectangle(ofRectangle(x+i*(w+pad),y,w,h));
+        y += (lineH);
+        ofDrawBitmapStringHighlight("myPalette:", x, y, ofColor::black, ofColor::white);
+        y += pad;
+
+        for (int i = 0; i < myPalette.size(); i++) {
+            ofSetColor(myPalette[i]);
+            ofDrawRectangle(ofRectangle(x + i * (w + pad), y, w, h));
+        }
+        y += (h + pad);
+
+        y += (lineH);
+        ofDrawBitmapStringHighlight("myPalette_Name:", x, y, ofColor::black, ofColor::white);
+        y += (lineH);
+        ofDrawBitmapStringHighlight(myPalette_Name, x, y, ofColor::black, ofColor::white);
+
+        ofPopStyle();
     }
-    y += (h+pad);
-
-    y += (lineH);
-    ofDrawBitmapStringHighlight("myPalette_Name:", x, y, ofColor::black, ofColor::white);
-    y += (lineH);
-    ofDrawBitmapStringHighlight(myPalette_Name, x, y, ofColor::black, ofColor::white);
-
-    ofPopStyle();
 }
 
 //--------------------------------------------------------------
@@ -83,7 +84,19 @@ void ofApp::exit(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
-    ColourLoversHelper.nextPalette();
+    if (key == OF_KEY_DOWN)
+    {
+        ColourLoversHelper.nextPalette();
+    }
+    if (key == OF_KEY_UP)
+    {
+        ColourLoversHelper.prevPalette();
+    }
+    if (key == 'g')
+    {
+        SHOW_gui = !SHOW_gui;
+        ColourLoversHelper.setVisible(SHOW_gui);
+    }
 }
 
 //--------------------------------------------------------------

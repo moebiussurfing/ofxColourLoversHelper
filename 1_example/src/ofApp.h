@@ -26,4 +26,6 @@ class ofApp: public ofBaseApp{
 		string myPalette_Name = "";
 		ofColor myColor;
 		vector<ofColor> myPalette;
+
+		bool SHOW_gui = true;
 };
