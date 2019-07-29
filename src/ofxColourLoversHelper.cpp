@@ -10,6 +10,8 @@ ofxColourLoversHelper::ofxColourLoversHelper()
     gridPosition = glm::vec2(1210,10);
     gridSize = glm::vec2(200, ofGetHeight());
 
+    colorMarked = (ofColor::white);
+
 //    setVisible(true);
     addKeysListeners();
     addMouseListeners();
@@ -255,7 +257,7 @@ void ofxColourLoversHelper::updateColourLab(){
             btn->setDrawBack(true);
 
             // mark selector settings colors borders & disable
-            btn->setColorOutline(ofColor::black);
+            btn->setColorOutline(colorMarked);
             btn->setDrawOutline(false);
 
             coloursPalette.push_back(btn);

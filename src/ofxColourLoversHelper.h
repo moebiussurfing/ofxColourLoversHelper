@@ -2,8 +2,6 @@
 #pragma once
 #include "ofMain.h"
 
-#include "ofxRectangleUtils.h"
-
 #include "ofxUI.h"
 #include "ofxColourLovers.h"
 
@@ -13,6 +11,11 @@ public:
 
     ofxColourLoversHelper();
     ~ofxColourLoversHelper();
+
+    void update();
+    void draw();
+    void exit();
+    void windowResized(int w, int h);
 
     //--
 
@@ -37,13 +40,6 @@ public:
 
     //--
 
-    void update();
-    void draw();
-    void exit();
-    void windowResized(int w, int h);
-
-    //---
-
 private:
 
     ofxUICanvas *gui;
@@ -56,7 +52,6 @@ private:
     vector<ColourLovePalette> palettes;
 
     void guiEvent(ofxUIEventArgs &e);
-
     void colourLoveEvent(ColourLoveEvent &e);
     void colourLabEvent(ofxUIEventArgs &e);
     void colourPaletteEvent(ofxUIEventArgs &e);
@@ -66,7 +61,6 @@ private:
     vector<ofxUIButton *> coloursPalette;
     vector<ofxUIButton *> colourRanges;
     string lastSearch;
-
     ofxUILabel * lastPaletteName_UI;
     string lastPaletteName = "";
 
@@ -76,10 +70,9 @@ private:
     void clearHistory();
 
     string path = "colourLovers/";
+    ofColor colorMarked;
 
     //---
-
-//private:
 
     ofColor *myColor_BACK;
     vector<ofColor> *myPalette_BACK;

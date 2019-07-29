@@ -6,27 +6,33 @@ void ofApp::setup(){
     ofSetFrameRate(30);
     ofBackground(64);
 
+    //-
+
     // set positions and panel sizes
     glm::vec2 sizeGui(150, 400);
     glm::vec2 sizeGrid(150, ofGetHeight());
     glm::vec2 posGui(ofGetWidth()-(sizeGui.x+sizeGrid.x+4), 0);
     glm::vec2 posGrid(posGui.x+sizeGui.x+2, 0);
 
-    //must be called before setup() to overwrite default settings
+    // must be called before setup() to overwrite default settings
     ColourLoversHelper.setGrid(posGrid, sizeGrid);
     ColourLoversHelper.setup(posGui, sizeGui);
+
+    //-
 
     // receivers pointers
     ColourLoversHelper.setColor_BACK(myColor);
     ColourLoversHelper.setPalette_BACK(myPalette);
     ColourLoversHelper.setPalette_Name_BACK(myPalette_Name);
 
-    // initiation values
+    // some initiation values..
     myColor = ofColor::white;
     myPalette.resize(2);//pointer setter whill clear/resize. nevermind the vector size here
     myPalette[0] = ofColor::white;
     myPalette[0] = ofColor::white;
     myPalette_Name = "NOT LOADED";
+
+    //-
 }
 
 //--------------------------------------------------------------
@@ -130,7 +136,8 @@ void ofApp::mouseReleased(int x, int y, int button){
 }
 
 //--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
+void ofApp::windowResized(int w, int h)
+{
     // set positions and panel sizes
     glm::vec2 sizeGui(150, 400);
     glm::vec2 sizeGrid(150, ofGetHeight());
