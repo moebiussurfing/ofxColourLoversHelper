@@ -77,13 +77,15 @@ void ofxColourLoversHelper::setup(){
     gui->addWidgetDown(lastPaletteName_UI);
     lastPaletteName_UI->setLabel(lastPaletteName);
 
-    gui->addWidgetDown(new ofxUIToggle("FIXED WIDTHS",MODE_fixedSize, 10,10,5));
-
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
-    gui->addWidgetDown(new ofxUILabelButton("ADD FAVOURITE",false, width-xInit, dim));
 
+    gui->addWidgetDown(new ofxUILabelButton("ADD FAVOURITE",false, width-xInit, dim));
     gui->addWidgetDown(new ofxUILabelButton("REMOVE FAVS",false, width-xInit, dim, OFX_UI_FONT_SMALL));
     gui->addWidgetDown(new ofxUILabelButton("REMOVE HISTORY",false, width-xInit, dim, OFX_UI_FONT_SMALL));
+
+    gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
+
+    gui->addWidgetDown(new ofxUIToggle("FIXED WIDTHS",MODE_fixedSize, 10,10,5));
 
     //getTopPalettesForLover
     //searchPalettes
@@ -104,7 +106,7 @@ void ofxColourLoversHelper::setup(){
     if (palettes.size()>0)
     {
         currPalette = 0;
-//        updateFlag = 1;
+        updateFlag = 1;
 //        setPalette(currPalette);
 //        refreshPalette();
     }
@@ -265,7 +267,7 @@ void ofxColourLoversHelper::draw(){
 void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     int kind = e.widget->getKind();
-    ofLogNotice("ofxColourLoversHelper") << "got event from: " << name;
+    ofLogNotice("ofxColourLoversHelper") << "guiEvent: " << name;
 //    ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
 
     if(name == "search")
@@ -332,7 +334,6 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
 
     else if(name == "FIXED WIDTHS")
     {
-//        cout << "FIXED WIDTHS" << endl;
         bool MODE_fixedSize_PRE = MODE_fixedSize;
         ofxUIToggle *toggle = e.getToggle();
         MODE_fixedSize = toggle->getValue();
@@ -342,6 +343,8 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
             updateColourLab();
         }
     }
+
+    //-
 
     currPalette=-1;
 }
