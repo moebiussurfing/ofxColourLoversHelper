@@ -456,21 +456,25 @@ void ofxColourLoversHelper::refreshPalette()
 
     // TODO: workflow...auto trig last color too... (it's done before too..but require when controlling by keyboard next/prev palette)
 
-    //MODE_PickPalette_BACK && 
-    if (MODE_PickColor_BACK)
-    {
-        // set BACK color clicked
-        if (myColor_BACK!=nullptr)
-        {
-            myColor_BACK->set( lastColor_clicked );
-        }
-
-        // flag updater color ready
-        if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
-        {
-            (*bUpdated_Color_BACK) = true;
-        }
-    }
+//    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+////    if (MODE_PickColor_BACK)
+//    {
+//        ofColor c;
+//        c = p.colours[0];
+//
+//        // set BACK color clicked
+//        if (myColor_BACK!=nullptr)
+//        {
+////            myColor_BACK->set( lastColor_clicked );
+//            myColor_BACK->set( c );
+//        }
+//
+//        // flag updater color ready
+//        if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
+//        {
+//            (*bUpdated_Color_BACK) = true;
+//        }
+//    }
 
     //-
 
@@ -518,6 +522,31 @@ void ofxColourLoversHelper::nextPalette() {
     ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
 
     refreshPalette();
+
+    //-
+
+    // TODO: workflow...auto trig last color too... (it's done before too..but require when controlling by keyboard next/prev palette)
+
+////    if (!MODE_PickPalette_BACK && MODE_PickColor_BACK)
+////    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+//    if (MODE_PickColor_BACK)
+//    {
+////        ofColor c;
+////        c = p.colours[0];
+//
+//        // set BACK color clicked
+//        if (myColor_BACK!=nullptr)
+//        {
+//            myColor_BACK->set( lastColor_clicked );
+////            myColor_BACK->set( c );
+//        }
+//
+//        // flag updater color ready
+//        if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
+//        {
+//            (*bUpdated_Color_BACK) = true;
+//        }
+//    }
 }
 
 
