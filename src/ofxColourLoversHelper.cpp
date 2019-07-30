@@ -90,6 +90,12 @@ void ofxColourLoversHelper::setup(){
     gui->addWidgetDown(new ofxUILabelButton("FAVS",false, 0.5*width-xInit, dim, OFX_UI_FONT_MEDIUM));
     gui->addWidgetRight(new ofxUILabelButton( "HISTORY",false, 0.5*width-xInit, dim, OFX_UI_FONT_MEDIUM));
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
+
+    int tgSize1 = 10;
+    int tgSize2 = 4;
+    gui->addWidgetDown(new ofxUIToggle("FIXED WIDTHS",MODE_fixedSize,tgSize1,tgSize1,tgSize2));
+    gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
+
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 2));
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
@@ -106,12 +112,13 @@ void ofxColourLoversHelper::setup(){
 
     gui->addWidgetDown(new ofxUISpacer(width-xInit, 0));
 
-    gui->addWidgetDown(new ofxUIToggle("Fixed widths",MODE_fixedSize, 10,10,4));
+    tgSize1 = 10;
+    tgSize2 = 4;
+    gui->addWidgetDown(new ofxUIToggle("PALETTE PICK",MODE_PickPalette_BACK,tgSize1,tgSize1,tgSize2));
+    gui->addWidgetDown(new ofxUIToggle("COLOR PICK",MODE_PickColor_BACK,tgSize1,tgSize1,tgSize2));
 
     //getTopPalettesForLover
     //searchPalettes
-
-    //gui->addWidgetDown(new ofxUILabel("BUTTONS", OFX_UI_FONT_MEDIUM));
 
     currPalette=-1;
     paletteView = 0;
@@ -367,16 +374,25 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
             clearHistory();
     }
 
-    else if(name == "Fixed widths")
+    else if(name == "FIXED WIDTHS")
     {
         bool MODE_fixedSize_PRE = MODE_fixedSize;
         ofxUIToggle *toggle = e.getToggle();
         MODE_fixedSize = toggle->getValue();
-//        cout << MODE_fixedSize << endl;
         if (MODE_fixedSize != MODE_fixedSize_PRE)
         {
             updateColourLab();
         }
+    }
+    else if(name == "PALETTE PICK")
+    {
+        ofxUIToggle *toggle = e.getToggle();
+        MODE_PickPalette_BACK = toggle->getValue();
+    }
+    else if(name == "COLOR PICK")
+    {
+        ofxUIToggle *toggle = e.getToggle();
+        MODE_PickColor_BACK = toggle->getValue();
     }
 
     //-
@@ -396,16 +412,20 @@ void ofxColourLoversHelper::refreshPalette()
 
     //-
 
-    // set BACK name clicked
-    if (myPalette_Name_BACK!=nullptr)
-    {
-        (*myPalette_Name_BACK) = p.title;
-    }
+    // get and set palette colors and name BACK
 
-    // get and set palettes BACK
     int sizePalette = p.colours.size();
-    if (sizePalette>0 && myPalette_BACK!=nullptr)
+    if (sizePalette>0 && myPalette_BACK!=nullptr && MODE_PickPalette_BACK)
     {
+        // set BACK name clicked
+        if (myPalette_Name_BACK!=nullptr)
+        {
+            (*myPalette_Name_BACK) = p.title;
+        }
+
+        //-
+
+        // set BACK palette colors
         myPalette_BACK->clear();
         myPalette_BACK->resize(sizePalette);
         (*myPalette_BACK) = p.colours;
@@ -528,16 +548,16 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
     }
 
     // flag updater color ready
-    if (bUpdated_Color_BACK!=nullptr)
+    if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
     {
         (*bUpdated_Color_BACK) = true;
     }
 
-    // set BACK name clicked
-    if (myPalette_Name_BACK!=nullptr)
-    {
-        (*myPalette_Name_BACK) = p.title;
-    }
+//    // set BACK name clicked
+//    if (myPalette_Name_BACK!=nullptr)
+//    {
+//        (*myPalette_Name_BACK) = p.title;
+//    }
 
     // set palette
     setPalette(pId);

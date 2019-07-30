@@ -50,9 +50,13 @@ public:
 
     //----
 
+    bool MODE_PickColor_BACK = true;//should store in xml..
+    bool MODE_PickPalette_BACK = true;
+
 private:
 
     void refreshPalette();
+
     bool MODE_fixedSize = true;
 
     //-
