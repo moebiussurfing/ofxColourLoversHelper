@@ -68,6 +68,12 @@ void ofxColourLoversHelper::setup(){
 
     gui = new ofxUICanvas(position.x, position.y, size.x, size.y);
 
+    // custom bacground color
+    ofFloatColor colorBg;
+//    colorBg.set(0.06f, 0.06f, 0.06f, 0.94f);
+    colorBg.set(0.06f, 0.06f, 0.06f, 0.8f);
+    gui->setColorBack(ofColor( colorBg ));
+
     gui->setFont("assets/fonts/PragmataProR_0822.ttf");
     gui->setFontSize(OFX_UI_FONT_LARGE, 9);
     gui->setFontSize(OFX_UI_FONT_MEDIUM, 7);
@@ -132,8 +138,17 @@ void ofxColourLoversHelper::setup(){
 
     // STARTUP
 
-    loadFavourites();
+//    loadFavourites();
+//    // auto load first palette of favourites
+//    if (palettes.size()>0)
+//    {
+//        currPalette = 0;
+////        updateFlag = 1;
+////        setPalette(currPalette);
+//        refreshPalette();
+//    }
 
+    loadHistory();
     // auto load first palette of favourites
     if (palettes.size()>0)
     {
@@ -439,6 +454,28 @@ void ofxColourLoversHelper::refreshPalette()
 
     //-
 
+    // TODO: workflow...auto trig last color too... (it's done before too..but require when controlling by keyboard next/prev palette)
+
+    //MODE_PickPalette_BACK && 
+    if (MODE_PickColor_BACK)
+    {
+        // set BACK color clicked
+        if (myColor_BACK!=nullptr)
+        {
+            myColor_BACK->set( lastColor_clicked );
+        }
+
+        // flag updater color ready
+        if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
+        {
+            (*bUpdated_Color_BACK) = true;
+        }
+    }
+
+    //-
+
+    //--
+
     // mark borders in all colors in palette as active about currPalette
 
     for(int i=0;i<palettes.size();i++)
@@ -541,10 +578,12 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
 
     //-
 
+    lastColor_clicked = p.colours[cId];
+
     // set BACK color clicked
     if (myColor_BACK!=nullptr)
     {
-        myColor_BACK->set( p.colours[cId] );
+        myColor_BACK->set( lastColor_clicked );
     }
 
     // flag updater color ready
@@ -553,11 +592,7 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e){
         (*bUpdated_Color_BACK) = true;
     }
 
-//    // set BACK name clicked
-//    if (myPalette_Name_BACK!=nullptr)
-//    {
-//        (*myPalette_Name_BACK) = p.title;
-//    }
+    //-
 
     // set palette
     setPalette(pId);

@@ -59,6 +59,8 @@ private:
 
     bool MODE_fixedSize = true;
 
+    ofColor lastColor_clicked;
+
     //-
 
     ofxUICanvas *gui;
