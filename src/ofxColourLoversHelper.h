@@ -25,6 +25,7 @@ public:
 
     void setup(glm::vec2 _position, glm::vec2 _size);
     void setGrid(glm::vec2 _position, glm::vec2 _size);
+    void setPosition(glm::vec2 _position, glm::vec2 _size);
 
     void setVisible(bool b);
 
@@ -37,6 +38,7 @@ public:
 
     void nextPalette();
     void prevPalette();
+    void randomPalette();
 
     //--
 

@@ -168,6 +168,13 @@ void ofxColourLoversHelper::setup(glm::vec2 _position, glm::vec2 _size){
     setup();
 }
 
+//--------------------------------------------------------------
+void ofxColourLoversHelper::setPosition(glm::vec2 _position, glm::vec2 _size){
+    position = _position;
+    size = _size;
+
+    gui->setPosition(position.x, position.y);
+}
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setGrid(glm::vec2 _position, glm::vec2 _size){
@@ -420,7 +427,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
 //--------------------------------------------------------------
 void ofxColourLoversHelper::refreshPalette()
 {
-    ofLogNotice("ofxColourLoversHelper") << "refreshPalette:currPalette: " << currPalette;
+    ofLogNotice("ofxColourLoversHelper::refreshPalette") << "currPalette: " << currPalette;
     ColourLovePalette p = palettes[currPalette];
     lastPaletteName = "'"+p.title+"'";
     lastPaletteName_UI->setLabel(lastPaletteName);
@@ -505,10 +512,33 @@ void ofxColourLoversHelper::refreshPalette()
     }
 }
 
+//--------------------------------------------------------------
+void ofxColourLoversHelper::randomPalette() {
+
+    currPalette = (int)ofRandom(palettes.size());
+    ofLogNotice("ofxColourLoversHelper::randomPalette") << currPalette;
+
+    refreshPalette();
+
+    if (MODE_PickColor_BACK)
+    {
+        // set BACK color clicked
+        if (myColor_BACK!=nullptr)
+        {
+            myColor_BACK->set( palettes[currPalette].colours[0] );//auto get first color from palette beacuse there's no color click! just key pressed
+
+            // flag updater color ready
+            if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
+            {
+                (*bUpdated_Color_BACK) = true;
+            }
+        }
+    }
+}
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::nextPalette() {
-    if (!isKeysEnabled) return;
+//    if (!isKeysEnabled) return;
 
     ofLogNotice("ofxColourLoversHelper") << "nextPalette:currPalette" << currPalette;
     if (currPalette==-1)
@@ -527,32 +557,28 @@ void ofxColourLoversHelper::nextPalette() {
 
     // TODO: workflow...auto trig last color too... (it's done before too..but require when controlling by keyboard next/prev palette)
 
-////    if (!MODE_PickPalette_BACK && MODE_PickColor_BACK)
-////    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
-//    if (MODE_PickColor_BACK)
-//    {
-////        ofColor c;
-////        c = p.colours[0];
-//
-//        // set BACK color clicked
-//        if (myColor_BACK!=nullptr)
-//        {
-//            myColor_BACK->set( lastColor_clicked );
-////            myColor_BACK->set( c );
-//        }
-//
-//        // flag updater color ready
-//        if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
-//        {
-//            (*bUpdated_Color_BACK) = true;
-//        }
-//    }
+//    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+//    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+    if (MODE_PickColor_BACK)
+    {
+        // set BACK color clicked
+        if (myColor_BACK!=nullptr)
+        {
+            myColor_BACK->set( palettes[currPalette].colours[0] );//auto get first color from palette beacuse there's no color click! just key pressed
+
+            // flag updater color ready
+            if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
+            {
+                (*bUpdated_Color_BACK) = true;
+            }
+        }
+    }
 }
 
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::prevPalette() {
-    if (!isKeysEnabled) return;
+//    if (!isKeysEnabled) return;
 
     ofLogNotice("ofxColourLoversHelper") << "prevPalette:currPalette" << currPalette;
     if (currPalette==-1)
@@ -566,6 +592,27 @@ void ofxColourLoversHelper::prevPalette() {
     ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
 
     refreshPalette();
+
+    //-
+
+    // TODO: workflow...auto trig last color too... (it's done before too..but require when controlling by keyboard next/prev palette)
+
+//    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+//    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+    if (MODE_PickColor_BACK)
+    {
+        // set BACK color clicked
+        if (myColor_BACK!=nullptr)
+        {
+            myColor_BACK->set( palettes[currPalette].colours[0] );//auto get first color from palette beacuse there's no color click! just key pressed
+
+            // flag updater color ready
+            if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
+            {
+                (*bUpdated_Color_BACK) = true;
+            }
+        }
+    }
 }
 
 
