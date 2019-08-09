@@ -55,6 +55,8 @@ public:
     bool MODE_PickColor_BACK = true;//should store in xml..
     bool MODE_PickPalette_BACK = true;
 
+    bool ENABLER_Keys = true;
+
 private:
 
     void refreshPalette();

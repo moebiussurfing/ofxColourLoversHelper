@@ -425,17 +425,26 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     {
         ofLogWarning("ofxColourLoversHelper") << "textInput focus! SHOULD DISABLE KEYS !";
         ofxUITextInput *ti = (ofxUITextInput *) e.widget;
+
         if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_FOCUS){
             ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_FOCUS";
-            //            unfocusAllTextInputs(ti);
+            //unfocusAllTextInputs(ti);
+            ENABLER_Keys = false;
+        }
+        else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_LOAD) {
+            ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_LOAD";
+            ENABLER_Keys = false;
         }
         else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER) {
             ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_ENTER";
+            ENABLER_Keys = true;
         }
         else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_UNFOCUS) {
             ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_UNFOCUS";
+            ENABLER_Keys = true;
         }
 
+        ofLogWarning("ofxColourLoversHelper") << "ENABLER_Keys: " << ENABLER_Keys;
     }
 
     //-
