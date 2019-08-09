@@ -28,6 +28,11 @@ public:
     void setPosition(glm::vec2 _position, glm::vec2 _size);
 
     void setVisible(bool b);
+    void setVisibleSearcher(bool b){
+        bSearcherVisible = b;
+        gui->setVisible(bSearcherVisible);
+    }
+    bool bSearcherVisible = true;
 
     // pointers back to 'communicate externally'
     void setColor_BACK(ofColor &c);

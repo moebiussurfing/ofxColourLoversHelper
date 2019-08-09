@@ -23,7 +23,10 @@ ofxColourLoversHelper::ofxColourLoversHelper()
 void ofxColourLoversHelper::setVisible(bool b) {
     isVisible = b;
     colourLab->setVisible(isVisible);
-    gui->setVisible(isVisible);
+//    gui->setVisible(isVisible);
+
+    if (isVisible)
+        setVisibleSearcher(bSearcherVisible);
 
     if(isVisible)
     {
@@ -125,6 +128,7 @@ void ofxColourLoversHelper::setup(){
     gui->addWidgetDown(new ofxUIToggle("PALETTE PICK",MODE_PickPalette_BACK,tgSize1,tgSize1,tgSize2));
     gui->addWidgetDown(new ofxUIToggle("COLOR PICK",MODE_PickColor_BACK,tgSize1,tgSize1,tgSize2));
 
+    //TODO
     //getTopPalettesForLover
     //searchPalettes
 
@@ -140,17 +144,7 @@ void ofxColourLoversHelper::setup(){
 
     // STARTUP
 
-//    loadFavourites();
-//    // auto load first palette of favourites
-//    if (palettes.size()>0)
-//    {
-//        currPalette = 0;
-////        updateFlag = 1;
-////        setPalette(currPalette);
-//        refreshPalette();
-//    }
-
-    loadHistory();
+    loadFavourites();
     // auto load first palette of favourites
     if (palettes.size()>0)
     {
@@ -159,6 +153,16 @@ void ofxColourLoversHelper::setup(){
 //        setPalette(currPalette);
         refreshPalette();
     }
+
+//    loadHistory();
+//    // auto load first palette of favourites
+//    if (palettes.size()>0)
+//    {
+//        currPalette = 0;
+////        updateFlag = 1;
+////        setPalette(currPalette);
+//        refreshPalette();
+//    }
 }
 
 
