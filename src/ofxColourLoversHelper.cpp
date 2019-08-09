@@ -85,6 +85,8 @@ void ofxColourLoversHelper::setup(){
 
     ofxUITextInput* textinput = new ofxUITextInput("search", "Search keyword",width-xInit, OFX_UI_FONT_MEDIUM);
     textinput->setTriggerOnClick(false);
+    textinput->setAutoClear(true);
+
     gui->addWidgetDown(textinput);
     textinput = new ofxUITextInput("loverId", "Lover id",width-xInit, OFX_UI_FONT_MEDIUM);
     textinput->setTriggerOnClick(false);
@@ -332,6 +334,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     string name = e.widget->getName();
     int kind = e.widget->getKind();
     ofLogNotice("ofxColourLoversHelper") << "guiEvent: " << name;
+
 //    ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
 
     if(name == "search")
@@ -415,6 +418,24 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e){
     {
         ofxUIToggle *toggle = e.getToggle();
         MODE_PickColor_BACK = toggle->getValue();
+    }
+
+    //TODO: disable keys outside handler
+    if (kind == OFX_UI_WIDGET_TEXTINPUT)
+    {
+        ofLogWarning("ofxColourLoversHelper") << "textInput focus! SHOULD DISABLE KEYS !";
+        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
+        if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_FOCUS){
+            ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_FOCUS";
+            //            unfocusAllTextInputs(ti);
+        }
+        else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER) {
+            ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_ENTER";
+        }
+        else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_UNFOCUS) {
+            ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_UNFOCUS";
+        }
+
     }
 
     //-
