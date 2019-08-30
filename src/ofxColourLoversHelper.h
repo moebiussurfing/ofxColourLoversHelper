@@ -32,7 +32,29 @@ public:
         bSearcherVisible = b;
         gui->setVisible(bSearcherVisible);
     }
+
+    //bool bIsEnabled = true;
+    void setKeysEnabled(bool b){
+        //isKeysEnabled = b;
+        //
+        //if (isKeysEnabled)
+        //{
+        //    addKeysListeners();
+        //}
+        //else
+        //{
+        //    removeKeysListeners();
+        //}
+    }
+
     bool bSearcherVisible = true;
+
+    // colour lovers browsing
+    void nextPalette();
+    void prevPalette();
+    void randomPalette();
+
+    //--
 
     // pointers back to 'communicate externally'
     void setColor_BACK(ofColor &c);
@@ -41,14 +63,7 @@ public:
     void setPalette_bUpdated_Palette_BACK(bool &b);
     void setPalette_bUpdated_Color_BACK(bool &b);
 
-    void nextPalette();
-    void prevPalette();
-    void randomPalette();
-
-    //--
-
     // pointers back to 'communicate externally'
-
     ofColor *myColor_BACK;
     vector<ofColor> *myPalette_BACK;
     string *myPalette_Name_BACK;

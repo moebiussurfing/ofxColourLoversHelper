@@ -13,8 +13,10 @@ ofxColourLoversHelper::ofxColourLoversHelper()
     colorMarked = (ofColor::white);
 
 //    setVisible(true);
-    addKeysListeners();
     addMouseListeners();
+
+    //setKeysEnabled(true);
+    addKeysListeners();
     isKeysEnabled = true;
 }
 
@@ -28,17 +30,21 @@ void ofxColourLoversHelper::setVisible(bool b) {
     if (isVisible)
         setVisibleSearcher(bSearcherVisible);
 
-    if(isVisible)
+    if (isVisible)
     {
-        addKeysListeners();
         addMouseListeners();
+
+        addKeysListeners();
         isKeysEnabled = true;
+        //setKeysEnabled(true);
     }
     else
     {
-        removeKeysListeners();
         removeMouseListeners();
+
+        removeKeysListeners();
         isKeysEnabled = false;
+        //setKeysEnabled(false);
     }
 }
 
@@ -827,7 +833,7 @@ void ofxColourLoversHelper::loadHistory(){
         palettes.push_back(cp);
     }
 
-    lastSearch ="HISTORY";
+    lastSearch = "HISTORY";
 
     // TODO: BUG: CRASHES IF EMPTY FOLDER
     if( favs.numFiles()>0 )
@@ -853,6 +859,7 @@ void ofxColourLoversHelper::clearHistory(){
     }
 }
 
+// pointers back to 'communicate externally'
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setColor_BACK(ofColor &c)
