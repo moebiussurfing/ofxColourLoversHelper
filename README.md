@@ -8,7 +8,7 @@ The core of this addons is https://github.com/borg/ofxColourLovers.
 I just added some methods to help integrate into my projects.
 
 ## Screenshots
-![image](/readme_images/Capture1.PNG?raw=true "image")  
+![image](/readme_images/Capture.PNG?raw=true "image")  
 
 ## Features
 
