@@ -1,0 +1,3 @@
+ofxColourLoversHelper
+ofxPoco
+ofxXmlSettings

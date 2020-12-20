@@ -1,6 +1,0 @@
-ofxColourLovers
-ofxColourLoversHelper
-ofxHttpUtils
-ofxPoco
-ofxUI
-ofxXmlSettings

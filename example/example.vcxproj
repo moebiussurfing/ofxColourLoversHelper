@@ -1,0 +1,399 @@
+<?xml version="1.0"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ItemGroup Label="ProjectConfigurations">
+		<ProjectConfiguration Include="Debug|Win32">
+			<Configuration>Debug</Configuration>
+			<Platform>Win32</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="Debug|x64">
+			<Configuration>Debug</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="Release|Win32">
+			<Configuration>Release</Configuration>
+			<Platform>Win32</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="Release|x64">
+			<Configuration>Release</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+	</ItemGroup>
+	<PropertyGroup Condition="'$(WindowsTargetPlatformVersion)'==''">
+		<LatestTargetPlatformVersion>$([Microsoft.Build.Utilities.ToolLocationHelper]::GetLatestSDKTargetPlatformVersion('Windows', '10.0'))</LatestTargetPlatformVersion>
+		<WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">$(LatestTargetPlatformVersion)</WindowsTargetPlatformVersion>
+		<TargetPlatformVersion>$(WindowsTargetPlatformVersion)</TargetPlatformVersion>
+	</PropertyGroup>
+	<PropertyGroup Label="Globals">
+		<ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
+		<Keyword>Win32Proj</Keyword>
+		<RootNamespace>example</RootNamespace>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+		<ConfigurationType>Application</ConfigurationType>
+		<CharacterSet>Unicode</CharacterSet>
+		<PlatformToolset>v141</PlatformToolset>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+		<ConfigurationType>Application</ConfigurationType>
+		<CharacterSet>Unicode</CharacterSet>
+		<PlatformToolset>v141</PlatformToolset>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+		<ConfigurationType>Application</ConfigurationType>
+		<CharacterSet>Unicode</CharacterSet>
+		<WholeProgramOptimization>true</WholeProgramOptimization>
+		<PlatformToolset>v141</PlatformToolset>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+		<ConfigurationType>Application</ConfigurationType>
+		<CharacterSet>Unicode</CharacterSet>
+		<WholeProgramOptimization>true</WholeProgramOptimization>
+		<PlatformToolset>v141</PlatformToolset>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+	<ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+		<Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+	</ImportGroup>
+	<ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+		<Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+	</ImportGroup>
+	<ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+		<Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+	</ImportGroup>
+	<ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+		<Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+	</ImportGroup>
+	<PropertyGroup Label="UserMacros" />
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+		<OutDir>bin\</OutDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+		<TargetName>$(ProjectName)_debug</TargetName>
+		<LinkIncremental>true</LinkIncremental>
+		<GenerateManifest>true</GenerateManifest>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<OutDir>bin\</OutDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+		<TargetName>$(ProjectName)_debug</TargetName>
+		<LinkIncremental>true</LinkIncremental>
+		<GenerateManifest>true</GenerateManifest>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+		<OutDir>bin\</OutDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+		<LinkIncremental>false</LinkIncremental>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<OutDir>bin\</OutDir>
+		<IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+		<LinkIncremental>false</LinkIncremental>
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+		<ClCompile>
+			<Optimization>Disabled</Optimization>
+			<BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+			<WarningLevel>Level3</WarningLevel>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxColourLoversHelper\libs;..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers;..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src;..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils;..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils\src;..\..\..\addons\ofxColourLoversHelper\libs\ofxUI;..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src;..\..\..\addons\ofxColourLoversHelper\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+			<CompileAs>CompileAsCpp</CompileAs>
+			<ObjectFileName>$(IntDir)</ObjectFileName>
+			<AdditionalOptions>-DPOCO_STATIC</AdditionalOptions>
+		</ClCompile>
+		<Link>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<SubSystem>Console</SubSystem>
+			<RandomizedBaseAddress>false</RandomizedBaseAddress>
+			<AdditionalDependencies>%(AdditionalDependencies);PocoCryptomdd.lib;PocoDatamdd.lib;PocoDataSQLitemdd.lib;PocoFoundationmdd.lib;PocoJSONmdd.lib;PocoNetmdd.lib;PocoNetSSLmdd.lib;PocoPDFmdd.lib;PocoUtilmdd.lib;PocoXMLmdd.lib;PocoZipmdd.lib;iphlpapi.lib</AdditionalDependencies>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxPoco\libs\poco\lib\vs\Win32\Debug;..\..\..\addons\ofxPoco</AdditionalLibraryDirectories>
+		</Link>
+		<PostBuildEvent />
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<ClCompile>
+			<Optimization>Disabled</Optimization>
+			<BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+			<WarningLevel>Level3</WarningLevel>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxColourLoversHelper\libs;..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers;..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src;..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils;..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils\src;..\..\..\addons\ofxColourLoversHelper\libs\ofxUI;..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src;..\..\..\addons\ofxColourLoversHelper\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+			<CompileAs>CompileAsCpp</CompileAs>
+			<MultiProcessorCompilation>true</MultiProcessorCompilation>
+			<ObjectFileName>$(IntDir)</ObjectFileName>
+			<AdditionalOptions>-DPOCO_STATIC</AdditionalOptions>
+		</ClCompile>
+		<Link>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<SubSystem>Console</SubSystem>
+			<RandomizedBaseAddress>false</RandomizedBaseAddress>
+			<AdditionalDependencies>%(AdditionalDependencies);PocoCryptomdd.lib;PocoDatamdd.lib;PocoDataSQLitemdd.lib;PocoFoundationmdd.lib;PocoJSONmdd.lib;PocoNetmdd.lib;PocoNetSSLmdd.lib;PocoPDFmdd.lib;PocoUtilmdd.lib;PocoXMLmdd.lib;PocoZipmdd.lib;iphlpapi.lib</AdditionalDependencies>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxPoco\libs\poco\lib\vs\x64\Debug;..\..\..\addons\ofxPoco</AdditionalLibraryDirectories>
+		</Link>
+		<PostBuildEvent />
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+		<ClCompile>
+			<WholeProgramOptimization>false</WholeProgramOptimization>
+			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+			<WarningLevel>Level3</WarningLevel>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxColourLoversHelper\libs;..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers;..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src;..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils;..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils\src;..\..\..\addons\ofxColourLoversHelper\libs\ofxUI;..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src;..\..\..\addons\ofxColourLoversHelper\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+			<CompileAs>CompileAsCpp</CompileAs>
+			<MultiProcessorCompilation>true</MultiProcessorCompilation>
+			<ObjectFileName>$(IntDir)</ObjectFileName>
+			<AdditionalOptions>-DPOCO_STATIC</AdditionalOptions>
+		</ClCompile>
+		<Link>
+			<IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+			<GenerateDebugInformation>false</GenerateDebugInformation>
+			<SubSystem>Console</SubSystem>
+			<OptimizeReferences>true</OptimizeReferences>
+			<EnableCOMDATFolding>true</EnableCOMDATFolding>
+			<RandomizedBaseAddress>false</RandomizedBaseAddress>
+			<AdditionalDependencies>%(AdditionalDependencies);PocoCryptomd.lib;PocoDatamd.lib;PocoDataSQLitemd.lib;PocoFoundationmd.lib;PocoJSONmd.lib;PocoNetmd.lib;PocoNetSSLmd.lib;PocoPDFmd.lib;PocoUtilmd.lib;PocoXMLmd.lib;PocoZipmd.lib;iphlpapi.lib</AdditionalDependencies>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxPoco\libs\poco\lib\vs\Win32\Release;..\..\..\addons\ofxPoco</AdditionalLibraryDirectories>
+		</Link>
+		<PostBuildEvent />
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<ClCompile>
+			<WholeProgramOptimization>false</WholeProgramOptimization>
+			<PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+			<WarningLevel>Level3</WarningLevel>
+			<AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxColourLoversHelper\libs;..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers;..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src;..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils;..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils\src;..\..\..\addons\ofxColourLoversHelper\libs\ofxUI;..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src;..\..\..\addons\ofxColourLoversHelper\src;..\..\..\addons\ofxPoco\libs\poco\include;..\..\..\addons\ofxPoco\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+			<CompileAs>CompileAsCpp</CompileAs>
+			<ObjectFileName>$(IntDir)</ObjectFileName>
+			<AdditionalOptions>-DPOCO_STATIC</AdditionalOptions>
+		</ClCompile>
+		<Link>
+			<IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+			<GenerateDebugInformation>false</GenerateDebugInformation>
+			<SubSystem>Console</SubSystem>
+			<OptimizeReferences>true</OptimizeReferences>
+			<EnableCOMDATFolding>true</EnableCOMDATFolding>
+			<RandomizedBaseAddress>false</RandomizedBaseAddress>
+			<AdditionalDependencies>%(AdditionalDependencies);PocoCryptomd.lib;PocoDatamd.lib;PocoDataSQLitemd.lib;PocoFoundationmd.lib;PocoJSONmd.lib;PocoNetmd.lib;PocoNetSSLmd.lib;PocoPDFmd.lib;PocoUtilmd.lib;PocoXMLmd.lib;PocoZipmd.lib;iphlpapi.lib</AdditionalDependencies>
+			<AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);..\..\..\addons\ofxPoco\libs\poco\lib\vs\x64\Release;..\..\..\addons\ofxPoco</AdditionalLibraryDirectories>
+		</Link>
+		<PostBuildEvent />
+	</ItemDefinitionGroup>
+	<ItemGroup>
+		<ClCompile Include="src\main.cpp" />
+		<ClCompile Include="src\ofApp.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\src\ofxColourLoversHelper.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src\ColourLoveEvent.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src\ColourLovePalette.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src\ofxColourLovers.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils\src\ofxHttpUtils.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUI2DGraph.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUI2DPad.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIBaseDraws.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIBiLabelSlider.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIButton.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUICanvas.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUICircleSlider.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIDragableLabelButton.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIDropDownList.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIEventArgs.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIFPS.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIFPSSlider.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIImage.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIImageButton.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIImageSampler.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIImageSlider.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIImageToggle.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUILabel.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUILabelButton.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUILabelToggle.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIMinimalSlider.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIMovingGraph.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIMultiImageButton.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIMultiImageToggle.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUINumberDialer.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIRadio.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIRangeSlider.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIRectangle.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIRotarySlider.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIScrollableCanvas.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUISlider.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUISortableList.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUISpacer.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUISpectrum.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUISuperCanvas.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUITabBar.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUITextArea.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUITextInput.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIToggle.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIToggleMatrix.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIValuePlotter.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIWaveform.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIWidget.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIWidgetWithLabel.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxPoco\src\ofxXmlPoco.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+		<ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="src\ofApp.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\src\ofxColourLoversHelper.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src\ColourCallTypes.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src\ColourLoveEvent.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src\ColourLovePalette.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxColourLovers\src\ofxColourLovers.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils\src\ofxHttpTypes.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxHttpUtils\src\ofxHttpUtils.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUI.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUI2DGraph.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUI2DPad.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIBaseDraws.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIBiLabelSlider.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIButton.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUICanvas.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUICircleSlider.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIDefines.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIDragableLabelButton.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIDropDownList.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIEventArgs.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIFPS.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIFPSSlider.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIImage.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIImageButton.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIImageSampler.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIImageSlider.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIImageToggle.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUILabel.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUILabelButton.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUILabelToggle.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIMinimalSlider.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIMovingGraph.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIMultiImageButton.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIMultiImageToggle.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUINumberDialer.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIOFWrapper.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIRadio.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIRangeSlider.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIRectangle.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIRotarySlider.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIScrollableCanvas.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUISlider.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUISortableList.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUISpacer.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUISpectrum.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUISuperCanvas.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUITabBar.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUITextArea.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUITextInput.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIToggle.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIToggleMatrix.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIUtils.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIValuePlotter.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIWaveform.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIWidget.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIWidgets.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIWidgetWithLabel.h" />
+		<ClInclude Include="..\..\..\addons\ofxColourLoversHelper\libs\ofxUI\src\ofxUIWrapper.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\src\ofxXmlPoco.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\aes.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\asn1.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\asn1t.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\asn1_mac.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\async.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\bio.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\blowfish.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\bn.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\buffer.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\camellia.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\cast.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\cmac.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\cms.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\comp.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\conf.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\conf_api.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\crypto.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ct.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\des.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\dh.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\dsa.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\dtls1.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ebcdic.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ec.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ecdh.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ecdsa.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\engine.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\err.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\evp.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\e_os2.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\hmac.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\idea.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\kdf.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\lhash.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\md2.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\md4.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\md5.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\mdc2.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\modes.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\objects.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\obj_mac.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ocsp.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\opensslconf.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\opensslconf_osx.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\opensslv.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ossl_typ.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\pem.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\pem2.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\pkcs12.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\pkcs7.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\rand.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\rc2.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\rc4.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\rc5.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ripemd.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\rsa.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\safestack.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\seed.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\sha.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\srp.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\srtp.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ssl.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ssl2.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ssl3.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\stack.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\symhacks.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\tls1.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ts.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\txt_db.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\ui.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\whrlpool.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\x509.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\x509v3.h" />
+		<ClInclude Include="..\..\..\addons\ofxPoco\libs\openssl\include\openssl\x509_vfy.h" />
+		<ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
+		<ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
+			<Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
+		</ProjectReference>
+	</ItemGroup>
+	<ItemGroup>
+		<ResourceCompile Include="icon.rc">
+			<AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
+			<AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
+			<AdditionalIncludeDirectories>$(OF_ROOT)\libs\openFrameworksCompiled\project\vs</AdditionalIncludeDirectories>
+		</ResourceCompile>
+	</ItemGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties RESOURCE_FILE="icon.rc" />
+		</VisualStudio>
+	</ProjectExtensions>
+</Project>
