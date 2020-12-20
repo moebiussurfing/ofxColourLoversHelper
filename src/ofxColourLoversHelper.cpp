@@ -25,10 +25,15 @@ ofxColourLoversHelper::ofxColourLoversHelper()
 void ofxColourLoversHelper::setVisible(bool b)
 {
     isVisible = b;
+
+    //TODO
+    if (colourLab)
+
     colourLab->setVisible(isVisible);
     //    gui->setVisible(isVisible);
 
-    if (isVisible)
+    if (isVisible && gui)
+//    if (isVisible)
         setVisibleSearcher(bSearcherVisible);
 
     if (isVisible)
@@ -330,6 +335,9 @@ void ofxColourLoversHelper::updateColourLab()
 //--------------------------------------------------------------
 void ofxColourLoversHelper::update()
 {
+//    bool b = gui->bInsideCanvas;
+//    cout << b << endl;
+
     if (updateFlag)
     {
         updateColourLab();
@@ -363,6 +371,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
         ofxUITextInput *textinput = (ofxUITextInput *) e.widget;
         lastSearch = "'" + textinput->getTextString() + "'";
         ofxColourLovers::searchPalettes(textinput->getTextString(), 40);
+        ofLogNotice("ofxColourLoversHelper") << "textinput: " << textinput->getTextString();
     }
 
     else if (name == "loverId")
@@ -372,6 +381,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
         string s = textinput->getTextString();
         ofStringReplace(s, " ", "%20");
         ofxColourLovers::getTopPalettesForLover(s, 40);
+        ofLogNotice("ofxColourLoversHelper") << "loverId: " << textinput->getTextString();
     }
 
     else if (name == "paletteId")
@@ -379,6 +389,8 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
         ofxUITextInput *textinput = (ofxUITextInput *) e.widget;
         lastSearch = textinput->getTextString();
         ofxColourLovers::getPalette(lastSearch);
+        ofLogNotice("ofxColourLoversHelper") << "paletteId: " << textinput->getTextString();
+
     }
 
     else if (name == "ADD FAVOURITE" && currPalette > -1)
@@ -445,7 +457,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
     if (kind == OFX_UI_WIDGET_TEXTINPUT)
     {
         ofLogWarning("ofxColourLoversHelper") << "TEXTINPUT FOCUS!";
-        ofLogWarning("ofxColourLoversHelper") << "SHOULD DISABLE KEYS !";
+//        ofLogWarning("ofxColourLoversHelper") << "SHOULD DISABLE KEYS !";
         ofxUITextInput *ti = (ofxUITextInput *) e.widget;
 
         if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_FOCUS)
@@ -485,9 +497,21 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
 void ofxColourLoversHelper::refreshPalette()
 {
     ofLogNotice("ofxColourLoversHelper") << "refreshPalette currPalette: " << currPalette;
-    ColourLovePalette p = palettes[currPalette];
-    lastPaletteName = "'" + p.title + "'";
-    lastPaletteName_UI->setLabel(lastPaletteName);
+
+	//TODO:
+	//Windows
+
+	ColourLovePalette p;
+	if (palettes.size() > 0)
+	{
+		p = palettes[currPalette];
+		lastPaletteName = "'" + p.title + "'";
+		lastPaletteName_UI->setLabel(lastPaletteName);
+	}
+
+    //ColourLovePalette p = palettes[currPalette];
+    //lastPaletteName = "'" + p.title + "'";
+    //lastPaletteName_UI->setLabel(lastPaletteName);
 
     //-
 
@@ -721,8 +745,7 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e)
     int cId = ofToInt(seg[2]);
     ColourLovePalette p = palettes[pId];
 
-    ofLogNotice("ofxColourLoversHelper") << "colourLabEvent: " << name << " " << kind << " " << uid << " colour: "
-                                         << p.colours[cId] << " name: " << p.title;
+    ofLogNotice("ofxColourLoversHelper") << "colourLabEvent: " << name << " " << kind << " " << uid << " colour: " << p.colours[cId] << " name: " << p.title;
 
     lastPaletteName = "'" + p.title + "'";
     lastPaletteName_UI->setLabel(lastPaletteName);
