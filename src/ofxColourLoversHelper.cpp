@@ -4,499 +4,498 @@
 //--------------------------------------------------------------
 ofxColourLoversHelper::ofxColourLoversHelper()
 {
-    // default settings
-    position = glm::vec2(1000, 10);
-    size = glm::vec2(200, 200);
-    gridPosition = glm::vec2(1210, 10);
-    gridSize = glm::vec2(200, ofGetHeight());
+	// default settings
+	position = glm::vec2(1000, 10);
+	size = glm::vec2(200, 200);
+	gridPosition = glm::vec2(1210, 10);
+	gridSize = glm::vec2(200, ofGetHeight());
 
-    colorMarked = (ofColor::white);
+	colorMarked = (ofColor::white);
 
-    //    setVisible(true);
-    addMouseListeners();
+	//setVisible(true);
+	addMouseListeners();
 
-    //setKeysEnabled(true);
-    addKeysListeners();
-    isKeysEnabled = true;
+	//setKeysEnabled(true);
+	addKeysListeners();
+	isKeysEnabled = true;
 }
 
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setVisible(bool b)
 {
-    isVisible = b;
+	isVisible = b;
 
-    //TODO
-    if (colourLab)
+	//TODO
+	if (colourLab)
 
-    colourLab->setVisible(isVisible);
-    //    gui->setVisible(isVisible);
+		colourLab->setVisible(isVisible);
+	//gui->setVisible(isVisible);
 
-    if (isVisible && gui)
-//    if (isVisible)
-        setVisibleSearcher(bSearcherVisible);
+	if (isVisible && gui)
+		setVisibleSearcher(bSearcherVisible);
 
-    if (isVisible)
-    {
-        addMouseListeners();
+	if (isVisible)
+	{
+		addMouseListeners();
 
-        addKeysListeners();
-        isKeysEnabled = true;
-        //setKeysEnabled(true);
-    }
-    else
-    {
-        removeMouseListeners();
+		addKeysListeners();
+		isKeysEnabled = true;
+		//setKeysEnabled(true);
+	}
+	else
+	{
+		removeMouseListeners();
 
-        removeKeysListeners();
-        isKeysEnabled = false;
-        //setKeysEnabled(false);
-    }
+		removeKeysListeners();
+		isKeysEnabled = false;
+		//setKeysEnabled(false);
+	}
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setup()
 {
+	//-
 
-    //-
+#ifdef USE_OFX_UI
 
-    // TODO: to enable windowResize..
-    if (colourLab)
-    {
-        ofRemoveListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
-        delete colourLab;
-        colourLab = 0;
-    }
-    if (gui)
-    {
-        ofRemoveListener(gui->newGUIEvent, this, &ofxColourLoversHelper::guiEvent);
-        ofRemoveListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::colourLoveEvent);
-        delete gui;
-        gui = 0;
-    }
+// TODO: to enable windowResize..
+	if (colourLab)
+	{
+		ofRemoveListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
+		delete colourLab;
+		colourLab = 0;
+	}
+	if (gui)
+	{
+		ofRemoveListener(gui->newGUIEvent, this, &ofxColourLoversHelper::guiEvent);
+		ofRemoveListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::colourLoveEvent);
+		delete gui;
+		gui = 0;
+	}
 
-    //-
+	//-
 
-    int width = size.x;
-    int xInit = 6;
-    int dim = 30;
+	int width = size.x;
+	int xInit = 6;
+	int dim = 30;
 
-    gui = new ofxUICanvas(position.x, position.y, size.x, size.y);
+	gui = new ofxUICanvas(position.x, position.y, size.x, size.y);
 
-    // custom bacground color
-    ofFloatColor colorBg;
-    //    colorBg.set(0.06f, 0.06f, 0.06f, 0.94f);
-    colorBg.set(0.06f, 0.06f, 0.06f, 0.8f);
-    gui->setColorBack(ofColor(colorBg));
+	// custom bacground color
+	ofFloatColor colorBg;
+	//    colorBg.set(0.06f, 0.06f, 0.06f, 0.94f);
+	colorBg.set(0.06f, 0.06f, 0.06f, 0.8f);
+	gui->setColorBack(ofColor(colorBg));
 
-    gui->setFont("assets/fonts/PragmataProR_0822.ttf");
-    gui->setFontSize(OFX_UI_FONT_LARGE, 9);
-    gui->setFontSize(OFX_UI_FONT_MEDIUM, 7);
-    gui->setFontSize(OFX_UI_FONT_SMALL, 6);
+	gui->setFont("assets/fonts/PragmataProR_0822.ttf");
+	gui->setFontSize(OFX_UI_FONT_LARGE, 9);
+	gui->setFontSize(OFX_UI_FONT_MEDIUM, 7);
+	gui->setFontSize(OFX_UI_FONT_SMALL, 6);
 
-    gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
-    gui->addWidgetDown(new ofxUILabel("COLOUR LOVERS", OFX_UI_FONT_LARGE));
-    gui->addWidgetDown(new ofxUISpacer(width - xInit, 2));
+	gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
+	gui->addWidgetDown(new ofxUILabel("COLOUR LOVERS", OFX_UI_FONT_LARGE));
+	gui->addWidgetDown(new ofxUISpacer(width - xInit, 2));
 
-    ofxUITextInput *textinput = new ofxUITextInput("search", "Search keyword", width - xInit, OFX_UI_FONT_MEDIUM);
-    textinput->setTriggerOnClick(false);
-    textinput->setAutoClear(true);
+	ofxUITextInput *textinput = new ofxUITextInput("search", "Search keyword", width - xInit, OFX_UI_FONT_MEDIUM);
+	textinput->setTriggerOnClick(false);
+	textinput->setAutoClear(true);
 
-    gui->addWidgetDown(textinput);
-    textinput = new ofxUITextInput("loverId", "Lover id", width - xInit, OFX_UI_FONT_MEDIUM);
-    textinput->setTriggerOnClick(false);
-    gui->addWidgetDown(textinput);
-    textinput = new ofxUITextInput("paletteId", "Palette id", width - xInit, OFX_UI_FONT_MEDIUM);
-    textinput->setTriggerOnClick(false);
-    gui->addWidgetDown(textinput);
+	gui->addWidgetDown(textinput);
+	textinput = new ofxUITextInput("loverId", "Lover id", width - xInit, OFX_UI_FONT_MEDIUM);
+	textinput->setTriggerOnClick(false);
+	gui->addWidgetDown(textinput);
+	textinput = new ofxUITextInput("paletteId", "Palette id", width - xInit, OFX_UI_FONT_MEDIUM);
+	textinput->setTriggerOnClick(false);
+	gui->addWidgetDown(textinput);
 
-    gui->addWidgetDown(new ofxUILabelButton("FAVS", false, 0.5 * width - xInit, dim, OFX_UI_FONT_MEDIUM));
-    gui->addWidgetRight(new ofxUILabelButton("HISTORY", false, 0.5 * width - xInit, dim, OFX_UI_FONT_MEDIUM));
-    gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
+	gui->addWidgetDown(new ofxUILabelButton("FAVS", false, 0.5 * width - xInit, dim, OFX_UI_FONT_MEDIUM));
+	gui->addWidgetRight(new ofxUILabelButton("HISTORY", false, 0.5 * width - xInit, dim, OFX_UI_FONT_MEDIUM));
+	gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
 
-    int tgSize1 = 10;
-    int tgSize2 = 4;
-    gui->addWidgetDown(new ofxUIToggle("FIXED WIDTHS", MODE_fixedSize, tgSize1, tgSize1, tgSize2));
-    gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
+	int tgSize1 = 10;
+	int tgSize2 = 4;
+	gui->addWidgetDown(new ofxUIToggle("FIXED WIDTHS", MODE_fixedSize, tgSize1, tgSize1, tgSize2));
+	gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
 
-    gui->addWidgetDown(new ofxUISpacer(width - xInit, 2));
+	gui->addWidgetDown(new ofxUISpacer(width - xInit, 2));
 
-    gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
-    gui->addWidgetDown(new ofxUILabel("PALETTE NAME:", OFX_UI_FONT_MEDIUM));
-    lastPaletteName_UI = new ofxUILabel(lastPaletteName, OFX_UI_FONT_SMALL);
-    gui->addWidgetDown(lastPaletteName_UI);
-    lastPaletteName_UI->setLabel(lastPaletteName);
+	gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
+	gui->addWidgetDown(new ofxUILabel("PALETTE NAME:", OFX_UI_FONT_MEDIUM));
+	lastPaletteName_UI = new ofxUILabel(lastPaletteName, OFX_UI_FONT_SMALL);
+	gui->addWidgetDown(lastPaletteName_UI);
+	lastPaletteName_UI->setLabel(lastPaletteName);
 
-    gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
+	gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
 
-    gui->addWidgetDown(new ofxUILabelButton("ADD FAVOURITE", false, width - xInit, dim));
-    gui->addWidgetDown(new ofxUILabelButton("REMOVE FAVS", false, width - xInit, dim, OFX_UI_FONT_SMALL));
-    gui->addWidgetDown(new ofxUILabelButton("REMOVE HISTORY", false, width - xInit, dim, OFX_UI_FONT_SMALL));
+	gui->addWidgetDown(new ofxUILabelButton("ADD FAVOURITE", false, width - xInit, dim));
+	gui->addWidgetDown(new ofxUILabelButton("REMOVE FAVS", false, width - xInit, dim, OFX_UI_FONT_SMALL));
+	gui->addWidgetDown(new ofxUILabelButton("REMOVE HISTORY", false, width - xInit, dim, OFX_UI_FONT_SMALL));
 
-    gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
+	gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
 
-    tgSize1 = 10;
-    tgSize2 = 4;
-    gui->addWidgetDown(new ofxUIToggle("PALETTE PICK", MODE_PickPalette_BACK, tgSize1, tgSize1, tgSize2));
-    gui->addWidgetDown(new ofxUIToggle("COLOR PICK", MODE_PickColor_BACK, tgSize1, tgSize1, tgSize2));
+	tgSize1 = 10;
+	tgSize2 = 4;
+	gui->addWidgetDown(new ofxUIToggle("PALETTE PICK", MODE_PickPalette_BACK, tgSize1, tgSize1, tgSize2));
+	gui->addWidgetDown(new ofxUIToggle("COLOR PICK", MODE_PickColor_BACK, tgSize1, tgSize1, tgSize2));
 
-    //TODO
-    //getTopPalettesForLover
-    //searchPalettes
+	//TODO
+	//getTopPalettesForLover
+	//searchPalettes
 
-    currPalette = -1;
-    paletteView = 0;
-    updateFlag = 0;
-    colourLab = 0;
+	currPalette = -1;
+	paletteView = 0;
+	updateFlag = 0;
+	colourLab = 0;
 
-    ofAddListener(gui->newGUIEvent, this, &ofxColourLoversHelper::guiEvent);
-    ofAddListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::colourLoveEvent);
+	ofAddListener(gui->newGUIEvent, this, &ofxColourLoversHelper::guiEvent);
+	ofAddListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::colourLoveEvent);
+#endif
 
-    //-
+	//--
 
-    // STARTUP
+	// STARTUP
 
-    loadFavourites();
-    // auto load first palette of favourites
-    if (palettes.size() > 0)
-    {
-        currPalette = 0;
-        //        updateFlag = 1;
-        //        setPalette(currPalette);
-        refreshPalette();
-    }
+	loadFavourites();
+	// auto load first palette of favourites
+	if (palettes.size() > 0)
+	{
+		currPalette = 0;
+		//updateFlag = 1;
+		//setPalette(currPalette);
+		refreshPalette();
+	}
 
-    //    loadHistory();
-    //    // auto load first palette of favourites
-    //    if (palettes.size()>0)
-    //    {
-    //        currPalette = 0;
-    ////        updateFlag = 1;
-    ////        setPalette(currPalette);
-    //        refreshPalette();
-    //    }
+	//loadHistory();
+	//// auto load first palette of favourites
+	//if (palettes.size()>0)
+	//{
+	// currPalette = 0;
+	//// updateFlag = 1;
+	//// setPalette(currPalette);
+	// refreshPalette();
+	// }
 }
 
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setup(glm::vec2 _position, glm::vec2 _size)
 {
-    position = _position;
-    size = _size;
+	position = _position;
+	size = _size;
 
-    setup();
+	setup();
 }
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPosition(glm::vec2 _position, glm::vec2 _size)
 {
-    position = _position;
-    size = _size;
+	position = _position;
+	size = _size;
 
-    gui->setPosition(position.x, position.y);
+	gui->setPosition(position.x, position.y);
 }
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setGrid(glm::vec2 _position, glm::vec2 _size)
 {
-    gridPosition = _position;
-    gridSize = _size;
+	gridPosition = _position;
+	gridSize = _size;
 }
 
-
+#ifdef USE_OFX_UI
 //--------------------------------------------------------------
 void ofxColourLoversHelper::colourLoveEvent(ColourLoveEvent &e)
 {
-    palettes = e.palettes;
+	palettes = e.palettes;
 
-    if (!(palettes.size() > 0))
-    {
-        return;
-    }
+	if (!(palettes.size() > 0))
+	{
+		return;
+	}
 
-    // save results into history after succesfuly query search
-    for (int i = 0; i < palettes.size(); i++)
-    {
-        e.palettes[i].save(path + "history/" + e.palettes[i].id + ".xml");
-    }
+	// save results into history after succesfuly query search
+	for (int i = 0; i < palettes.size(); i++)
+	{
+		e.palettes[i].save(path + "history/" + e.palettes[i].id + ".xml");
+	}
 
-    //return;
-    //    bg = palettes[0].sortedColours[0];
-    //    bgLabel->setLabel("BG: "+ofxColourLovers::hexToWeb(bg));
+	//return;
+	//    bg = palettes[0].sortedColours[0];
+	//    bgLabel->setLabel("BG: "+ofxColourLovers::hexToWeb(bg));
 
-    updateFlag = 1;
+	updateFlag = 1;
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::updateColourLab()
 {
 
-    if (colourLab)
-    {
-        ofRemoveListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
-        delete colourLab;
-        colourLab = 0;
-    }
+	if (colourLab)
+	{
+		ofRemoveListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
+		delete colourLab;
+		colourLab = 0;
+	}
 
-    int xInit = 6;
-    int padding = 5;
-    int width;
-    width = gridSize.x;
+	int xInit = 6;
+	int padding = 5;
+	int width;
+	width = gridSize.x;
 
-    colourLab = new ofxUIScrollableCanvas(gridPosition.x, gridPosition.y, width, gridSize.y);
+	colourLab = new ofxUIScrollableCanvas(gridPosition.x, gridPosition.y, width, gridSize.y);
 
-    colourLab->setFont("assets/fonts/PragmataProR_0822.ttf");
-    colourLab->setFontSize(OFX_UI_FONT_LARGE, 9);
-    colourLab->setFontSize(OFX_UI_FONT_MEDIUM, 7);
-    colourLab->setFontSize(OFX_UI_FONT_SMALL, 6);
-    colourLab->setScrollableDirections(false, true);
-    colourLab->setScrollAreaToScreenHeight();
-    colourLab->addWidgetDown(new ofxUISpacer(width - xInit, 0));
+	colourLab->setFont("assets/fonts/PragmataProR_0822.ttf");
+	colourLab->setFontSize(OFX_UI_FONT_LARGE, 9);
+	colourLab->setFontSize(OFX_UI_FONT_MEDIUM, 7);
+	colourLab->setFontSize(OFX_UI_FONT_SMALL, 6);
+	colourLab->setScrollableDirections(false, true);
+	colourLab->setScrollAreaToScreenHeight();
+	colourLab->addWidgetDown(new ofxUISpacer(width - xInit, 0));
 
-    ofAddListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
+	ofAddListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
 
-    int cdim;
-    int cdist = 1;
-    int col = 0;
-    int row = 0;
-    int startY = 50;
-    float guiWidth = width - 2;
+	int cdim;
+	int cdist = 1;
+	int col = 0;
+	int row = 0;
+	int startY = 50;
+	float guiWidth = width - 2;
 
-    // height color/palette boxes
-    //cdim = 20;
-    //maybe some palette have less than 5 colors, ie: 4, and then can cause problems...
-    // so we fix to 5 as usual they have..
-    cdim = guiWidth / 5.;
+	// height color/palette boxes
+	//cdim = 20;
+	//maybe some palette have less than 5 colors, ie: 4, and then can cause problems...
+	// so we fix to 5 as usual they have..
+	cdim = guiWidth / 5.;
 
-    // colourLab->centerWidgets();
-    colourLab->addWidgetDown(new ofxUILabel(lastSearch, OFX_UI_FONT_MEDIUM));
-    colourLab->addWidgetDown(new ofxUISpacer(width - xInit, 2));
+	// colourLab->centerWidgets();
+	colourLab->addWidgetDown(new ofxUILabel(lastSearch, OFX_UI_FONT_MEDIUM));
+	colourLab->addWidgetDown(new ofxUISpacer(width - xInit, 2));
 
-    //-
+	//-
 
-    for (int i = 0; i < palettes.size(); i++)
-    {
-        int currX = 1;
-        int currW = 0;
+	for (int i = 0; i < palettes.size(); i++)
+	{
+		int currX = 1;
+		int currW = 0;
 
-        // colors in each palette
-        int numOfColorsInPalette = palettes[i].colours.size();
-        for (int c = 0; c < numOfColorsInPalette; c++)
-        {
-            if (!MODE_fixedSize)
-            {
-                // different sizes with original colourLover Palettes
-                currW = palettes[i].colorWidths[c] * guiWidth;
-            }
-            else
-            {
-                // same size for each color
-                currW = guiWidth / numOfColorsInPalette;
-            }
+		// colors in each palette
+		int numOfColorsInPalette = palettes[i].colours.size();
+		for (int c = 0; c < numOfColorsInPalette; c++)
+		{
+			if (!MODE_fixedSize)
+			{
+				// different sizes with original colourLover Palettes
+				currW = palettes[i].colorWidths[c] * guiWidth;
+			}
+			else
+			{
+				// same size for each color
+				currW = guiWidth / numOfColorsInPalette;
+			}
 
-            string butName = ("CL_" + ofToString(i) + "_" + ofToString(c));
-            ofxUIButton *btn = new ofxUIButton(butName, false,
-                currW, cdim,
-                currX, i * (cdim + 4) + startY);
+			string butName = ("CL_" + ofToString(i) + "_" + ofToString(c));
+			ofxUIButton *btn = new ofxUIButton(butName, false,
+				currW, cdim,
+				currX, i * (cdim + 4) + startY);
 
-            btn->setLabelVisible(0);
-            colourLab->addWidget(btn);
+			btn->setLabelVisible(0);
+			colourLab->addWidget(btn);
 
-            // For set colour issues, make sure to set fill colour after widget been added
-            // color filled box
-            btn->setDrawFill(true);
-            btn->setColorFill(palettes[i].colours[c]);
-            btn->setColorBack(palettes[i].colours[c]);
-            btn->setDrawBack(true);
+			// For set colour issues, make sure to set fill colour after widget been added
+			// color filled box
+			btn->setDrawFill(true);
+			btn->setColorFill(palettes[i].colours[c]);
+			btn->setColorBack(palettes[i].colours[c]);
+			btn->setDrawBack(true);
 
-            // mark selector settings colors borders & disable
-            btn->setColorOutline(colorMarked);
-            btn->setDrawOutline(false);
+			// mark selector settings colors borders & disable
+			btn->setColorOutline(colorMarked);
+			btn->setDrawOutline(false);
 
-            coloursPalette.push_back(btn);
+			coloursPalette.push_back(btn);
 
-            currX += currW;
-        }
-    }
+			currX += currW;
+		}
+	}
 
-    colourLab->getRect()->setHeight(palettes.size() * (cdim + 4) + startY);
-    colourLab->setSnapping(0);
-    updateFlag = 0;
+	colourLab->getRect()->setHeight(palettes.size() * (cdim + 4) + startY);
+	colourLab->setSnapping(0);
+	updateFlag = 0;
 
-    // TODO: startup
-    currPalette = 0;
-    setPalette(currPalette);
-    refreshPalette();
+	// TODO: startup
+	currPalette = 0;
+	setPalette(currPalette);
+	refreshPalette();
 }
 
+#endif
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::update()
 {
-//    bool b = gui->bInsideCanvas;
-//    cout << b << endl;
+	//    bool b = gui->bInsideCanvas;
+	//    cout << b << endl;
 
-    if (updateFlag)
-    {
-        updateColourLab();
-    }
+	if (updateFlag)
+	{
+		updateColourLab();
+	}
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::draw()
 {
-    //    //draw raw palettes without gui
-    //    if(palettes.size()>0){
-    //        for(int i=0;i<palettes.size();i++){
-    //             palettes[i].draw(500,25*i,500,20);
-    //        }
-    //    }
+	////draw raw palettes without gui
+	//if(palettes.size()>0){
+	//    for(int i=0;i<palettes.size();i++){
+	//         palettes[i].draw(500,25*i,500,20);
+	//    }
+	//}
 }
 
-
+#ifdef USE_OFX_UI
 //--------------------------------------------------------------
 void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
 {
-    string name = e.widget->getName();
-    int kind = e.widget->getKind();
-    ofLogNotice("ofxColourLoversHelper") << "guiEvent: " << name;
+	string name = e.widget->getName();
+	int kind = e.widget->getKind();
+	ofLogNotice(__FUNCTION__) << name;
 
-    //    ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
+	//    ofLogNotice(__FUNCTION__) << "currPalette: " << currPalette;
 
-    if (name == "search")
-    {
-        ofxUITextInput *textinput = (ofxUITextInput *) e.widget;
-        lastSearch = "'" + textinput->getTextString() + "'";
-        ofxColourLovers::searchPalettes(textinput->getTextString(), 40);
-        ofLogNotice("ofxColourLoversHelper") << "textinput: " << textinput->getTextString();
-    }
+	if (name == "search")
+	{
+		ofxUITextInput *textinput = (ofxUITextInput *)e.widget;
+		lastSearch = "'" + textinput->getTextString() + "'";
+		ofxColourLovers::searchPalettes(textinput->getTextString(), 40);
+		ofLogNotice(__FUNCTION__) << "textinput: " << textinput->getTextString();
+	}
 
-    else if (name == "loverId")
-    {
-        ofxUITextInput *textinput = (ofxUITextInput *) e.widget;
-        lastSearch = textinput->getTextString();
-        string s = textinput->getTextString();
-        ofStringReplace(s, " ", "%20");
-        ofxColourLovers::getTopPalettesForLover(s, 40);
-        ofLogNotice("ofxColourLoversHelper") << "loverId: " << textinput->getTextString();
-    }
+	else if (name == "loverId")
+	{
+		ofxUITextInput *textinput = (ofxUITextInput *)e.widget;
+		lastSearch = textinput->getTextString();
+		string s = textinput->getTextString();
+		ofStringReplace(s, " ", "%20");
+		ofxColourLovers::getTopPalettesForLover(s, 40);
+		ofLogNotice(__FUNCTION__) << "loverId: " << textinput->getTextString();
+	}
 
-    else if (name == "paletteId")
-    {
-        ofxUITextInput *textinput = (ofxUITextInput *) e.widget;
-        lastSearch = textinput->getTextString();
-        ofxColourLovers::getPalette(lastSearch);
-        ofLogNotice("ofxColourLoversHelper") << "paletteId: " << textinput->getTextString();
+	else if (name == "paletteId")
+	{
+		ofxUITextInput *textinput = (ofxUITextInput *)e.widget;
+		lastSearch = textinput->getTextString();
+		ofxColourLovers::getPalette(lastSearch);
+		ofLogNotice(__FUNCTION__) << "paletteId: " << textinput->getTextString();
 
-    }
+	}
 
-    else if (name == "ADD FAVOURITE" && currPalette > -1)
-    {
-        ofxUIButton *but = e.getButton();
-        if (but->getValue())
-        {
-            string str = path + "favourites/" + palettes[currPalette].id + ".xml";
-            palettes[currPalette].save(str);
-            ofLogNotice("ofxColourLoversHelper") << "saved favorite: " << str;
-        }
-    }
+	else if (name == "ADD FAVOURITE" && currPalette > -1)
+	{
+		ofxUIButton *but = e.getButton();
+		if (but->getValue())
+		{
+			string str = path + "favourites/" + palettes[currPalette].id + ".xml";
+			palettes[currPalette].save(str);
+			ofLogNotice(__FUNCTION__) << "saved favorite: " << str;
+		}
+	}
 
-        //-
+	//-
 
+	else if (name == "FAVS")
+	{
+		ofxUIButton *but = e.getButton();
+		if (but->getValue())
+			loadFavourites();
+	}
+	else if (name == "HISTORY")
+	{
+		ofxUIButton *but = e.getButton();
+		if (but->getValue())
+			loadHistory();
+	}
+	else if (name == "REMOVE FAVS")
+	{
+		ofxUIButton *but = e.getButton();
+		if (but->getValue())
+			clearFavourites();
+	}
+	else if (name == "REMOVE HISTORY")
+	{
+		ofxUIButton *but = e.getButton();
+		if (but->getValue())
+			clearHistory();
+	}
 
-    else if (name == "FAVS")
-    {
-        ofxUIButton *but = e.getButton();
-        if (but->getValue())
-            loadFavourites();
-    }
-    else if (name == "HISTORY")
-    {
-        ofxUIButton *but = e.getButton();
-        if (but->getValue())
-            loadHistory();
-    }
-    else if (name == "REMOVE FAVS")
-    {
-        ofxUIButton *but = e.getButton();
-        if (but->getValue())
-            clearFavourites();
-    }
-    else if (name == "REMOVE HISTORY")
-    {
-        ofxUIButton *but = e.getButton();
-        if (but->getValue())
-            clearHistory();
-    }
+	else if (name == "FIXED WIDTHS")
+	{
+		bool MODE_fixedSize_PRE = MODE_fixedSize;
+		ofxUIToggle *toggle = e.getToggle();
+		MODE_fixedSize = toggle->getValue();
+		if (MODE_fixedSize != MODE_fixedSize_PRE)
+		{
+			updateColourLab();
+		}
+	}
+	else if (name == "PALETTE PICK")
+	{
+		ofxUIToggle *toggle = e.getToggle();
+		MODE_PickPalette_BACK = toggle->getValue();
+	}
+	else if (name == "COLOR PICK")
+	{
+		ofxUIToggle *toggle = e.getToggle();
+		MODE_PickColor_BACK = toggle->getValue();
+	}
 
-    else if (name == "FIXED WIDTHS")
-    {
-        bool MODE_fixedSize_PRE = MODE_fixedSize;
-        ofxUIToggle *toggle = e.getToggle();
-        MODE_fixedSize = toggle->getValue();
-        if (MODE_fixedSize != MODE_fixedSize_PRE)
-        {
-            updateColourLab();
-        }
-    }
-    else if (name == "PALETTE PICK")
-    {
-        ofxUIToggle *toggle = e.getToggle();
-        MODE_PickPalette_BACK = toggle->getValue();
-    }
-    else if (name == "COLOR PICK")
-    {
-        ofxUIToggle *toggle = e.getToggle();
-        MODE_PickColor_BACK = toggle->getValue();
-    }
+	//TODO: disable keys outside handler
+	if (kind == OFX_UI_WIDGET_TEXTINPUT)
+	{
+		ofLogWarning(__FUNCTION__) << "TEXTINPUT FOCUS!";
+		//        ofLogWarning(__FUNCTION__) << "SHOULD DISABLE KEYS !";
+		ofxUITextInput *ti = (ofxUITextInput *)e.widget;
 
-    //TODO: disable keys outside handler
-    if (kind == OFX_UI_WIDGET_TEXTINPUT)
-    {
-        ofLogWarning("ofxColourLoversHelper") << "TEXTINPUT FOCUS!";
-//        ofLogWarning("ofxColourLoversHelper") << "SHOULD DISABLE KEYS !";
-        ofxUITextInput *ti = (ofxUITextInput *) e.widget;
+		if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_FOCUS)
+		{
+			ofLogWarning(__FUNCTION__) << "OFX_UI_TEXTINPUT_ON_FOCUS";
+			//unfocusAllTextInputs(ti);
+			ENABLER_Keys = false;
+		}
+		else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_LOAD)
+		{
+			ofLogWarning(__FUNCTION__) << "OFX_UI_TEXTINPUT_ON_LOAD";
+			ENABLER_Keys = false;
+		}
+		else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER)
+		{
+			ofLogWarning(__FUNCTION__) << "OFX_UI_TEXTINPUT_ON_ENTER";
+			ENABLER_Keys = true;
+		}
+		else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_UNFOCUS)
+		{
+			ofLogWarning(__FUNCTION__) << "OFX_UI_TEXTINPUT_ON_UNFOCUS";
+			ENABLER_Keys = true;
+		}
 
-        if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_FOCUS)
-        {
-            ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_FOCUS";
-            //unfocusAllTextInputs(ti);
-            ENABLER_Keys = false;
-        }
-        else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_LOAD)
-        {
-            ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_LOAD";
-            ENABLER_Keys = false;
-        }
-        else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER)
-        {
-            ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_ENTER";
-            ENABLER_Keys = true;
-        }
-        else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_UNFOCUS)
-        {
-            ofLogWarning("ofxColourLoversHelper") << "OFX_UI_TEXTINPUT_ON_UNFOCUS";
-            ENABLER_Keys = true;
-        }
+		ofLogWarning(__FUNCTION__) << "ENABLER_Keys: " << (ENABLER_Keys ? "TRUE" : "FALSE") << endl;
+	}
 
-        ofLogWarning("ofxColourLoversHelper") << "ENABLER_Keys: " << (ENABLER_Keys ? "TRUE":"FALSE") << endl;
-    }
+	//-
 
-    //-
-
-    // TODO: disabled beacause dont know what does and blocks next/prev by keys
-    //    currPalette=-1;
+	//TODO: disabled beacause dont know what does and blocks next/prev by keys
+	//currPalette=-1;
 }
+#endif
 
 
 // sends back pointers color/palette/name and mark gui selected..
 //--------------------------------------------------------------
 void ofxColourLoversHelper::refreshPalette()
 {
-    ofLogNotice("ofxColourLoversHelper") << "refreshPalette currPalette: " << currPalette;
+	ofLogNotice(__FUNCTION__) << "currPalette: " << currPalette;
 
 	//TODO:
 	//Windows
@@ -509,88 +508,88 @@ void ofxColourLoversHelper::refreshPalette()
 		lastPaletteName_UI->setLabel(lastPaletteName);
 	}
 
-    //ColourLovePalette p = palettes[currPalette];
-    //lastPaletteName = "'" + p.title + "'";
-    //lastPaletteName_UI->setLabel(lastPaletteName);
+	//ColourLovePalette p = palettes[currPalette];
+	//lastPaletteName = "'" + p.title + "'";
+	//lastPaletteName_UI->setLabel(lastPaletteName);
 
-    //-
+	//-
 
-    // get and set palette colors and name BACK
+	// get and set palette colors and name BACK
 
-    int sizePalette = p.colours.size();
-    if (sizePalette > 0 && myPalette_BACK != nullptr && MODE_PickPalette_BACK)
-    {
-        // set BACK name clicked
-        if (myPalette_Name_BACK != nullptr)
-        {
-            (*myPalette_Name_BACK) = p.title;
-        }
+	int sizePalette = p.colours.size();
+	if (sizePalette > 0 && myPalette_BACK != nullptr && MODE_PickPalette_BACK)
+	{
+		// set BACK name clicked
+		if (myPalette_Name_BACK != nullptr)
+		{
+			(*myPalette_Name_BACK) = p.title;
+		}
 
-        //-
+		//-
 
-        // set BACK palette colors
-        myPalette_BACK->clear();
-        myPalette_BACK->resize(sizePalette);
-        (*myPalette_BACK) = p.colours;
+		// set BACK palette colors
+		myPalette_BACK->clear();
+		myPalette_BACK->resize(sizePalette);
+		(*myPalette_BACK) = p.colours;
 
-        // mark update flag
-        if (bUpdated_Palette_BACK != nullptr)
-        {
-            (*bUpdated_Palette_BACK) = true;
-        }
-    }
+		// mark update flag
+		if (bUpdated_Palette_BACK != nullptr)
+		{
+			(*bUpdated_Palette_BACK) = true;
+		}
+	}
 
-    //-
+	//-
 
-    // TODO: workflow...auto trig last color too... (it's done before too..but require when controlling by keyboard next/prev palette)
+	// TODO: workflow...auto trig last color too... (it's done before too..but require when controlling by keyboard next/prev palette)
 
-    //    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
-    ////    if (MODE_PickColor_BACK)
-    //    {
-    //        ofColor c;
-    //        c = p.colours[0];
-    //
-    //        // set BACK color clicked
-    //        if (myColor_BACK!=nullptr)
-    //        {
-    ////            myColor_BACK->set( lastColor_clicked );
-    //            myColor_BACK->set( c );
-    //        }
-    //
-    //        // flag updater color ready
-    //        if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
-    //        {
-    //            (*bUpdated_Color_BACK) = true;
-    //        }
-    //    }
+	//    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+	////    if (MODE_PickColor_BACK)
+	//    {
+	//        ofColor c;
+	//        c = p.colours[0];
+	//
+	//        // set BACK color clicked
+	//        if (myColor_BACK!=nullptr)
+	//        {
+	////            myColor_BACK->set( lastColor_clicked );
+	//            myColor_BACK->set( c );
+	//        }
+	//
+	//        // flag updater color ready
+	//        if (bUpdated_Color_BACK!=nullptr && MODE_PickColor_BACK)
+	//        {
+	//            (*bUpdated_Color_BACK) = true;
+	//        }
+	//    }
 
-    //-
+	//-
 
-    //--
+	//--
 
-    // mark borders in all colors in palette as active about currPalette
+	// mark borders in all colors in palette as active about currPalette
 
-    for (int i = 0; i < palettes.size(); i++)
-    {
-        int numOfColorsInPalette = palettes[i].colours.size();
+	for (int i = 0; i < palettes.size(); i++)
+	{
+		int numOfColorsInPalette = palettes[i].colours.size();
 
-        for (int c = 0; c < numOfColorsInPalette; c++)
-        {
-            string butName = ("CL_" + ofToString(i) + "_" + ofToString(c));
+		for (int c = 0; c < numOfColorsInPalette; c++)
+		{
+			string butName = ("CL_" + ofToString(i) + "_" + ofToString(c));
 
-            auto e = colourLab->getWidget(butName);
-            ofxUIButton *btn = (ofxUIButton *) e;
+			auto e = colourLab->getWidget(butName);
+			ofxUIButton *btn = (ofxUIButton *)e;
 
-            if (i == currPalette)
-            {
-                btn->setDrawOutline(true);
-            }
-            else
-            {
-                btn->setDrawOutline(false);
-            }
-        }
-    }
+			if (i == currPalette)
+			{
+				btn->setDrawOutline(true);
+			}
+			else
+			{
+				btn->setDrawOutline(false);
+			}
+		}
+	}
 }
 
 
@@ -598,332 +597,327 @@ void ofxColourLoversHelper::refreshPalette()
 void ofxColourLoversHelper::randomPalette()
 {
 
-    currPalette = (int) ofRandom(palettes.size());
-    ofLogNotice("ofxColourLoversHelper") << "randomPalette" << currPalette;
+	currPalette = (int)ofRandom(palettes.size());
+	ofLogNotice(__FUNCTION__) << currPalette;
 
-    refreshPalette();
+	refreshPalette();
 
-    if (MODE_PickColor_BACK)
-    {
-        // set BACK color clicked
-        if (myColor_BACK != nullptr)
-        {
-            myColor_BACK->set(palettes[currPalette].colours[0]);//auto get first color from palette beacuse there's no color click! just key pressed
+	if (MODE_PickColor_BACK)
+	{
+		// set BACK color clicked
+		if (myColor_BACK != nullptr)
+		{
+			myColor_BACK->set(palettes[currPalette].colours[0]);//auto get first color from palette beacuse there's no color click! just key pressed
 
-            // flag updater color ready
-            if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
-            {
-                (*bUpdated_Color_BACK) = true;
-            }
-        }
-    }
+			// flag updater color ready
+			if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
+			{
+				(*bUpdated_Color_BACK) = true;
+			}
+		}
+	}
 }
 
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::nextPalette()
 {
-    //    if (!isKeysEnabled) return;
+	//if (!isKeysEnabled) return;
 
-    ofLogNotice("ofxColourLoversHelper") << "nextPalette:currPalette" << currPalette;
-    if (currPalette == -1)
-    {
-        ofLogWarning("ofxColourLoversHelper") << "PALETTE NOT LOADED. SKIP";
-        return;
-    }
+	ofLogNotice(__FUNCTION__) << currPalette;
+	if (currPalette == -1)
+	{
+		ofLogWarning(__FUNCTION__) << "PALETTE NOT LOADED. SKIP";
+		return;
+	}
 
-//    if (currPalette < palettes.size() - 1)
-//        currPalette++;
+	//if (currPalette < palettes.size() - 1)
+	//	currPalette++;
 
-    currPalette++;
-    if (currPalette > palettes.size() - 1)
-        currPalette = 0;
+	currPalette++;
+	if (currPalette > palettes.size() - 1)
+		currPalette = 0;
 
 
-    ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
+	ofLogNotice(__FUNCTION__) << currPalette;
 
-    refreshPalette();
+	refreshPalette();
 
-    //-
+	//-
 
-    // TODO: workflow...auto trig last color too... (it's done before too..but require when controlling by keyboard next/prev palette)
+	//TODO: 
+	//workflow
+	//...auto trig last color too... 
+	//(it's done before too..but require when controlling by keyboard next/prev palette)
 
-    //    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
-    //    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
-    if (MODE_PickColor_BACK)
-    {
-        // set BACK color clicked
-        if (myColor_BACK != nullptr)
-        {
-            myColor_BACK->set(palettes[currPalette].colours[0]);//auto get first color from palette beacuse there's no color click! just key pressed
+	//if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+	//if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+	if (MODE_PickColor_BACK)
+	{
+		// set BACK color clicked
+		if (myColor_BACK != nullptr)
+		{
+			myColor_BACK->set(palettes[currPalette].colours[0]);//auto get first color from palette beacuse there's no color click! just key pressed
 
-            // flag updater color ready
-            if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
-            {
-                (*bUpdated_Color_BACK) = true;
-            }
-        }
-    }
+			// flag updater color ready
+			if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
+			{
+				(*bUpdated_Color_BACK) = true;
+			}
+		}
+	}
 }
 
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::prevPalette()
 {
-    //    if (!isKeysEnabled) return;
+	//if (!isKeysEnabled) return;
 
-    ofLogNotice("ofxColourLoversHelper") << "prevPalette:currPalette" << currPalette;
-    if (currPalette == -1)
-    {
-        ofLogWarning("ofxColourLoversHelper") << "PALETTE NOT LOADED. SKIP";
-        return;
-    }
+	ofLogNotice(__FUNCTION__) << currPalette;
+	if (currPalette == -1)
+	{
+		ofLogWarning(__FUNCTION__) << "PALETTE NOT LOADED. SKIP";
+		return;
+	}
 
-//    if (currPalette > 0)
-//        currPalette--;
+	//if (currPalette > 0)
+	//currPalette--;
 
-    currPalette--;
-    if (currPalette < 0)
-        currPalette = palettes.size() - 1;
+	currPalette--;
+	if (currPalette < 0)
+		currPalette = palettes.size() - 1;
 
-    ofLogNotice("ofxColourLoversHelper") << "currPalette: " << currPalette;
+	ofLogNotice(__FUNCTION__) << currPalette;
 
-    refreshPalette();
+	refreshPalette();
 
-    //-
+	//-
 
-    // TODO: workflow...auto trig last color too... (it's done before too..but require when controlling by keyboard next/prev palette)
+	//TODO: workflow...auto trig last color too... (it's done before too..but require when controlling by keyboard next/prev palette)
 
-    //    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
-    //    if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
-    if (MODE_PickColor_BACK)
-    {
-        // set BACK color clicked
-        if (myColor_BACK != nullptr)
-        {
-            myColor_BACK->set(palettes[currPalette].colours[0]);//auto get first color from palette beacuse there's no color click! just key pressed
+	//if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+	//if (MODE_PickPalette_BACK && MODE_PickColor_BACK)
+	if (MODE_PickColor_BACK)
+	{
+		// set BACK color clicked
+		if (myColor_BACK != nullptr)
+		{
+			myColor_BACK->set(palettes[currPalette].colours[0]);//auto get first color from palette beacuse there's no color click! just key pressed
 
-            // flag updater color ready
-            if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
-            {
-                (*bUpdated_Color_BACK) = true;
-            }
-        }
-    }
+			// flag updater color ready
+			if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
+			{
+				(*bUpdated_Color_BACK) = true;
+			}
+		}
+	}
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e)
 {
+	string name = e.widget->getName();
+	int kind = e.widget->getKind();
+	int uid = e.widget->getID();
 
-    string name = e.widget->getName();
-    int kind = e.widget->getKind();
-    int uid = e.widget->getID();
+	//-
 
-    //-
+	// filter mousePressed only
+	bool isButtonColor_click = false;
+	if (kind == OFX_UI_WIDGET_BUTTON)
+	{
+		ofxUIButton *but = e.getButton();
+		if (but->getValue())
+		{
+			isButtonColor_click = true;
+			return;
+		}
+	}
 
-    // filter mousePressed only
-    bool isButtonColor_click = false;
-    if (kind == OFX_UI_WIDGET_BUTTON)
-    {
-        ofxUIButton *but = e.getButton();
-        if (but->getValue())
-        {
-            isButtonColor_click = true;
-            return;
-        }
-    }
+	//-
 
-    //-
+	string whatList = name.substr(0, 2);
+	string whatColId = name.substr(3, name.length() - 3);
 
-    string whatList = name.substr(0, 2);
-    string whatColId = name.substr(3, name.length() - 3);
+	vector<string> seg = ofSplitString(name, "_");
+	int pId = ofToInt(seg[1]);
+	int cId = ofToInt(seg[2]);
+	ColourLovePalette p = palettes[pId];
 
-    vector<string> seg = ofSplitString(name, "_");
-    int pId = ofToInt(seg[1]);
-    int cId = ofToInt(seg[2]);
-    ColourLovePalette p = palettes[pId];
+	ofLogNotice(__FUNCTION__) << name << " " << kind << " " << uid << " colour: " << p.colours[cId] << " name: " << p.title;
 
-    ofLogNotice("ofxColourLoversHelper") << "colourLabEvent: " << name << " " << kind << " " << uid << " colour: " << p.colours[cId] << " name: " << p.title;
+	lastPaletteName = "'" + p.title + "'";
+	lastPaletteName_UI->setLabel(lastPaletteName);
 
-    lastPaletteName = "'" + p.title + "'";
-    lastPaletteName_UI->setLabel(lastPaletteName);
+	//-
 
-    //-
+	lastColor_clicked = p.colours[cId];
 
-    lastColor_clicked = p.colours[cId];
+	// set BACK color clicked
+	if (myColor_BACK != nullptr)
+	{
+		myColor_BACK->set(lastColor_clicked);
+	}
 
-    // set BACK color clicked
-    if (myColor_BACK != nullptr)
-    {
-        myColor_BACK->set(lastColor_clicked);
-    }
+	// flag updater color ready
+	if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
+	{
+		(*bUpdated_Color_BACK) = true;
+	}
 
-    // flag updater color ready
-    if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
-    {
-        (*bUpdated_Color_BACK) = true;
-    }
+	//-
 
-    //-
+	// set palette
+	setPalette(pId);
+	ofLogNotice(__FUNCTION__) << "pId: " << pId;
+	ofLogNotice(__FUNCTION__) << "currPalette: " << currPalette;
 
-    // set palette
-    setPalette(pId);
-    ofLogNotice("ofxColourLoversHelper") << "colourLabEvent:setPalette:pId: " << pId;
-    ofLogNotice("ofxColourLoversHelper") << "colourLabEvent:currPalette: " << currPalette;
-
-    // TODO: startup
-    currPalette = pId;
-    setPalette(currPalette);
-    refreshPalette();
+	//TODO: startup
+	currPalette = pId;
+	setPalette(currPalette);
+	refreshPalette();
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPalette(int pId)
 {
-    ofLogNotice("ofxColourLoversHelper") << "setPalette " << pId;
+	ofLogNotice(__FUNCTION__) << pId;
 
-    //skip if its already loaded?
-    if (currPalette == pId)
-    {
-        return;
-    }
-    currPalette = pId;
+	//skip if its already loaded?
+	if (currPalette == pId)
+	{
+		return;
+	}
+	currPalette = pId;
 
-    //    ColourLovePalette p = palettes[pId];
-    ////    lastPaletteName = p.title;
-    //
-    //    //--
-    //
-    //    // get palettes BACK
-    //
-    ////            // TODO: not required?
-    ////    int sizePalette = p.colours.size();
-    ////    if (sizePalette>0 && myPalette_BACK!= nullptr)
-    ////    {
-    ////        myPalette_BACK->clear();
-    ////        myPalette_BACK->resize(sizePalette);
-    ////        (*myPalette_BACK) = p.colours;
-    //////        lastPaletteName = p.title;
-    ////    }
+	//    ColourLovePalette p = palettes[pId];
+	////    lastPaletteName = p.title;
+	//
+	//    //--
+	//
+	//    // get palettes BACK
+	//
+	////            // TODO: not required?
+	////    int sizePalette = p.colours.size();
+	////    if (sizePalette>0 && myPalette_BACK!= nullptr)
+	////    {
+	////        myPalette_BACK->clear();
+	////        myPalette_BACK->resize(sizePalette);
+	////        (*myPalette_BACK) = p.colours;
+	//////        lastPaletteName = p.title;
+	////    }
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::colourPaletteEvent(ofxUIEventArgs &e)
 {
-    //    string name = e.widget->getName();
-    //    int kind = e.widget->getKind();
-    //    int uid = e.widget->getID();
-    //
-    //    // TODO: add button with same name
-    //    if(name=="ADD FAVOURITE" && currPalette>-1)
-    //    {
-    //        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
-    //        palettes[currPalette].save(str);
-    //        ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
-    //    }
-    //    else
-    //    {
-    //        vector<string> seg = ofSplitString(name,", ");
-    //        int r = ofToInt(seg[0]);
-    //        int g = ofToInt(seg[1]);
-    //        int b = ofToInt(seg[2]);
-    //
-    //        ofLogNotice("ofxColourLoversHelper")<<"colourPaletteEvent: "<<r<<" g "<<g <<" b "<<b;
-    //    }
+	//    string name = e.widget->getName();
+	//    int kind = e.widget->getKind();
+	//    int uid = e.widget->getID();
+	//
+	//    // TODO: add button with same name
+	//    if(name=="ADD FAVOURITE" && currPalette>-1)
+	//    {
+	//        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
+	//        palettes[currPalette].save(str);
+	//        ofLogNotice(__FUNCTION__)<<"saved favorite: "<<str;
+	//    }
+	//    else
+	//    {
+	//        vector<string> seg = ofSplitString(name,", ");
+	//        int r = ofToInt(seg[0]);
+	//        int g = ofToInt(seg[1]);
+	//        int b = ofToInt(seg[2]);
+	//
+	//        ofLogNotice(__FUNCTION__)<<"colourPaletteEvent: "<<r<<" g "<<g <<" b "<<b;
+	//    }
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::loadFavourites()
 {
-    ofLogNotice("ofxColourLoversHelper") << "loadFavourites";
+	ofLogNotice(__FUNCTION__);
 
-    ofDirectory favs(path + "favourites");
-    favs.listDir();
-    palettes.clear();
+	ofDirectory favs(path + "favourites");
+	favs.listDir();
+	palettes.clear();
 
-    for (int i = 0; i < favs.numFiles(); i++)
-    {
-        ColourLovePalette cp;
-        cp.load(path + "favourites/" + favs.getName(i));
-        palettes.push_back(cp);
-    }
+	for (int i = 0; i < favs.numFiles(); i++)
+	{
+		ColourLovePalette cp;
+		cp.load(path + "favourites/" + favs.getName(i));
+		palettes.push_back(cp);
+	}
 
-    lastSearch = "FAVOURITES";
+	lastSearch = "FAVOURITES";
 
-    // TODO: BUG: CRASHES IF EMPTY FOLDER
-    if (favs.numFiles() > 0)
-        updateColourLab();
+	// TODO: BUG: CRASHES IF EMPTY FOLDER
+	if (favs.numFiles() > 0)
+		updateColourLab();
 
-    //    // TODO: startup
-    //    currPalette = 0;
-    ////    updateFlag = 1;
-    //    setPalette(currPalette);
-    //    refreshPalette();
+	//    // TODO: startup
+	//    currPalette = 0;
+	////    updateFlag = 1;
+	//    setPalette(currPalette);
+	//    refreshPalette();
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::clearFavourites()
 {
-    ofLogNotice("ofxColourLoversHelper") << "clearFavourites";
+	ofLogNotice(__FUNCTION__);
 
-    ofDirectory favs(path + "favourites");
-    favs.listDir();
+	ofDirectory favs(path + "favourites");
+	favs.listDir();
 
-    for (int i = 0; i < favs.numFiles(); i++)
-    {
-        favs[i].remove();
-    }
+	for (int i = 0; i < favs.numFiles(); i++)
+	{
+		favs[i].remove();
+	}
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::loadHistory()
 {
-    ofLogNotice("ofxColourLoversHelper") << "loadHistory";
+	ofLogNotice(__FUNCTION__);
 
-    ofDirectory favs(path + "history");
-    favs.listDir();
-    palettes.clear();
+	ofDirectory favs(path + "history");
+	favs.listDir();
+	palettes.clear();
 
-    for (int i = 0; i < favs.numFiles(); i++)
-    {
-        ColourLovePalette cp;
-        cp.load(path + "history/" + favs.getName(i));
-        palettes.push_back(cp);
-    }
+	for (int i = 0; i < favs.numFiles(); i++)
+	{
+		ColourLovePalette cp;
+		cp.load(path + "history/" + favs.getName(i));
+		palettes.push_back(cp);
+	}
 
-    lastSearch = "HISTORY";
+	lastSearch = "HISTORY";
 
-    // TODO: BUG: CRASHES IF EMPTY FOLDER
-    if (favs.numFiles() > 0)
-        updateColourLab();
+	// TODO: BUG: CRASHES IF EMPTY FOLDER
+	if (favs.numFiles() > 0)
+		updateColourLab();
 
-    //    // TODO: startup
-    //    currPalette = 1;
-    ////    updateFlag = 1;
-    //    setPalette(currPalette);
-    //    refreshPalette();
+	//    // TODO: startup
+	//    currPalette = 1;
+	////    updateFlag = 1;
+	//    setPalette(currPalette);
+	//    refreshPalette();
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::clearHistory()
 {
-    ofLogNotice("ofxColourLoversHelper") << "clearHistory";
+	ofLogNotice(__FUNCTION__);
 
-    ofDirectory favs(path + "/history");
-    favs.listDir();
+	ofDirectory favs(path + "/history");
+	favs.listDir();
 
-    for (int i = 0; i < favs.numFiles(); i++)
-    {
-        favs[i].remove();
-    }
+	for (int i = 0; i < favs.numFiles(); i++)
+	{
+		favs[i].remove();
+	}
 }
 
 // pointers back to 'communicate externally'
@@ -931,125 +925,111 @@ void ofxColourLoversHelper::clearHistory()
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setColor_BACK(ofColor &c)
 {
-    myColor_BACK = &c;
+	myColor_BACK = &c;
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPalette_BACK(vector<ofColor> &p)
 {
-    myPalette_BACK = &p;
+	myPalette_BACK = &p;
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPalette_bUpdated_Palette_BACK(bool &b)
 {
-    bUpdated_Palette_BACK = &b;
+	bUpdated_Palette_BACK = &b;
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPalette_bUpdated_Color_BACK(bool &b)
 {
-    bUpdated_Color_BACK = &b;
+	bUpdated_Color_BACK = &b;
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPalette_Name_BACK(string &n)
 {
-    myPalette_Name_BACK = &n;
+	myPalette_Name_BACK = &n;
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::keyPressed(ofKeyEventArgs &eventArgs)
 {
-    const int &key = eventArgs.key;
-    //    cout << "key: " << key << endl;
+	const int &key = eventArgs.key;
+	//cout << "key: " << key << endl;
 
-    //-
+	//-
 
-    //    if (key == 'f')
-    //    {
-    //        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
-    //        palettes[currPalette].save(str);
-    //        ofLogNotice("ofxColourLoversHelper")<<"saved favorite: "<<str;
-    //    }
+	//if (key == 'f')
+	//{
+	//    string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
+	//    palettes[currPalette].save(str);
+	//    ofLogNotice(__FUNCTION__)<<"saved favorite: "<<str;
+	//}
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::keyReleased(ofKeyEventArgs &eventArgs)
 {
-    if (eventArgs.key == ' ')
-    {
-    }
+	if (eventArgs.key == ' ')
+	{
+	}
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::addKeysListeners()
 {
-    ofAddListener(ofEvents().keyPressed, this, &ofxColourLoversHelper::keyPressed);
+	ofAddListener(ofEvents().keyPressed, this, &ofxColourLoversHelper::keyPressed);
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::removeKeysListeners()
 {
-    ofRemoveListener(ofEvents().keyPressed, this, &ofxColourLoversHelper::keyPressed);
+	ofRemoveListener(ofEvents().keyPressed, this, &ofxColourLoversHelper::keyPressed);
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::mouseDragged(ofMouseEventArgs &eventArgs)
 {
-    const int &x = eventArgs.x;
-    const int &y = eventArgs.y;
-    const int &button = eventArgs.button;
-    //    ofLogNotice("ofxColourLoversHelper") << "mouseDragged " <<  x << ", " << y << ", " << button;
+	const int &x = eventArgs.x;
+	const int &y = eventArgs.y;
+	const int &button = eventArgs.button;
+	//ofLogNotice(__FUNCTION__) <<  x << ", " << y << ", " << button;
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::mousePressed(ofMouseEventArgs &eventArgs)
 {
-    const int &x = eventArgs.x;
-    const int &y = eventArgs.y;
-    const int &button = eventArgs.button;
-    //    ofLogNotice("ofxColourLoversHelper") << "mousePressed " <<  x << ", " << y << ", " << button;
+	const int &x = eventArgs.x;
+	const int &y = eventArgs.y;
+	const int &button = eventArgs.button;
+	//ofLogNotice(__FUNCTION__)  <<  x << ", " << y << ", " << button;
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::mouseReleased(ofMouseEventArgs &eventArgs)
 {
-    const int &x = eventArgs.x;
-    const int &y = eventArgs.y;
-    const int &button = eventArgs.button;
-    //    ofLogNotice("ofxColourLoversHelper") << "mouseReleased " <<  x << ", " << y << ", " << button;
+	const int &x = eventArgs.x;
+	const int &y = eventArgs.y;
+	const int &button = eventArgs.button;
+	//ofLogNotice(__FUNCTION__)  <<  x << ", " << y << ", " << button;
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::addMouseListeners()
 {
-    ofAddListener(ofEvents().mouseDragged, this, &ofxColourLoversHelper::mouseDragged);
-    ofAddListener(ofEvents().mousePressed, this, &ofxColourLoversHelper::mousePressed);
-    ofAddListener(ofEvents().mouseReleased, this, &ofxColourLoversHelper::mouseReleased);
+	ofAddListener(ofEvents().mouseDragged, this, &ofxColourLoversHelper::mouseDragged);
+	ofAddListener(ofEvents().mousePressed, this, &ofxColourLoversHelper::mousePressed);
+	ofAddListener(ofEvents().mouseReleased, this, &ofxColourLoversHelper::mouseReleased);
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::removeMouseListeners()
 {
-    ofRemoveListener(ofEvents().mouseDragged, this, &ofxColourLoversHelper::mouseDragged);
-    ofRemoveListener(ofEvents().mousePressed, this, &ofxColourLoversHelper::mousePressed);
-    ofRemoveListener(ofEvents().mouseReleased, this, &ofxColourLoversHelper::mouseReleased);
+	ofRemoveListener(ofEvents().mouseDragged, this, &ofxColourLoversHelper::mouseDragged);
+	ofRemoveListener(ofEvents().mousePressed, this, &ofxColourLoversHelper::mousePressed);
+	ofRemoveListener(ofEvents().mouseReleased, this, &ofxColourLoversHelper::mouseReleased);
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::exit()
@@ -1057,19 +1037,15 @@ void ofxColourLoversHelper::exit()
 
 }
 
-
 //--------------------------------------------------------------
 ofxColourLoversHelper::~ofxColourLoversHelper()
 {
-    removeKeysListeners();
-    removeMouseListeners();
+	removeKeysListeners();
+	removeMouseListeners();
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::windowResized(int w, int h)
 {
-    updateColourLab();
+	updateColourLab();
 }
-
-
