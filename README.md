@@ -2,10 +2,11 @@ ofxColourLoversHelper
 ------------------------------------
 
 # Overview
-**ofxColourLoversHelper** is an **openFrameworks** helper addon to handle ColourLovers palettes.
+**ofxColourLoversHelper** is an **openFrameworks** helper addon to handle **ColourLovers** palettes.
  
 The core of this addons is https://github.com/borg/ofxColourLovers.  
-I just added some methods to help integrate into my projects.
+Thanks to @borg!  
+I just added some methods to help integrate into my projects/addons.
 
 ## Screenshots
 ![image](/readme_images/Capture.PNG?raw=true "image")  
@@ -13,16 +14,16 @@ I just added some methods to help integrate into my projects.
 ## Features
 
 ## Usage
- - Look into **OF_ADDON/example**.
+ - Look the examples.
 
 ## Dependencies
-Add to your project:  
-ofxPoco  
-ofxXmlSettings  
+Add to your project using ```Project Generator```:  
+* ofxPoco  
+* ofxXmlSettings  
 
-Allready included into ```OF_ADDON/libs/```:  
-ofxUI  
-ofxColourLovers  
+Already included into ```OF_ADDON/libs/```:  
+* ofxUI  
+* ofxColourLovers  
 
 ## Tested systems
 - **Windows10** / **VS2017** / **OF ~0.11**
