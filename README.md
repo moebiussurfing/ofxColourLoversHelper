@@ -12,6 +12,8 @@ I just added some methods to help integrate into my projects/addons.
 ![image](/readme_images/Capture_ofxImGui.PNG?raw=true "image")  
 
 ## Features
+- Implemented ImGui.
+- 
 
 ## Usage
  - Look the examples.
@@ -19,10 +21,11 @@ I just added some methods to help integrate into my projects/addons.
 ## Dependencies
 Add to your project using ```Project Generator```:  
 * ofxImGui
-* ofxUI [ not required but implemented]  
 * ofxPoco  
 * ofxXmlSettings  
+* ofxXmlSettings
 * ofxSurfingHelpers
+* ofxUI [ not required but implemented]  
 
 Already included into ```OF_ADDON/libs/```:  
 * ofxColourLovers  

@@ -2,3 +2,4 @@ ofxColourLoversHelper
 ofxImGui
 ofxPoco
 ofxSurfingHelpers
+ofxXmlSettings
