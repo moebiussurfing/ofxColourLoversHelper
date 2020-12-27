@@ -78,8 +78,10 @@ void ofxColourLoversHelper::drawImGui()
 {
 	auto mainSettings = ofxImGui::Settings();
 
+#ifndef USE_OFX_IM_GUI_EXTERNAL
 	gui_ImGui.begin();
-
+#endif
+	
 	//-
 
 	//ImGui::SetNextWindowSize(ofVec2f(200, 100), ImGuiCond_FirstUseEver);
@@ -132,7 +134,6 @@ void ofxColourLoversHelper::drawImGui()
 
 			textInput_temp1_PRE = textInput_temp1 = "";//clear
 		}
-
 
 		//-
 
@@ -258,11 +259,6 @@ void ofxColourLoversHelper::drawImGui()
 
 	if (ofxImGui::BeginWindow(lastSearch.c_str(), mainSettings, false))
 	{
-		//ImGui::Text(lastSearch.c_str());
-		//ImGui::Separator();
-
-		//ImGui::Dummy(ImVec2(0.0f, 15));
-
 		ImGui::Text("Selected Palette:"); //ImGui::SameLine();
 		ImGui::Text(lastPaletteName.c_str());
 
@@ -397,8 +393,10 @@ void ofxColourLoversHelper::drawImGui()
 	ofxImGui::EndWindow(mainSettings);
 
 	//-
-
+	
+#ifndef USE_OFX_IM_GUI_EXTERNAL
 	gui_ImGui.end();
+#endif
 }
 #endif
 
@@ -407,6 +405,7 @@ void ofxColourLoversHelper::setup()
 {
 	//--
 
+#ifndef USE_OFX_IM_GUI_EXTERNAL
 #ifdef USE_OFX_IM_GUI
 	ofxSurfingHelpers::ImGui_FontCustom();
 
@@ -417,6 +416,7 @@ void ofxColourLoversHelper::setup()
 	ImGui::GetIO().ConfigWindowsResizeFromEdges = true;
 
 	ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
+#endif
 #endif
 
 	//--

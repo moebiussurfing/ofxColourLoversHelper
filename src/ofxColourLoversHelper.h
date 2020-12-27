@@ -9,6 +9,7 @@
 //
 //	You can choice a gui
 #define USE_OFX_IM_GUI
+#define USE_OFX_IM_GUI_EXTERNAL
 //#define USE_OFX_UI
 
 //--
@@ -132,9 +133,11 @@ private:
 
     //----
 
+public:
     bool MODE_PickColor_BACK = true;//should store in xml..
     bool MODE_PickPalette_BACK = true;
 
+private:
     ofParameter<bool> ENABLER_Keys {"keys enabler", true};
 	//bool ENABLER_Keys = true;
 
