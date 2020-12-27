@@ -1,4 +1,3 @@
-ofxXmlSettings
 ofxColourLoversHelper
 ofxImGui
 ofxPoco
