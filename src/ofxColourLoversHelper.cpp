@@ -1,14 +1,27 @@
 #include "ofxColourLoversHelper.h"
 
-
 //--------------------------------------------------------------
 ofxColourLoversHelper::ofxColourLoversHelper()
 {
 	// default settings
 	position = glm::vec2(1000, 10);
-	size = glm::vec2(200, 200);
+	size = glm::vec2(200, 400);
 	gridPosition = glm::vec2(1210, 10);
 	gridSize = glm::vec2(200, ofGetHeight());
+
+	//-
+
+	//// set positions and panel sizes
+	//glm::vec2 sizeGui(150, 400);
+	//glm::vec2 sizeGrid(150, ofGetHeight());
+	//glm::vec2 posGui(ofGetWidth() - (sizeGui.x + sizeGrid.x + 4), 0);
+	//glm::vec2 posGrid(posGui.x + sizeGui.x + 2, 0);
+
+	////must be called before setup() to overwrite default settings
+	//setGrid(posGrid, sizeGrid);
+	//setup(posGui, sizeGui);
+
+	//-
 
 	colorMarked = (ofColor::white);
 
@@ -20,22 +33,29 @@ ofxColourLoversHelper::ofxColourLoversHelper()
 	isKeysEnabled = true;
 }
 
+//--------------------------------------------------------------
+void ofxColourLoversHelper::setToggleVisible()
+{
+	bIsVisible = !bIsVisible;
+}
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setVisible(bool b)
 {
-	isVisible = b;
+	bIsVisible = b;
 
-	//TODO
-	if (colourLab)
+	//-
 
-		colourLab->setVisible(isVisible);
-	//gui->setVisible(isVisible);
-
-	if (isVisible && gui)
+#ifdef USE_OFX_UI
+	if (gui_Lab) gui_Lab->setVisible(bIsVisible);
+	//gui->setVisible(bIsVisible);
+	if (bIsVisible && gui)
 		setVisibleSearcher(bSearcherVisible);
+#endif
 
-	if (isVisible)
+	//-
+
+	if (bIsVisible)
 	{
 		addMouseListeners();
 
@@ -54,23 +74,363 @@ void ofxColourLoversHelper::setVisible(bool b)
 }
 
 //--------------------------------------------------------------
+void ofxColourLoversHelper::drawImGui()
+{
+	auto mainSettings = ofxImGui::Settings();
+
+	gui_ImGui.begin();
+
+	//-
+
+	//ImGui::SetNextWindowSize(ofVec2f(200, 100), ImGuiCond_FirstUseEver);
+	mainSettings.windowPos = ofVec2f(100, 10);
+	mainSettings.windowSize = ofVec2f(300, 500);
+	mainSettings.lockPosition = false;
+	mainSettings.windowBlock = false;
+
+	//widgets size
+	float h = 30;
+	float w = 200;
+	//float w = ImGui::GetWindowWidth();
+
+	//-
+
+	if (ofxImGui::BeginWindow("COLOUR LOVERS", mainSettings, false))
+	{
+		//ImGui::Text("COLOUR LOVERS");
+
+		//-
+
+		//search
+		ImGui::Text("Search Keyword:");
+		//std::string textInput_temp1 = "";
+
+		char tab1[32];
+		strncpy(tab1, textInput_temp1.c_str(), sizeof(tab1));
+		tab1[sizeof(tab1) - 1] = 0;
+
+		if (ImGui::InputText("", tab1, IM_ARRAYSIZE(tab1)))
+		{
+			textInput_temp1 = ofToString(tab1);
+			ofLogNotice(__FUNCTION__) << "input: " << textInput_temp1;
+
+			//ofLogNotice(__FUNCTION__) << "InputText:" << ofToString(tab1);
+			//lastSearch_PRE = lastSearch;
+
+			if (textInput_temp1 != textInput_temp1_PRE) {
+				textInput_temp1_PRE = textInput_temp1;
+			}
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("SEARCH"))
+		{
+			ofLogNotice(__FUNCTION__) << "searchPalettes: " << textInput_temp1_PRE;
+			ofxColourLovers::searchPalettes(textInput_temp1_PRE, amountResults);
+			lastSearch = "'" + textInput_temp1_PRE + "'";
+		}
+
+
+		//-
+
+		//hide to debug and simplify
+//#define EXTEND_SEARCH
+#ifdef EXTEND_SEARCH
+		//lover
+		ImGui::Text("Lover Id:");
+		std::string textInput_temp2 = "";
+
+		char tab2[32];
+		strncpy(tab2, textInput_temp2.c_str(), sizeof(tab2));
+		tab2[sizeof(tab2) - 1] = 0;
+
+		if (ImGui::InputText("", tab2, IM_ARRAYSIZE(tab2)))
+		{
+			ofLogNotice(__FUNCTION__) << "InputText:" << ofToString(tab2);
+			textInput_temp2 = ofToString(tab2);
+			ofLogNotice(__FUNCTION__) << "textInput_temp2:" << textInput_temp2;
+
+			lastSearch = textInput_temp2;
+			std::string s = textInput_temp2;
+			ofStringReplace(s, " ", "%20");
+			ofxColourLovers::getTopPalettesForLover(s, amountResults);
+		}
+
+		//-
+
+		//palette
+		ImGui::Text("Palette Id:");
+		std::string textInput_temp3 = "";
+
+		char tab3[32];
+		strncpy(tab3, textInput_temp3.c_str(), sizeof(tab3));
+		tab3[sizeof(tab3) - 1] = 0;
+
+		if (ImGui::InputText("", tab3, IM_ARRAYSIZE(tab3)))
+		{
+			ofLogNotice(__FUNCTION__) << "InputText:" << ofToString(tab3);
+			textInput_temp3 = ofToString(tab3);
+			ofLogNotice(__FUNCTION__) << "textInput_temp2:" << textInput_temp3;
+
+			lastSearch = textInput_temp3;
+			ofxColourLovers::getPalette(lastSearch);
+		}
+#endif
+
+		ImGui::Dummy(ImVec2(0.0f, 5));
+
+		if (ImGui::Button("FAVS", ImVec2(w * 0.5, h)))
+		{
+			loadFavourites();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("HISTORY", ImVec2(w * 0.5, h)))
+		{
+			loadHistory();
+		}
+
+		//bool MODE_fixedSize_PRE = MODE_fixedSize;
+		//if (ImGui::Checkbox("FIXED WIDTH", &MODE_fixedSize))
+		//{
+		//	if (MODE_fixedSize != MODE_fixedSize_PRE)
+		//	{
+		//		build_Gui_Lab();
+		//	}
+		//}
+
+		ImGui::Dummy(ImVec2(0.0f, 5));
+
+		ImGui::Text("PALETTE NAME:");
+		ImGui::Text(lastPaletteName.c_str());
+
+		ImGui::Dummy(ImVec2(0.0f, 5));
+
+		if (ImGui::Button("ADD FAVOURITE", ImVec2(w, h)))
+		{
+			ofxSurfingHelpers::CheckFolder(path + "favourites/");
+
+			std::string str = path + "favourites/" + palettes[currPalette].id + ".xml";
+
+			palettes[currPalette].save(str);
+			ofLogNotice(__FUNCTION__) << "saved favorite: " << str;
+		}
+		if (ImGui::Button("REMOVE FAVS", ImVec2(w, h)))
+		{
+			clearFavourites();
+
+			//workflow
+			loadFavourites();
+		}
+		if (ImGui::Button("REMOVE HISTORY", ImVec2(w, h)))
+		{
+			clearHistory();
+
+			//workflow
+			loadHistory();
+		}
+
+		ImGui::Dummy(ImVec2(0.0f, 5));
+
+		if (ImGui::Checkbox("PALETTE PICK", &MODE_PickPalette_BACK))
+		{
+		}
+		if (ImGui::Checkbox("COLOR PICK", &MODE_PickColor_BACK))
+		{
+		}
+
+		ImGui::SliderInt("Results", &amountResults, 5, 100);
+	}
+	ofxImGui::EndWindow(mainSettings);
+
+	//----
+
+	//ImGui::SetNextWindowSize(ofVec2f(200, 100), ImGuiCond_FirstUseEver);
+	mainSettings.windowPos = ofVec2f(500, 10);
+	mainSettings.windowSize = ofVec2f(300, 500);
+	mainSettings.lockPosition = false;
+	mainSettings.windowBlock = false;
+
+	ImGuiColorEditFlags colorEdiFlags = false;
+	int ww = w / 5;
+
+	if (ofxImGui::BeginWindow(lastSearch.c_str(), mainSettings, false))
+	{
+		//ImGui::Text(lastSearch.c_str());
+		//ImGui::Separator();
+
+		//ImGui::Dummy(ImVec2(0.0f, 15));
+
+		ImGui::Text("Selected Palette:"); //ImGui::SameLine();
+		ImGui::Text(lastPaletteName.c_str());
+
+		ImGui::Dummy(ImVec2(0.0f, 5));
+
+		bool MODE_fixedSize_PRE = MODE_fixedSize;
+		if (ImGui::Checkbox("FIXED WIDTH", &MODE_fixedSize))
+		{
+			if (MODE_fixedSize != MODE_fixedSize_PRE)
+			{
+				build_Gui_Lab();
+			}
+		}
+
+		ImGui::Dummy(ImVec2(0.0f, 5));
+
+		//-
+
+		for (int i = 0; i < palettes.size(); i++)
+		{
+			int wc = 0;
+
+			// colors in each palette
+			int numOfColorsInPalette = palettes[i].colours.size();
+			for (int c = 0; c < numOfColorsInPalette; c++)
+			{
+				if (c != 0) ImGui::SameLine();
+
+				ImGui::PushID(c);
+
+				if (!MODE_fixedSize)
+				{
+					// different sizes with original colourLover Palettes
+					wc = palettes[i].colorWidths[c] * w;
+				}
+				else
+				{
+					// same size for each color
+					wc = w / numOfColorsInPalette;
+				}
+
+				std::string name = ("CL_" + ofToString(i) + "_" + ofToString(c));
+
+				//-
+
+				// draw border to selected color/palette
+				bool bDrawBorder = false;
+				if (i == currPalette)
+				{
+					bDrawBorder = true;
+				}
+				if (bDrawBorder)
+				{
+					//ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0, 0, .40));//black
+					ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1, 1, 1, .50));//white
+					ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.5f);
+					//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+				}
+
+				//-
+
+				//colored box
+				if (ImGui::ColorButton(name.c_str(),
+					palettes[i].colours[c],
+					colorEdiFlags,
+					ImVec2(wc, ww)))
+				{
+					//-
+
+					// 1. filter name
+
+					std::string whatList = name.substr(0, 2);
+					std::string whatColId = name.substr(3, name.length() - 3);
+
+					vector<std::string> seg = ofSplitString(name, "_");
+					int pId = ofToInt(seg[1]);
+					int cId = ofToInt(seg[2]);
+					ColourLovePalette p = palettes[pId];
+
+					lastPaletteName = "'" + p.title + "'";
+
+#ifdef USE_OFX_UI
+					lastPaletteName_UI->setLabel(lastPaletteName);
+#endif
+					//-
+
+					// 2. pick palette and color
+
+					//lastColor_clicked = palettes[i].colours[c];
+					lastColor_clicked = p.colours[cId];
+
+					// set BACK color clicked
+					if (myColor_BACK != nullptr && MODE_PickColor_BACK)
+					{
+						myColor_BACK->set(lastColor_clicked);
+					}
+
+					// flag updater color ready
+					if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
+					{
+						(*bUpdated_Color_BACK) = true;
+					}
+
+					//-
+
+					// 3. set palette
+					//currPalette = i;
+
+					currPalette = pId;
+					setPalette(currPalette);
+
+					ofLogNotice(__FUNCTION__) << "palette Id : " << pId;
+					ofLogNotice(__FUNCTION__) << "currPalette: " << currPalette;
+
+					refreshPalette();
+				}
+
+				//-
+
+				if (bDrawBorder)
+				{
+					ImGui::PopStyleColor();
+					ImGui::PopStyleVar(1);
+				}
+
+				//-
+
+				ImGui::PopID();
+			}
+		}
+	}
+	ofxImGui::EndWindow(mainSettings);
+
+	//-
+
+	gui_ImGui.end();
+}
+
+//--------------------------------------------------------------
 void ofxColourLoversHelper::setup()
 {
-	//-
+	//--
+
+#ifdef USE_OFX_IM_GUI
+	ofxSurfingHelpers::ImGui_FontCustom();
+
+	gui_ImGui.setup();
+
+	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	ImGui::GetIO().MouseDrawCursor = false;
+	ImGui::GetIO().ConfigWindowsResizeFromEdges = true;
+
+	ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
+#endif
+
+	//--
 
 #ifdef USE_OFX_UI
 
-// TODO: to enable windowResize..
-	if (colourLab)
+	if (gui_Lab)
 	{
-		ofRemoveListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
-		delete colourLab;
-		colourLab = 0;
+		ofRemoveListener(gui_Lab->newGUIEvent, this, &ofxColourLoversHelper::Changed_Gui_Lab);
+		delete gui_Lab;
+		gui_Lab = 0;
 	}
 	if (gui)
 	{
-		ofRemoveListener(gui->newGUIEvent, this, &ofxColourLoversHelper::guiEvent);
-		ofRemoveListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::colourLoveEvent);
+		ofRemoveListener(gui->newGUIEvent, this, &ofxColourLoversHelper::Changed_Gui);
+
+		ofRemoveListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::Changed_ColourLovers);
 		delete gui;
 		gui = 0;
 	}
@@ -85,7 +445,7 @@ void ofxColourLoversHelper::setup()
 
 	// custom bacground color
 	ofFloatColor colorBg;
-	//    colorBg.set(0.06f, 0.06f, 0.06f, 0.94f);
+	//colorBg.set(0.06f, 0.06f, 0.06f, 0.94f);
 	colorBg.set(0.06f, 0.06f, 0.06f, 0.8f);
 	gui->setColorBack(ofColor(colorBg));
 
@@ -105,6 +465,7 @@ void ofxColourLoversHelper::setup()
 	gui->addWidgetDown(textinput);
 	textinput = new ofxUITextInput("loverId", "Lover id", width - xInit, OFX_UI_FONT_MEDIUM);
 	textinput->setTriggerOnClick(false);
+
 	gui->addWidgetDown(textinput);
 	textinput = new ofxUITextInput("paletteId", "Palette id", width - xInit, OFX_UI_FONT_MEDIUM);
 	textinput->setTriggerOnClick(false);
@@ -144,25 +505,37 @@ void ofxColourLoversHelper::setup()
 	//getTopPalettesForLover
 	//searchPalettes
 
-	currPalette = -1;
-	paletteView = 0;
-	updateFlag = 0;
-	colourLab = 0;
+	//-
 
-	ofAddListener(gui->newGUIEvent, this, &ofxColourLoversHelper::guiEvent);
-	ofAddListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::colourLoveEvent);
+	//callbacks
+	ofAddListener(gui->newGUIEvent, this, &ofxColourLoversHelper::Changed_Gui);
 #endif
 
-	//--
+	//-
 
-	// STARTUP
+	ofAddListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::Changed_ColourLovers);
+
+	//----
+
+	// startup
+
+	currPalette = -1;
+	updateFlag = false;
+
+#ifdef USE_OFX_UI
+	gui_Palette = 0;
+	gui_Lab = 0;
+#endif
+
+
+	//-
 
 	loadFavourites();
 	// auto load first palette of favourites
 	if (palettes.size() > 0)
 	{
 		currPalette = 0;
-		//updateFlag = 1;
+		//updateFlag = true;
 		//setPalette(currPalette);
 		refreshPalette();
 	}
@@ -194,7 +567,10 @@ void ofxColourLoversHelper::setPosition(glm::vec2 _position, glm::vec2 _size)
 	position = _position;
 	size = _size;
 
+#ifdef USE_OFX_UI
 	gui->setPosition(position.x, position.y);
+#endif
+
 }
 
 //--------------------------------------------------------------
@@ -204,10 +580,11 @@ void ofxColourLoversHelper::setGrid(glm::vec2 _position, glm::vec2 _size)
 	gridSize = _size;
 }
 
-#ifdef USE_OFX_UI
 //--------------------------------------------------------------
-void ofxColourLoversHelper::colourLoveEvent(ColourLoveEvent &e)
+void ofxColourLoversHelper::Changed_ColourLovers(ColourLoveEvent &e)
 {
+	ofLogNotice(__FUNCTION__) << ofToString(e.message);
+
 	palettes = e.palettes;
 
 	if (!(palettes.size() > 0))
@@ -222,21 +599,26 @@ void ofxColourLoversHelper::colourLoveEvent(ColourLoveEvent &e)
 	}
 
 	//return;
-	//    bg = palettes[0].sortedColours[0];
-	//    bgLabel->setLabel("BG: "+ofxColourLovers::hexToWeb(bg));
+	//bg = palettes[0].sortedColours[0];
+	//bgLabel->setLabel("BG: "+ofxColourLovers::hexToWeb(bg));
 
-	updateFlag = 1;
+	updateFlag = true;
 }
 
 //--------------------------------------------------------------
-void ofxColourLoversHelper::updateColourLab()
+void ofxColourLoversHelper::build_Gui_Lab()
 {
+	ofLogNotice(__FUNCTION__);
 
-	if (colourLab)
+	// populate color boxes of all palettes 
+
+#ifdef USE_OFX_UI
+
+	if (gui_Lab)
 	{
-		ofRemoveListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
-		delete colourLab;
-		colourLab = 0;
+		ofRemoveListener(gui_Lab->newGUIEvent, this, &ofxColourLoversHelper::Changed_Gui_Lab);
+		delete gui_Lab;
+		gui_Lab = 0;
 	}
 
 	int xInit = 6;
@@ -244,17 +626,17 @@ void ofxColourLoversHelper::updateColourLab()
 	int width;
 	width = gridSize.x;
 
-	colourLab = new ofxUIScrollableCanvas(gridPosition.x, gridPosition.y, width, gridSize.y);
+	gui_Lab = new ofxUIScrollableCanvas(gridPosition.x, gridPosition.y, width, gridSize.y);
 
-	colourLab->setFont("assets/fonts/PragmataProR_0822.ttf");
-	colourLab->setFontSize(OFX_UI_FONT_LARGE, 9);
-	colourLab->setFontSize(OFX_UI_FONT_MEDIUM, 7);
-	colourLab->setFontSize(OFX_UI_FONT_SMALL, 6);
-	colourLab->setScrollableDirections(false, true);
-	colourLab->setScrollAreaToScreenHeight();
-	colourLab->addWidgetDown(new ofxUISpacer(width - xInit, 0));
+	gui_Lab->setFont("assets/fonts/PragmataProR_0822.ttf");
+	gui_Lab->setFontSize(OFX_UI_FONT_LARGE, 9);
+	gui_Lab->setFontSize(OFX_UI_FONT_MEDIUM, 7);
+	gui_Lab->setFontSize(OFX_UI_FONT_SMALL, 6);
+	gui_Lab->setScrollableDirections(false, true);
+	gui_Lab->setScrollAreaToScreenHeight();
+	gui_Lab->addWidgetDown(new ofxUISpacer(width - xInit, 0));
 
-	ofAddListener(colourLab->newGUIEvent, this, &ofxColourLoversHelper::colourLabEvent);
+	ofAddListener(gui_Lab->newGUIEvent, this, &ofxColourLoversHelper::Changed_Gui_Lab);
 
 	int cdim;
 	int cdist = 1;
@@ -266,12 +648,12 @@ void ofxColourLoversHelper::updateColourLab()
 	// height color/palette boxes
 	//cdim = 20;
 	//maybe some palette have less than 5 colors, ie: 4, and then can cause problems...
-	// so we fix to 5 as usual they have..
+	//so we fix to 5 as usual they have..
 	cdim = guiWidth / 5.;
 
-	// colourLab->centerWidgets();
-	colourLab->addWidgetDown(new ofxUILabel(lastSearch, OFX_UI_FONT_MEDIUM));
-	colourLab->addWidgetDown(new ofxUISpacer(width - xInit, 2));
+	//gui_Lab->centerWidgets();
+	gui_Lab->addWidgetDown(new ofxUILabel(lastSearch, OFX_UI_FONT_MEDIUM));
+	gui_Lab->addWidgetDown(new ofxUISpacer(width - xInit, 2));
 
 	//-
 
@@ -295,13 +677,13 @@ void ofxColourLoversHelper::updateColourLab()
 				currW = guiWidth / numOfColorsInPalette;
 			}
 
-			string butName = ("CL_" + ofToString(i) + "_" + ofToString(c));
+			std::string butName = ("CL_" + ofToString(i) + "_" + ofToString(c));
 			ofxUIButton *btn = new ofxUIButton(butName, false,
 				currW, cdim,
 				currX, i * (cdim + 4) + startY);
 
 			btn->setLabelVisible(0);
-			colourLab->addWidget(btn);
+			gui_Lab->addWidget(btn);
 
 			// For set colour issues, make sure to set fill colour after widget been added
 			// color filled box
@@ -314,39 +696,47 @@ void ofxColourLoversHelper::updateColourLab()
 			btn->setColorOutline(colorMarked);
 			btn->setDrawOutline(false);
 
-			coloursPalette.push_back(btn);
+			buttonColoursPalette.push_back(btn);
 
 			currX += currW;
 		}
 	}
 
-	colourLab->getRect()->setHeight(palettes.size() * (cdim + 4) + startY);
-	colourLab->setSnapping(0);
-	updateFlag = 0;
+	gui_Lab->getRect()->setHeight(palettes.size() * (cdim + 4) + startY);
+	gui_Lab->setSnapping(0);
 
-	// TODO: startup
+	updateFlag = false;
+#endif
+
+	//-
+
+//#ifdef USE_OFX_UI
+	//workflow
 	currPalette = 0;
 	setPalette(currPalette);
 	refreshPalette();
+	//#endif
 }
-
-#endif
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::update()
 {
-	//    bool b = gui->bInsideCanvas;
-	//    cout << b << endl;
+	//bool b = gui->bInsideCanvas;
+	//cout << b << endl;
 
 	if (updateFlag)
 	{
-		updateColourLab();
+		build_Gui_Lab();
+
+		updateFlag = false;
 	}
 }
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::draw()
 {
+	drawImGui();
+
 	////draw raw palettes without gui
 	//if(palettes.size()>0){
 	//    for(int i=0;i<palettes.size();i++){
@@ -357,19 +747,17 @@ void ofxColourLoversHelper::draw()
 
 #ifdef USE_OFX_UI
 //--------------------------------------------------------------
-void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
+void ofxColourLoversHelper::Changed_Gui(ofxUIEventArgs &e)
 {
-	string name = e.widget->getName();
+	std::string name = e.widget->getName();
 	int kind = e.widget->getKind();
 	ofLogNotice(__FUNCTION__) << name;
-
-	//    ofLogNotice(__FUNCTION__) << "currPalette: " << currPalette;
 
 	if (name == "search")
 	{
 		ofxUITextInput *textinput = (ofxUITextInput *)e.widget;
 		lastSearch = "'" + textinput->getTextString() + "'";
-		ofxColourLovers::searchPalettes(textinput->getTextString(), 40);
+		ofxColourLovers::searchPalettes(textinput->getTextString(), amountResults);
 		ofLogNotice(__FUNCTION__) << "textinput: " << textinput->getTextString();
 	}
 
@@ -377,9 +765,9 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
 	{
 		ofxUITextInput *textinput = (ofxUITextInput *)e.widget;
 		lastSearch = textinput->getTextString();
-		string s = textinput->getTextString();
+		std::string s = textinput->getTextString();
 		ofStringReplace(s, " ", "%20");
-		ofxColourLovers::getTopPalettesForLover(s, 40);
+		ofxColourLovers::getTopPalettesForLover(s, amountResults);
 		ofLogNotice(__FUNCTION__) << "loverId: " << textinput->getTextString();
 	}
 
@@ -397,7 +785,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
 		ofxUIButton *but = e.getButton();
 		if (but->getValue())
 		{
-			string str = path + "favourites/" + palettes[currPalette].id + ".xml";
+			std::string str = path + "favourites/" + palettes[currPalette].id + ".xml";
 			palettes[currPalette].save(str);
 			ofLogNotice(__FUNCTION__) << "saved favorite: " << str;
 		}
@@ -437,7 +825,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
 		MODE_fixedSize = toggle->getValue();
 		if (MODE_fixedSize != MODE_fixedSize_PRE)
 		{
-			updateColourLab();
+			build_Gui_Lab();
 		}
 	}
 	else if (name == "PALETTE PICK")
@@ -455,7 +843,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
 	if (kind == OFX_UI_WIDGET_TEXTINPUT)
 	{
 		ofLogWarning(__FUNCTION__) << "TEXTINPUT FOCUS!";
-		//        ofLogWarning(__FUNCTION__) << "SHOULD DISABLE KEYS !";
+		//ofLogWarning(__FUNCTION__) << "SHOULD DISABLE KEYS !";
 		ofxUITextInput *ti = (ofxUITextInput *)e.widget;
 
 		if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_FOCUS)
@@ -480,7 +868,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
 			ENABLER_Keys = true;
 		}
 
-		ofLogWarning(__FUNCTION__) << "ENABLER_Keys: " << (ENABLER_Keys ? "TRUE" : "FALSE") << endl;
+		ofLogWarning(__FUNCTION__) << "ENABLER_Keys: " << (ENABLER_Keys ? "TRUE" : "FALSE");
 	}
 
 	//-
@@ -495,7 +883,7 @@ void ofxColourLoversHelper::guiEvent(ofxUIEventArgs &e)
 //--------------------------------------------------------------
 void ofxColourLoversHelper::refreshPalette()
 {
-	ofLogNotice(__FUNCTION__) << "currPalette: " << currPalette;
+	ofLogNotice(__FUNCTION__) << currPalette;
 
 	//TODO:
 	//Windows
@@ -505,7 +893,10 @@ void ofxColourLoversHelper::refreshPalette()
 	{
 		p = palettes[currPalette];
 		lastPaletteName = "'" + p.title + "'";
+
+#ifdef USE_OFX_UI
 		lastPaletteName_UI->setLabel(lastPaletteName);
+#endif
 	}
 
 	//ColourLovePalette p = palettes[currPalette];
@@ -563,10 +954,9 @@ void ofxColourLoversHelper::refreshPalette()
 	//        }
 	//    }
 
-	//-
-
 	//--
 
+#ifdef USE_OFX_UI
 	// mark borders in all colors in palette as active about currPalette
 
 	for (int i = 0; i < palettes.size(); i++)
@@ -575,9 +965,9 @@ void ofxColourLoversHelper::refreshPalette()
 
 		for (int c = 0; c < numOfColorsInPalette; c++)
 		{
-			string butName = ("CL_" + ofToString(i) + "_" + ofToString(c));
+			std::string butName = ("CL_" + ofToString(i) + "_" + ofToString(c));
 
-			auto e = colourLab->getWidget(butName);
+			auto e = gui_Lab->getWidget(butName);
 			ofxUIButton *btn = (ofxUIButton *)e;
 
 			if (i == currPalette)
@@ -590,8 +980,8 @@ void ofxColourLoversHelper::refreshPalette()
 			}
 		}
 	}
+#endif
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::randomPalette()
@@ -617,7 +1007,6 @@ void ofxColourLoversHelper::randomPalette()
 		}
 	}
 }
-
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::nextPalette()
@@ -668,7 +1057,6 @@ void ofxColourLoversHelper::nextPalette()
 	}
 }
 
-
 //--------------------------------------------------------------
 void ofxColourLoversHelper::prevPalette()
 {
@@ -714,16 +1102,18 @@ void ofxColourLoversHelper::prevPalette()
 	}
 }
 
+#ifdef USE_OFX_UI
 //--------------------------------------------------------------
-void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e)
+void ofxColourLoversHelper::Changed_Gui_Lab(ofxUIEventArgs &e)
 {
-	string name = e.widget->getName();
+	std::string name = e.widget->getName();
 	int kind = e.widget->getKind();
 	int uid = e.widget->getID();
 
 	//-
 
-	// filter mousePressed only
+	// filter mousePressed only to pick a palette/color
+
 	bool isButtonColor_click = false;
 	if (kind == OFX_UI_WIDGET_BUTTON)
 	{
@@ -737,10 +1127,12 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e)
 
 	//-
 
-	string whatList = name.substr(0, 2);
-	string whatColId = name.substr(3, name.length() - 3);
+	// 1. filter name
 
-	vector<string> seg = ofSplitString(name, "_");
+	std::string whatList = name.substr(0, 2);
+	std::string whatColId = name.substr(3, name.length() - 3);
+
+	vector<std::string> seg = ofSplitString(name, "_");
 	int pId = ofToInt(seg[1]);
 	int cId = ofToInt(seg[2]);
 	ColourLovePalette p = palettes[pId];
@@ -751,6 +1143,8 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e)
 	lastPaletteName_UI->setLabel(lastPaletteName);
 
 	//-
+
+	// 2. pick color
 
 	lastColor_clicked = p.colours[cId];
 
@@ -768,16 +1162,20 @@ void ofxColourLoversHelper::colourLabEvent(ofxUIEventArgs &e)
 
 	//-
 
-	// set palette
-	setPalette(pId);
-	ofLogNotice(__FUNCTION__) << "pId: " << pId;
-	ofLogNotice(__FUNCTION__) << "currPalette: " << currPalette;
+	// 3. set palette
+	//setPalette(pId);
 
-	//TODO: startup
 	currPalette = pId;
 	setPalette(currPalette);
+
+	ofLogNotice(__FUNCTION__) << "palette Id : " << pId;
+	ofLogNotice(__FUNCTION__) << "currPalette: " << currPalette;
+
 	refreshPalette();
+
+	//-
 }
+#endif
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setPalette(int pId)
@@ -809,30 +1207,32 @@ void ofxColourLoversHelper::setPalette(int pId)
 	////    }
 }
 
+#ifdef USE_OFX_UI
 //--------------------------------------------------------------
-void ofxColourLoversHelper::colourPaletteEvent(ofxUIEventArgs &e)
+void ofxColourLoversHelper::Changed_ColourPalette(ofxUIEventArgs &e)
 {
-	//    string name = e.widget->getName();
+	//    std::string name = e.widget->getName();
 	//    int kind = e.widget->getKind();
 	//    int uid = e.widget->getID();
 	//
 	//    // TODO: add button with same name
 	//    if(name=="ADD FAVOURITE" && currPalette>-1)
 	//    {
-	//        string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
+	//        std::string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
 	//        palettes[currPalette].save(str);
 	//        ofLogNotice(__FUNCTION__)<<"saved favorite: "<<str;
 	//    }
 	//    else
 	//    {
-	//        vector<string> seg = ofSplitString(name,", ");
+	//        vector<std::string> seg = ofSplitString(name,", ");
 	//        int r = ofToInt(seg[0]);
 	//        int g = ofToInt(seg[1]);
 	//        int b = ofToInt(seg[2]);
 	//
-	//        ofLogNotice(__FUNCTION__)<<"colourPaletteEvent: "<<r<<" g "<<g <<" b "<<b;
+	//        ofLogNotice(__FUNCTION__)<<"Changed_ColourPalette: "<<r<<" g "<<g <<" b "<<b;
 	//    }
 }
+#endif
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::loadFavourites()
@@ -851,16 +1251,17 @@ void ofxColourLoversHelper::loadFavourites()
 	}
 
 	lastSearch = "FAVOURITES";
+	//lastSearch_PRE = lastSearch;
 
-	// TODO: BUG: CRASHES IF EMPTY FOLDER
-	if (favs.numFiles() > 0)
-		updateColourLab();
+	//TODO:
+	//BUG: CRASHES IF EMPTY FOLDER
+	if (favs.numFiles() > 0) build_Gui_Lab();
 
-	//    // TODO: startup
-	//    currPalette = 0;
-	////    updateFlag = 1;
-	//    setPalette(currPalette);
-	//    refreshPalette();
+	//// TODO: startup
+	//currPalette = 0;
+	////updateFlag = 1;
+	//setPalette(currPalette);
+	//refreshPalette();
 }
 
 //--------------------------------------------------------------
@@ -894,16 +1295,17 @@ void ofxColourLoversHelper::loadHistory()
 	}
 
 	lastSearch = "HISTORY";
+	//lastSearch_PRE = lastSearch;
 
-	// TODO: BUG: CRASHES IF EMPTY FOLDER
-	if (favs.numFiles() > 0)
-		updateColourLab();
+	//TODO: 
+	//BUG: CRASHES IF EMPTY FOLDER
+	if (favs.numFiles() > 0) build_Gui_Lab();
 
-	//    // TODO: startup
-	//    currPalette = 1;
-	////    updateFlag = 1;
-	//    setPalette(currPalette);
-	//    refreshPalette();
+	//// TODO: startup
+	//currPalette = 1;
+	////updateFlag = 1;
+	//setPalette(currPalette);
+	//refreshPalette();
 }
 
 //--------------------------------------------------------------
@@ -947,7 +1349,7 @@ void ofxColourLoversHelper::setPalette_bUpdated_Color_BACK(bool &b)
 }
 
 //--------------------------------------------------------------
-void ofxColourLoversHelper::setPalette_Name_BACK(string &n)
+void ofxColourLoversHelper::setPalette_Name_BACK(std::string &n)
 {
 	myPalette_Name_BACK = &n;
 }
@@ -956,13 +1358,13 @@ void ofxColourLoversHelper::setPalette_Name_BACK(string &n)
 void ofxColourLoversHelper::keyPressed(ofKeyEventArgs &eventArgs)
 {
 	const int &key = eventArgs.key;
-	//cout << "key: " << key << endl;
+	//ofLogNotice(__FUNCTION__) << "key: " << key;
 
 	//-
 
 	//if (key == 'f')
 	//{
-	//    string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
+	//    std::string str = "palettes/favourites/"+palettes[currPalette].id+ ".xml";
 	//    palettes[currPalette].save(str);
 	//    ofLogNotice(__FUNCTION__)<<"saved favorite: "<<str;
 	//}
@@ -994,7 +1396,6 @@ void ofxColourLoversHelper::mouseDragged(ofMouseEventArgs &eventArgs)
 	const int &x = eventArgs.x;
 	const int &y = eventArgs.y;
 	const int &button = eventArgs.button;
-	//ofLogNotice(__FUNCTION__) <<  x << ", " << y << ", " << button;
 }
 
 //--------------------------------------------------------------
@@ -1003,7 +1404,6 @@ void ofxColourLoversHelper::mousePressed(ofMouseEventArgs &eventArgs)
 	const int &x = eventArgs.x;
 	const int &y = eventArgs.y;
 	const int &button = eventArgs.button;
-	//ofLogNotice(__FUNCTION__)  <<  x << ", " << y << ", " << button;
 }
 
 //--------------------------------------------------------------
@@ -1012,7 +1412,6 @@ void ofxColourLoversHelper::mouseReleased(ofMouseEventArgs &eventArgs)
 	const int &x = eventArgs.x;
 	const int &y = eventArgs.y;
 	const int &button = eventArgs.button;
-	//ofLogNotice(__FUNCTION__)  <<  x << ", " << y << ", " << button;
 }
 
 //--------------------------------------------------------------
@@ -1042,10 +1441,20 @@ ofxColourLoversHelper::~ofxColourLoversHelper()
 {
 	removeKeysListeners();
 	removeMouseListeners();
+
+#ifdef USE_OFX_UI
+	ofRemoveListener(gui_Lab->newGUIEvent, this, &ofxColourLoversHelper::Changed_Gui_Lab);
+	//delete gui_Lab;
+
+	ofRemoveListener(gui->newGUIEvent, this, &ofxColourLoversHelper::Changed_Gui);
+	//delete gui;
+#endif
+
+	ofRemoveListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::Changed_ColourLovers);
 }
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::windowResized(int w, int h)
 {
-	updateColourLab();
+	//build_Gui_Lab();
 }

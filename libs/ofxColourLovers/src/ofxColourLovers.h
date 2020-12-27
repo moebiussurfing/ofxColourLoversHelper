@@ -168,8 +168,10 @@ class ofxColourLovers{
          }*/
         
         
-        
-        ofLog()<<"submitting search"<<endl;
+        //ofLog()<<"submitting search"<<endl;
+		ofLogNotice(__FUNCTION__) << "submitting search: "<< keywords;
+		ofLogNotice(__FUNCTION__) << "url: "<< url;
+
         //status = PENDING;
         getSingleton().http.addForm(form);
         
@@ -177,8 +179,6 @@ class ofxColourLovers{
             getSingleton().http.start();            
         }
         //getSingleton().http.submitForm(form);
-        
-        
     }
     
     static  void getPalette(string id){
@@ -191,8 +191,9 @@ class ofxColourLovers{
         string url = CL_purl+id+"?showPaletteWidths=1";
         form.action = url;
         
-             
-        ofLog()<<"getPalette: "<<id<<endl;
+        //ofLog()<<"getPalette: "<<id<<endl;
+		ofLogNotice(__FUNCTION__) << "getPalette: " << id;
+
         //status = PENDING;
         getSingleton().http.addForm(form);
         
@@ -200,8 +201,6 @@ class ofxColourLovers{
             getSingleton().http.start();            
         }
         //getSingleton().http.submitForm(form);
-        
-        
     }
 
     

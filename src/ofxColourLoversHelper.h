@@ -2,9 +2,24 @@
 #pragma once
 #include "ofMain.h"
 
-#define USE_OFX_UI
+//--
+
+//	OPTIONAL
+//
+//#define USE_OFX_UI
+#define USE_OFX_IM_GUI
+
+//--
+
+#include "ofxSurfingHelpers.h"
+#include "ofxSurfing_ImGui.h"
+
 #ifdef USE_OFX_UI
 #include "ofxUI.h"
+#endif
+
+#ifdef USE_OFX_IM_GUI
+#include "ofxImGui.h"
 #endif
 
 #include "ofxColourLovers.h"
@@ -16,26 +31,60 @@ public:
     ofxColourLoversHelper();
     ~ofxColourLoversHelper();
 
-    void update();
+	void setup(); 
+	void update();
     void draw();
     void exit();
     void windowResized(int w, int h);
 
     //--
 
+private:
+#ifdef USE_OFX_IM_GUI
+	ofxImGui::Gui gui_ImGui;
+	void drawImGui();
+#endif
+
+	std::string textInput_temp1 = "";
+	std::string textInput_temp1_PRE = "-1";
+
+	//--
+
+#ifdef USE_OFX_UI
+	ofxUICanvas *gui;
+	ofxUIScrollableCanvas *gui_Lab;
+	ofxUICanvas *gui_Palette;
+	void Changed_Gui(ofxUIEventArgs &e);
+	void Changed_Gui_Lab(ofxUIEventArgs &e);
+	void Changed_ColourPalette(ofxUIEventArgs &e);
+	vector<ofxUIButton *> buttonColoursPalette;
+	vector<ofxUIButton *> colourRanges;
+	ofxUILabel * lastPaletteName_UI;
+#endif
+
+private:
+	void Changed_ColourLovers(ColourLoveEvent &e);
+
+	//--
+
     // API
 
-    void setup();
-
+public:
     void setup(glm::vec2 _position, glm::vec2 _size);
     void setGrid(glm::vec2 _position, glm::vec2 _size);
     void setPosition(glm::vec2 _position, glm::vec2 _size);
 
+    void setToggleVisible();
+	bool isVisible() {
+		return bIsVisible;
+	}
     void setVisible(bool b);
     void setVisibleSearcher(bool b){
         bSearcherVisible = b;
+#ifdef USE_OFX_UI
         gui->setVisible(bSearcherVisible);
-    }
+#endif
+	}
 
     //bool bIsEnabled = true;
     void setKeysEnabled(bool b){
@@ -51,16 +100,19 @@ public:
         //}
     }
 
+private:
     bool bSearcherVisible = true;
 
     // colour lovers browsing
-    void nextPalette();
+public:
+	void nextPalette();
     void prevPalette();
     void randomPalette();
 
     //--
 
     // pointers back to 'communicate externally'
+public:
     void setColor_BACK(ofColor &c);
     void setPalette_BACK(vector<ofColor> &p);
     void setPalette_Name_BACK(std::string &n);
@@ -68,6 +120,7 @@ public:
     void setPalette_bUpdated_Color_BACK(bool &b);
 
     // pointers back to 'communicate externally'
+private:
     ofColor *myColor_BACK;
     vector<ofColor> *myPalette_BACK;
     std::string *myPalette_Name_BACK;
@@ -90,21 +143,7 @@ private:
 
     ofColor lastColor_clicked;
 
-    //-
-
-#ifdef USE_OFX_UI
-    ofxUICanvas *gui;
-    ofxUIScrollableCanvas *colourLab;
-    ofxUICanvas *paletteView;
-
-    void guiEvent(ofxUIEventArgs &e);
-    void colourLoveEvent(ColourLoveEvent &e);
-    void colourLabEvent(ofxUIEventArgs &e);
-    void colourPaletteEvent(ofxUIEventArgs &e);
-    vector<ofxUIButton *> coloursPalette;
-    vector<ofxUIButton *> colourRanges;
-    ofxUILabel * lastPaletteName_UI;
-#endif
+	int amountResults = 40;
 
 	//-
 
@@ -115,8 +154,11 @@ private:
     vector<ColourLovePalette> palettes;
 
     bool updateFlag;
-    void updateColourLab();
-    std::string lastSearch;
+    void build_Gui_Lab();
+    
+	std::string lastSearch;
+    std::string lastSearch_PRE = "-1";
+
     std::string lastPaletteName = "";
 
     void loadFavourites();
@@ -129,7 +171,7 @@ private:
 
     //---
 
-    bool isVisible = true;
+    bool bIsVisible = true;
     bool isKeysEnabled = true;
 
     glm::vec2 position;
@@ -137,15 +179,17 @@ private:
     glm::vec2 gridPosition;
     glm::vec2 gridSize;
 
-    void keyPressed( ofKeyEventArgs& eventArgs);
-    void keyReleased( ofKeyEventArgs& eventArgs );
     void addKeysListeners();
     void removeKeysListeners();
 
     void mouseDragged( ofMouseEventArgs& eventArgs );
     void mousePressed( ofMouseEventArgs& eventArgs );
     void mouseReleased( ofMouseEventArgs& eventArgs );
-    void addMouseListeners();
-    void removeMouseListeners();
 
+	void addMouseListeners();
+    void removeMouseListeners();
+	
+public:
+    void keyPressed( ofKeyEventArgs& eventArgs);
+    void keyReleased( ofKeyEventArgs& eventArgs );
 };

@@ -1,24 +1,14 @@
 #include "ofApp.h"
 
-
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetFrameRate(30);
-    ofBackground(64);
+    ofSetFrameRate(60);
+	 
+	//-
 
-    //-
+	ColourLoversHelper.setup();
 
-    // set positions and panel sizes
-    glm::vec2 sizeGui(150, 400);
-    glm::vec2 sizeGrid(150, ofGetHeight());
-    glm::vec2 posGui(ofGetWidth()-(sizeGui.x+sizeGrid.x+4), 0);
-    glm::vec2 posGrid(posGui.x+sizeGui.x+2, 0);
-
-    // must be called before setup() to overwrite default settings
-    ColourLoversHelper.setGrid(posGrid, sizeGrid);
-    ColourLoversHelper.setup(posGui, sizeGui);
-
-    //-
+	//-
 
     // receivers pointers
     ColourLoversHelper.setColor_BACK(myColor);
@@ -31,8 +21,6 @@ void ofApp::setup(){
     myPalette[0] = ofColor::white;
     myPalette[0] = ofColor::white;
     myPalette_Name = "NOT LOADED";
-
-    //-
 }
 
 //--------------------------------------------------------------
@@ -42,14 +30,16 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ColourLoversHelper.draw();
 
-    // preview receivers
+	//-
 
-    if (SHOW_gui)
+    // preview
+    if (ColourLoversHelper.isVisible())
     {
         int x, y, w, h, pad, lineH;
         x = 10;
-        y = ofGetHeight() - 200;
+        y = ofGetHeight() - 230;
         w = h = 40;
         pad = 3;
         lineH = 20;
@@ -86,12 +76,6 @@ void ofApp::draw(){
     }
 }
 
-
-//--------------------------------------------------------------
-void ofApp::exit(){
-    ColourLoversHelper.exit();
-}
-
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
@@ -103,60 +87,20 @@ void ofApp::keyPressed(int key){
     {
         ColourLoversHelper.prevPalette();
     }
+
     if (key == 'g')
     {
-        SHOW_gui = !SHOW_gui;
-        ColourLoversHelper.setVisible(SHOW_gui);
+        ColourLoversHelper.setToggleVisible();
     }
-}
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
 }
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h)
 {
-    // set positions and panel sizes
-    glm::vec2 sizeGui(150, 400);
-    glm::vec2 sizeGrid(150, ofGetHeight());
-    glm::vec2 posGui(ofGetWidth()-(sizeGui.x+sizeGrid.x+4), 0);
-    glm::vec2 posGrid(posGui.x+sizeGui.x+2, 0);
-
-    //must be called before setup() to overwrite default settings
-    ColourLoversHelper.setGrid(posGrid, sizeGrid);
-    ColourLoversHelper.setup(posGui, sizeGui);
-
     ColourLoversHelper.windowResized(w, h);
 }
 
 //--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
+void ofApp::exit() {
+	ColourLoversHelper.exit();
 }
