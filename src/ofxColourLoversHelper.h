@@ -45,7 +45,9 @@ public:
 
 private:
 #ifdef USE_OFX_IM_GUI
+#ifndef USE_OFX_IM_GUI_EXTERNAL
 	ofxImGui::Gui gui_ImGui;
+#endif
 	void drawImGui();
 #endif
 
