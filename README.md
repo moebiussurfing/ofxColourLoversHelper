@@ -6,14 +6,13 @@ ofxColourLoversHelper
  
 The core of this addons is https://github.com/borg/ofxColourLovers.  
 Thanks to **@borg**!  
-I just added some methods to help integrate into my projects/addons.
+I just added some methods to help integrate into my projects/addons, and also switched from *ofxUI* to *ofxImGui* user control.
 
 ## Screenshots
 ![image](/readme_images/Capture_ofxImGui.PNG?raw=true "image")  
 
 ## Features
 - Implemented ImGui.
-- 
 
 ## Usage
  - Look the examples.
