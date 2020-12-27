@@ -1,3 +1,5 @@
-ofxColourLoversHelper
-ofxPoco
 ofxXmlSettings
+ofxColourLoversHelper
+ofxImGui
+ofxPoco
+ofxSurfingHelpers

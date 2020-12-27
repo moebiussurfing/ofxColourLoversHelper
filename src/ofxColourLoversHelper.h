@@ -2,14 +2,17 @@
 #pragma once
 #include "ofMain.h"
 
+
 //--
 
 //	OPTIONAL
 //
-//#define USE_OFX_UI
+//	You can choice a gui
 #define USE_OFX_IM_GUI
+//#define USE_OFX_UI
 
 //--
+
 
 #include "ofxSurfingHelpers.h"
 #include "ofxSurfing_ImGui.h"

@@ -72,7 +72,7 @@ void ofxColourLoversHelper::setVisible(bool b)
 		//setKeysEnabled(false);
 	}
 }
-
+#ifdef USE_OFX_IM_GUI
 //--------------------------------------------------------------
 void ofxColourLoversHelper::drawImGui()
 {
@@ -129,6 +129,8 @@ void ofxColourLoversHelper::drawImGui()
 			ofLogNotice(__FUNCTION__) << "searchPalettes: " << textInput_temp1_PRE;
 			ofxColourLovers::searchPalettes(textInput_temp1_PRE, amountResults);
 			lastSearch = "'" + textInput_temp1_PRE + "'";
+
+			textInput_temp1_PRE = textInput_temp1 = "";//clear
 		}
 
 
@@ -398,6 +400,7 @@ void ofxColourLoversHelper::drawImGui()
 
 	gui_ImGui.end();
 }
+#endif
 
 //--------------------------------------------------------------
 void ofxColourLoversHelper::setup()
@@ -735,7 +738,9 @@ void ofxColourLoversHelper::update()
 //--------------------------------------------------------------
 void ofxColourLoversHelper::draw()
 {
+#ifdef USE_OFX_IM_GUI
 	drawImGui();
+#endif
 
 	////draw raw palettes without gui
 	//if(palettes.size()>0){
