@@ -739,7 +739,7 @@ void ofxColourLoversHelper::update()
 void ofxColourLoversHelper::draw()
 {
 #ifdef USE_OFX_IM_GUI
-	drawImGui();
+	if (bIsVisible)	drawImGui();
 #endif
 
 	////draw raw palettes without gui

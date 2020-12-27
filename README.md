@@ -22,7 +22,6 @@ I just added some methods to help integrate into my projects/addons.
 Add to your project using ```Project Generator```:  
 * ofxImGui
 * ofxPoco  
-* ofxXmlSettings  
 * ofxXmlSettings
 * ofxSurfingHelpers
 * ofxUI [ not required but implemented]  

@@ -35,7 +35,6 @@ void ofApp::draw(){
 	//-
 
     // preview
-    if (ColourLoversHelper.isVisible())
     {
         int x, y, w, h, pad, lineH;
         x = 10;
@@ -47,7 +46,7 @@ void ofApp::draw(){
         ofPushStyle();
         ofFill();
 
-        ofDrawBitmapStringHighlight("RECEIVERS IN ofApp", x, y, ofColor::black, ofColor::white);
+        ofDrawBitmapStringHighlight("ofApp LOCAL COLORS", x, y, ofColor::black, ofColor::white);
         y += 3*pad+lineH;
 
         ofDrawBitmapStringHighlight("myColor:", x, y, ofColor::black, ofColor::white);
