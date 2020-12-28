@@ -84,22 +84,17 @@ void ofxColourLoversHelper::drawImGui()
 
 	//-
 
-	////ImGui::SetNextWindowSize(ofVec2f(200, 100), ImGuiCond_FirstUseEver);
-	//mainSettings.windowPos = ofVec2f(100, 10);
-	//mainSettings.windowSize = ofVec2f(300, 500);
-	//mainSettings.lockPosition = false;
-	//mainSettings.windowBlock = false;
-
 	//widgets size
-	float h = 20;
+	float h = 25;
 	float w = 170;
 	//float w = ImGui::GetWindowWidth();
 
 	//-
 
-	//if (ofxImGui::BeginWindow("COLOUR-LOVERS", mainSettings, false))
+	if (ofxImGui::BeginWindow("COLOUR-LOVERS", mainSettings, false))
 	{
-		if (ofxImGui::BeginWindow("SEARCH", mainSettings, false))
+		//if (ofxImGui::BeginWindow("SEARCH", mainSettings, false))
+		if (ofxImGui::BeginTree("SEARCH", mainSettings))
 		{
 			//ImGui::Text("COLOUR LOVERS");
 
@@ -206,7 +201,7 @@ void ofxColourLoversHelper::drawImGui()
 
 			ImGui::Dummy(ImVec2(0.0f, 5));
 
-			ImGui::Text("Name:");
+			//ImGui::Text("Name:");
 			ImGui::Text(lastPaletteName.c_str());
 
 			ImGui::Dummy(ImVec2(0.0f, 5));
@@ -245,9 +240,12 @@ void ofxColourLoversHelper::drawImGui()
 			}
 
 			ImGui::SliderInt("Amnt Max", &amountResults, 5, 100);
-		}
-		ofxImGui::EndWindow(mainSettings);
 
+			//-
+
+			ofxImGui::EndTree(mainSettings);
+		}
+		//ofxImGui::EndWindow(mainSettings);
 
 		//----
 
@@ -260,19 +258,20 @@ void ofxColourLoversHelper::drawImGui()
 		ImGuiColorEditFlags colorEdiFlags = false;
 		int ww = w / 5;
 
+		if (ofxImGui::BeginTree("BROWSE", mainSettings))
+		//if (ofxImGui::BeginWindow("BROWSE", mainSettings, false))
 		//if (ofxImGui::BeginWindow(lastSearch.c_str(), mainSettings, false))
-		if (ofxImGui::BeginWindow("BROWSE", mainSettings, false))
 		{
 			ImGui::Dummy(ImVec2(0.0f, 5));
 			ImGui::Text(lastSearch.c_str());
 
 			ImGui::Dummy(ImVec2(0.0f, 5));
-			
+
 			//ImGui::Text("Name:"); //ImGui::SameLine();
 			//ImGui::Dummy(ImVec2(0.0f, 5));
-			
+
 			ImGui::Text(lastPaletteName.c_str());
-			
+
 			ImGui::Dummy(ImVec2(0.0f, 5));
 
 			bool MODE_fixedSize_PRE = MODE_fixedSize;
@@ -402,10 +401,13 @@ void ofxColourLoversHelper::drawImGui()
 					ImGui::PopID();
 				}
 			}
+
+			ofxImGui::EndTree(mainSettings);
 		}
-		ofxImGui::EndWindow(mainSettings);
+		//ofxImGui::EndWindow(mainSettings);
 	}
-	//ofxImGui::EndWindow(mainSettings);
+
+	ofxImGui::EndWindow(mainSettings);
 
 	//-
 
@@ -1290,9 +1292,9 @@ void ofxColourLoversHelper::clearFavourites()
 	ofLogNotice(__FUNCTION__);
 
 	ofDirectory favs(path + "favourites");
-	
+
 	ofxSurfingHelpers::CheckFolder(path + "favourites");
-	
+
 	favs.listDir();
 
 	for (int i = 0; i < favs.numFiles(); i++)
@@ -1337,7 +1339,7 @@ void ofxColourLoversHelper::loadHistory()
 void ofxColourLoversHelper::clearHistory()
 {
 	ofLogNotice(__FUNCTION__);
-	
+
 	ofxSurfingHelpers::CheckFolder(path + "history");
 
 	ofDirectory favs(path + "history");
@@ -1364,19 +1366,19 @@ void ofxColourLoversHelper::setPalette_BACK(vector<ofColor> &p)
 }
 
 //--------------------------------------------------------------
-void ofxColourLoversHelper::setPalette_bUpdated_Palette_BACK(bool &b)
+void ofxColourLoversHelper::setPalette_BACK_Refresh(bool &b)
 {
 	bUpdated_Palette_BACK = &b;
 }
 
 //--------------------------------------------------------------
-void ofxColourLoversHelper::setPalette_bUpdated_Color_BACK(bool &b)
+void ofxColourLoversHelper::setColor_BACK_Refresh(bool &b)
 {
 	bUpdated_Color_BACK = &b;
 }
 
 //--------------------------------------------------------------
-void ofxColourLoversHelper::setPalette_Name_BACK(std::string &n)
+void ofxColourLoversHelper::setPalette_BACK_Name(std::string &n)
 {
 	myPalette_Name_BACK = &n;
 }

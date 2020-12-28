@@ -121,9 +121,9 @@ public:
 public:
     void setColor_BACK(ofColor &c);
     void setPalette_BACK(vector<ofColor> &p);
-    void setPalette_Name_BACK(std::string &n);
-    void setPalette_bUpdated_Palette_BACK(bool &b);
-    void setPalette_bUpdated_Color_BACK(bool &b);
+    void setPalette_BACK_Name(std::string &n);
+    void setPalette_BACK_Refresh(bool &b);
+    void setColor_BACK_Refresh(bool &b);
 
     // pointers back to 'communicate externally'
 private:
@@ -151,7 +151,7 @@ private:
 
     ofColor lastColor_clicked;
 
-	int amountResults = 40;
+	int amountResults = 100;
 
 	//-
 
