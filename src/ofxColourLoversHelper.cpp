@@ -198,7 +198,7 @@ void ofxColourLoversHelper::drawImGui()
 			//	}
 			//}
 
-			ImGui::Dummy(ImVec2(0.0f, 15));
+			ImGui::Dummy(ImVec2(0.0f, 5));
 
 			//ImGui::Text("Name:");
 			//ImGui::Text(lastPaletteName.c_str());
@@ -246,6 +246,8 @@ void ofxColourLoversHelper::drawImGui()
 		//ofxImGui::EndWindow(mainSettings);
 
 		//----
+		
+		ImGui::Dummy(ImVec2(0.0f, 10));
 
 		ImGuiColorEditFlags colorEdiFlags = false;
 		int ww = w / 5;
@@ -256,7 +258,6 @@ void ofxColourLoversHelper::drawImGui()
 		{
 			ImGui::Dummy(ImVec2(0.0f, 5));
 			ImGui::Text(lastSearch.c_str());
-
 			ImGui::Dummy(ImVec2(0.0f, 5));
 
 			//ImGui::Text("Name:"); //ImGui::SameLine();
