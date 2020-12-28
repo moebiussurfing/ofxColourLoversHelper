@@ -84,7 +84,6 @@ void ofxColourLoversHelper::drawImGui()
 
 	//-
 
-	//widgets size
 	float h = 25;
 	float w = 170;
 	//float w = ImGui::GetWindowWidth();
@@ -100,7 +99,7 @@ void ofxColourLoversHelper::drawImGui()
 
 			//-
 
-			//search
+			// search
 			ImGui::Text("Keyword:");
 			//std::string textInput_temp1 = "";
 
@@ -159,7 +158,7 @@ void ofxColourLoversHelper::drawImGui()
 
 			//-
 
-			//palette
+			// palette
 			ImGui::Text("Palette Id:");
 			std::string textInput_temp3 = "";
 
@@ -199,14 +198,13 @@ void ofxColourLoversHelper::drawImGui()
 			//	}
 			//}
 
-			ImGui::Dummy(ImVec2(0.0f, 5));
+			ImGui::Dummy(ImVec2(0.0f, 15));
 
 			//ImGui::Text("Name:");
-			ImGui::Text(lastPaletteName.c_str());
+			//ImGui::Text(lastPaletteName.c_str());
+			//ImGui::Dummy(ImVec2(0.0f, 5));
 
-			ImGui::Dummy(ImVec2(0.0f, 5));
-
-			if (ImGui::Button("FAV +", ImVec2(w, h)))
+			if (ImGui::Button("ADD FAV", ImVec2(w, h)))
 			{
 				ofxSurfingHelpers::CheckFolder(path + "favourites/");
 
@@ -215,7 +213,7 @@ void ofxColourLoversHelper::drawImGui()
 				palettes[currPalette].save(str);
 				ofLogNotice(__FUNCTION__) << "saved favorite: " << str;
 			}
-			if (ImGui::Button("FAV -", ImVec2(w, h)))
+			if (ImGui::Button("REMOVE FAV", ImVec2(w, h)))
 			{
 				clearFavourites();
 
@@ -248,12 +246,6 @@ void ofxColourLoversHelper::drawImGui()
 		//ofxImGui::EndWindow(mainSettings);
 
 		//----
-
-		//ImGui::SetNextWindowSize(ofVec2f(200, 100), ImGuiCond_FirstUseEver);
-		//mainSettings.windowPos = ofVec2f(500, 10);
-		//mainSettings.windowSize = ofVec2f(300, 500);
-		//mainSettings.lockPosition = false;
-		//mainSettings.windowBlock = false;
 
 		ImGuiColorEditFlags colorEdiFlags = false;
 		int ww = w / 5;
