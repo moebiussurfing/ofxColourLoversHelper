@@ -81,319 +81,334 @@ void ofxColourLoversHelper::drawImGui()
 #ifndef USE_OFX_IM_GUI_EXTERNAL
 	gui_ImGui.begin();
 #endif
-	
+
 	//-
 
-	//ImGui::SetNextWindowSize(ofVec2f(200, 100), ImGuiCond_FirstUseEver);
-	mainSettings.windowPos = ofVec2f(100, 10);
-	mainSettings.windowSize = ofVec2f(300, 500);
-	mainSettings.lockPosition = false;
-	mainSettings.windowBlock = false;
+	////ImGui::SetNextWindowSize(ofVec2f(200, 100), ImGuiCond_FirstUseEver);
+	//mainSettings.windowPos = ofVec2f(100, 10);
+	//mainSettings.windowSize = ofVec2f(300, 500);
+	//mainSettings.lockPosition = false;
+	//mainSettings.windowBlock = false;
 
 	//widgets size
-	float h = 30;
-	float w = 200;
+	float h = 20;
+	float w = 170;
 	//float w = ImGui::GetWindowWidth();
 
 	//-
 
-	if (ofxImGui::BeginWindow("COLOUR LOVERS", mainSettings, false))
+	//if (ofxImGui::BeginWindow("COLOUR-LOVERS", mainSettings, false))
 	{
-		//ImGui::Text("COLOUR LOVERS");
-
-		//-
-
-		//search
-		ImGui::Text("Search Keyword:");
-		//std::string textInput_temp1 = "";
-
-		char tab1[32];
-		strncpy(tab1, textInput_temp1.c_str(), sizeof(tab1));
-		tab1[sizeof(tab1) - 1] = 0;
-
-		if (ImGui::InputText("", tab1, IM_ARRAYSIZE(tab1)))
+		if (ofxImGui::BeginWindow("SEARCH", mainSettings, false))
 		{
-			textInput_temp1 = ofToString(tab1);
-			ofLogNotice(__FUNCTION__) << "input: " << textInput_temp1;
+			//ImGui::Text("COLOUR LOVERS");
 
-			//ofLogNotice(__FUNCTION__) << "InputText:" << ofToString(tab1);
-			//lastSearch_PRE = lastSearch;
+			//-
 
-			if (textInput_temp1 != textInput_temp1_PRE) {
-				textInput_temp1_PRE = textInput_temp1;
+			//search
+			ImGui::Text("Keyword:");
+			//std::string textInput_temp1 = "";
+
+			char tab1[32];
+			strncpy(tab1, textInput_temp1.c_str(), sizeof(tab1));
+			tab1[sizeof(tab1) - 1] = 0;
+
+			if (ImGui::InputText("", tab1, IM_ARRAYSIZE(tab1)))
+			{
+				textInput_temp1 = ofToString(tab1);
+				ofLogNotice(__FUNCTION__) << "input: " << textInput_temp1;
+
+				//ofLogNotice(__FUNCTION__) << "InputText:" << ofToString(tab1);
+				//lastSearch_PRE = lastSearch;
+
+				if (textInput_temp1 != textInput_temp1_PRE) {
+					textInput_temp1_PRE = textInput_temp1;
+				}
 			}
-		}
 
-		ImGui::SameLine();
+			ImGui::SameLine();
 
-		if (ImGui::Button("SEARCH"))
-		{
-			ofLogNotice(__FUNCTION__) << "searchPalettes: " << textInput_temp1_PRE;
-			ofxColourLovers::searchPalettes(textInput_temp1_PRE, amountResults);
-			lastSearch = "'" + textInput_temp1_PRE + "'";
+			if (ImGui::Button("SEARCH"))
+			{
+				ofLogNotice(__FUNCTION__) << "searchPalettes: " << textInput_temp1_PRE;
+				ofxColourLovers::searchPalettes(textInput_temp1_PRE, amountResults);
+				lastSearch = "'" + textInput_temp1_PRE + "'";
 
-			textInput_temp1_PRE = textInput_temp1 = "";//clear
-		}
+				//textInput_temp1_PRE = textInput_temp1 = "";//clear
+			}
 
-		//-
+			//-
 
-		//hide to debug and simplify
-//#define EXTEND_SEARCH
+			//hide to debug and simplify
+	//#define EXTEND_SEARCH
 #ifdef EXTEND_SEARCH
 		//lover
-		ImGui::Text("Lover Id:");
-		std::string textInput_temp2 = "";
+			ImGui::Text("Lover Id:");
+			std::string textInput_temp2 = "";
 
-		char tab2[32];
-		strncpy(tab2, textInput_temp2.c_str(), sizeof(tab2));
-		tab2[sizeof(tab2) - 1] = 0;
+			char tab2[32];
+			strncpy(tab2, textInput_temp2.c_str(), sizeof(tab2));
+			tab2[sizeof(tab2) - 1] = 0;
 
-		if (ImGui::InputText("", tab2, IM_ARRAYSIZE(tab2)))
-		{
-			ofLogNotice(__FUNCTION__) << "InputText:" << ofToString(tab2);
-			textInput_temp2 = ofToString(tab2);
-			ofLogNotice(__FUNCTION__) << "textInput_temp2:" << textInput_temp2;
+			if (ImGui::InputText("", tab2, IM_ARRAYSIZE(tab2)))
+			{
+				ofLogNotice(__FUNCTION__) << "InputText:" << ofToString(tab2);
+				textInput_temp2 = ofToString(tab2);
+				ofLogNotice(__FUNCTION__) << "textInput_temp2:" << textInput_temp2;
 
-			lastSearch = textInput_temp2;
-			std::string s = textInput_temp2;
-			ofStringReplace(s, " ", "%20");
-			ofxColourLovers::getTopPalettesForLover(s, amountResults);
-		}
+				lastSearch = textInput_temp2;
+				std::string s = textInput_temp2;
+				ofStringReplace(s, " ", "%20");
+				ofxColourLovers::getTopPalettesForLover(s, amountResults);
+			}
 
-		//-
+			//-
 
-		//palette
-		ImGui::Text("Palette Id:");
-		std::string textInput_temp3 = "";
+			//palette
+			ImGui::Text("Palette Id:");
+			std::string textInput_temp3 = "";
 
-		char tab3[32];
-		strncpy(tab3, textInput_temp3.c_str(), sizeof(tab3));
-		tab3[sizeof(tab3) - 1] = 0;
+			char tab3[32];
+			strncpy(tab3, textInput_temp3.c_str(), sizeof(tab3));
+			tab3[sizeof(tab3) - 1] = 0;
 
-		if (ImGui::InputText("", tab3, IM_ARRAYSIZE(tab3)))
-		{
-			ofLogNotice(__FUNCTION__) << "InputText:" << ofToString(tab3);
-			textInput_temp3 = ofToString(tab3);
-			ofLogNotice(__FUNCTION__) << "textInput_temp2:" << textInput_temp3;
+			if (ImGui::InputText("", tab3, IM_ARRAYSIZE(tab3)))
+			{
+				ofLogNotice(__FUNCTION__) << "InputText:" << ofToString(tab3);
+				textInput_temp3 = ofToString(tab3);
+				ofLogNotice(__FUNCTION__) << "textInput_temp2:" << textInput_temp3;
 
-			lastSearch = textInput_temp3;
-			ofxColourLovers::getPalette(lastSearch);
-		}
+				lastSearch = textInput_temp3;
+				ofxColourLovers::getPalette(lastSearch);
+			}
 #endif
 
-		ImGui::Dummy(ImVec2(0.0f, 5));
+			ImGui::Dummy(ImVec2(0.0f, 5));
 
-		if (ImGui::Button("FAVS", ImVec2(w * 0.5, h)))
-		{
-			loadFavourites();
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("HISTORY", ImVec2(w * 0.5, h)))
-		{
-			loadHistory();
-		}
-
-		//bool MODE_fixedSize_PRE = MODE_fixedSize;
-		//if (ImGui::Checkbox("FIXED WIDTH", &MODE_fixedSize))
-		//{
-		//	if (MODE_fixedSize != MODE_fixedSize_PRE)
-		//	{
-		//		build_Gui_Lab();
-		//	}
-		//}
-
-		ImGui::Dummy(ImVec2(0.0f, 5));
-
-		ImGui::Text("PALETTE NAME:");
-		ImGui::Text(lastPaletteName.c_str());
-
-		ImGui::Dummy(ImVec2(0.0f, 5));
-
-		if (ImGui::Button("ADD FAVOURITE", ImVec2(w, h)))
-		{
-			ofxSurfingHelpers::CheckFolder(path + "favourites/");
-
-			std::string str = path + "favourites/" + palettes[currPalette].id + ".xml";
-
-			palettes[currPalette].save(str);
-			ofLogNotice(__FUNCTION__) << "saved favorite: " << str;
-		}
-		if (ImGui::Button("REMOVE FAVS", ImVec2(w, h)))
-		{
-			clearFavourites();
-
-			//workflow
-			loadFavourites();
-		}
-		if (ImGui::Button("REMOVE HISTORY", ImVec2(w, h)))
-		{
-			clearHistory();
-
-			//workflow
-			loadHistory();
-		}
-
-		ImGui::Dummy(ImVec2(0.0f, 5));
-
-		if (ImGui::Checkbox("PALETTE PICK", &MODE_PickPalette_BACK))
-		{
-		}
-		if (ImGui::Checkbox("COLOR PICK", &MODE_PickColor_BACK))
-		{
-		}
-
-		ImGui::SliderInt("Results", &amountResults, 5, 100);
-	}
-	ofxImGui::EndWindow(mainSettings);
-
-	//----
-
-	//ImGui::SetNextWindowSize(ofVec2f(200, 100), ImGuiCond_FirstUseEver);
-	mainSettings.windowPos = ofVec2f(500, 10);
-	mainSettings.windowSize = ofVec2f(300, 500);
-	mainSettings.lockPosition = false;
-	mainSettings.windowBlock = false;
-
-	ImGuiColorEditFlags colorEdiFlags = false;
-	int ww = w / 5;
-
-	if (ofxImGui::BeginWindow(lastSearch.c_str(), mainSettings, false))
-	{
-		ImGui::Text("Selected Palette:"); //ImGui::SameLine();
-		ImGui::Text(lastPaletteName.c_str());
-
-		ImGui::Dummy(ImVec2(0.0f, 5));
-
-		bool MODE_fixedSize_PRE = MODE_fixedSize;
-		if (ImGui::Checkbox("FIXED WIDTH", &MODE_fixedSize))
-		{
-			if (MODE_fixedSize != MODE_fixedSize_PRE)
+			if (ImGui::Button("FAVS", ImVec2(w * 0.5, h)))
 			{
-				build_Gui_Lab();
+				loadFavourites();
 			}
-		}
-
-		ImGui::Dummy(ImVec2(0.0f, 5));
-
-		//-
-
-		for (int i = 0; i < palettes.size(); i++)
-		{
-			int wc = 0;
-
-			// colors in each palette
-			int numOfColorsInPalette = palettes[i].colours.size();
-			for (int c = 0; c < numOfColorsInPalette; c++)
+			ImGui::SameLine();
+			if (ImGui::Button("HISTORY", ImVec2(w * 0.5, h)))
 			{
-				if (c != 0) ImGui::SameLine();
+				loadHistory();
+			}
 
-				ImGui::PushID(c);
+			//bool MODE_fixedSize_PRE = MODE_fixedSize;
+			//if (ImGui::Checkbox("FIXED WIDTH", &MODE_fixedSize))
+			//{
+			//	if (MODE_fixedSize != MODE_fixedSize_PRE)
+			//	{
+			//		build_Gui_Lab();
+			//	}
+			//}
 
-				if (!MODE_fixedSize)
+			ImGui::Dummy(ImVec2(0.0f, 5));
+
+			ImGui::Text("Name:");
+			ImGui::Text(lastPaletteName.c_str());
+
+			ImGui::Dummy(ImVec2(0.0f, 5));
+
+			if (ImGui::Button("FAV +", ImVec2(w, h)))
+			{
+				ofxSurfingHelpers::CheckFolder(path + "favourites/");
+
+				std::string str = path + "favourites/" + palettes[currPalette].id + ".xml";
+
+				palettes[currPalette].save(str);
+				ofLogNotice(__FUNCTION__) << "saved favorite: " << str;
+			}
+			if (ImGui::Button("FAV -", ImVec2(w, h)))
+			{
+				clearFavourites();
+
+				//workflow
+				loadFavourites();
+			}
+			if (ImGui::Button("CLEAR HISTORY", ImVec2(w, h)))
+			{
+				clearHistory();
+
+				//workflow
+				loadHistory();
+			}
+
+			ImGui::Dummy(ImVec2(0.0f, 5));
+
+			if (ImGui::Checkbox("PICK PALETTE", &MODE_PickPalette_BACK))
+			{
+			}
+			if (ImGui::Checkbox("PICK COLOR", &MODE_PickColor_BACK))
+			{
+			}
+
+			ImGui::SliderInt("Amnt Max", &amountResults, 5, 100);
+		}
+		ofxImGui::EndWindow(mainSettings);
+
+
+		//----
+
+		//ImGui::SetNextWindowSize(ofVec2f(200, 100), ImGuiCond_FirstUseEver);
+		//mainSettings.windowPos = ofVec2f(500, 10);
+		//mainSettings.windowSize = ofVec2f(300, 500);
+		//mainSettings.lockPosition = false;
+		//mainSettings.windowBlock = false;
+
+		ImGuiColorEditFlags colorEdiFlags = false;
+		int ww = w / 5;
+
+		//if (ofxImGui::BeginWindow(lastSearch.c_str(), mainSettings, false))
+		if (ofxImGui::BeginWindow("BROWSE", mainSettings, false))
+		{
+			ImGui::Dummy(ImVec2(0.0f, 5));
+			ImGui::Text(lastSearch.c_str());
+
+			ImGui::Dummy(ImVec2(0.0f, 5));
+			
+			//ImGui::Text("Name:"); //ImGui::SameLine();
+			//ImGui::Dummy(ImVec2(0.0f, 5));
+			
+			ImGui::Text(lastPaletteName.c_str());
+			
+			ImGui::Dummy(ImVec2(0.0f, 5));
+
+			bool MODE_fixedSize_PRE = MODE_fixedSize;
+
+			//if (ImGui::Checkbox("Fixed Width", &MODE_fixedSize))
+			if (ofxImGui::AddParameter(MODE_fixedSize))
+			{
+				if (MODE_fixedSize != MODE_fixedSize_PRE)
 				{
-					// different sizes with original colourLover Palettes
-					wc = palettes[i].colorWidths[c] * w;
+					build_Gui_Lab();
 				}
-				else
+			}
+
+			ImGui::Dummy(ImVec2(0.0f, 5));
+
+			//-
+
+			for (int i = 0; i < palettes.size(); i++)
+			{
+				int wc = 0;
+
+				// colors in each palette
+				int numOfColorsInPalette = palettes[i].colours.size();
+				for (int c = 0; c < numOfColorsInPalette; c++)
 				{
-					// same size for each color
-					wc = w / numOfColorsInPalette;
-				}
+					if (c != 0) ImGui::SameLine();
 
-				std::string name = ("CL_" + ofToString(i) + "_" + ofToString(c));
+					ImGui::PushID(c);
 
-				//-
+					if (!MODE_fixedSize)
+					{
+						// different sizes with original colourLover Palettes
+						wc = palettes[i].colorWidths[c] * w;
+					}
+					else
+					{
+						// same size for each color
+						wc = w / numOfColorsInPalette;
+					}
 
-				// draw border to selected color/palette
-				bool bDrawBorder = false;
-				if (i == currPalette)
-				{
-					bDrawBorder = true;
-				}
-				if (bDrawBorder)
-				{
-					//ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0, 0, .40));//black
-					ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1, 1, 1, .50));//white
-					ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.5f);
-					//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
-				}
+					std::string name = ("CL_" + ofToString(i) + "_" + ofToString(c));
 
-				//-
-
-				//colored box
-				if (ImGui::ColorButton(name.c_str(),
-					palettes[i].colours[c],
-					colorEdiFlags,
-					ImVec2(wc, ww)))
-				{
 					//-
 
-					// 1. filter name
+					// draw border to selected color/palette
+					bool bDrawBorder = false;
+					if (i == currPalette)
+					{
+						bDrawBorder = true;
+					}
+					if (bDrawBorder)
+					{
+						//ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0, 0, .40));//black
+						ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1, 1, 1, .50));//white
+						ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.5f);
+						//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
+					}
 
-					std::string whatList = name.substr(0, 2);
-					std::string whatColId = name.substr(3, name.length() - 3);
+					//-
 
-					vector<std::string> seg = ofSplitString(name, "_");
-					int pId = ofToInt(seg[1]);
-					int cId = ofToInt(seg[2]);
-					ColourLovePalette p = palettes[pId];
+					//colored box
+					if (ImGui::ColorButton(name.c_str(),
+						palettes[i].colours[c],
+						colorEdiFlags,
+						ImVec2(wc, ww)))
+					{
+						//-
 
-					lastPaletteName = "'" + p.title + "'";
+						// 1. filter name
+
+						std::string whatList = name.substr(0, 2);
+						std::string whatColId = name.substr(3, name.length() - 3);
+
+						vector<std::string> seg = ofSplitString(name, "_");
+						int pId = ofToInt(seg[1]);
+						int cId = ofToInt(seg[2]);
+						ColourLovePalette p = palettes[pId];
+
+						lastPaletteName = "'" + p.title + "'";
 
 #ifdef USE_OFX_UI
-					lastPaletteName_UI->setLabel(lastPaletteName);
+						lastPaletteName_UI->setLabel(lastPaletteName);
 #endif
-					//-
+						//-
 
-					// 2. pick palette and color
+						// 2. pick palette and color
 
-					//lastColor_clicked = palettes[i].colours[c];
-					lastColor_clicked = p.colours[cId];
+						//lastColor_clicked = palettes[i].colours[c];
+						lastColor_clicked = p.colours[cId];
 
-					// set BACK color clicked
-					if (myColor_BACK != nullptr && MODE_PickColor_BACK)
-					{
-						myColor_BACK->set(lastColor_clicked);
+						// set BACK color clicked
+						if (myColor_BACK != nullptr && MODE_PickColor_BACK)
+						{
+							myColor_BACK->set(lastColor_clicked);
+						}
+
+						// flag updater color ready
+						if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
+						{
+							(*bUpdated_Color_BACK) = true;
+						}
+
+						//-
+
+						// 3. set palette
+						//currPalette = i;
+
+						currPalette = pId;
+						setPalette(currPalette);
+
+						ofLogNotice(__FUNCTION__) << "palette Id : " << pId;
+						ofLogNotice(__FUNCTION__) << "currPalette: " << currPalette;
+
+						refreshPalette();
 					}
 
-					// flag updater color ready
-					if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
+					//-
+
+					if (bDrawBorder)
 					{
-						(*bUpdated_Color_BACK) = true;
+						ImGui::PopStyleColor();
+						ImGui::PopStyleVar(1);
 					}
 
 					//-
 
-					// 3. set palette
-					//currPalette = i;
-
-					currPalette = pId;
-					setPalette(currPalette);
-
-					ofLogNotice(__FUNCTION__) << "palette Id : " << pId;
-					ofLogNotice(__FUNCTION__) << "currPalette: " << currPalette;
-
-					refreshPalette();
+					ImGui::PopID();
 				}
-
-				//-
-
-				if (bDrawBorder)
-				{
-					ImGui::PopStyleColor();
-					ImGui::PopStyleVar(1);
-				}
-
-				//-
-
-				ImGui::PopID();
 			}
 		}
+		ofxImGui::EndWindow(mainSettings);
 	}
-	ofxImGui::EndWindow(mainSettings);
+	//ofxImGui::EndWindow(mainSettings);
 
 	//-
-	
+
 #ifndef USE_OFX_IM_GUI_EXTERNAL
 	gui_ImGui.end();
 #endif
@@ -1275,6 +1290,9 @@ void ofxColourLoversHelper::clearFavourites()
 	ofLogNotice(__FUNCTION__);
 
 	ofDirectory favs(path + "favourites");
+	
+	ofxSurfingHelpers::CheckFolder(path + "favourites");
+	
 	favs.listDir();
 
 	for (int i = 0; i < favs.numFiles(); i++)
@@ -1287,6 +1305,8 @@ void ofxColourLoversHelper::clearFavourites()
 void ofxColourLoversHelper::loadHistory()
 {
 	ofLogNotice(__FUNCTION__);
+
+	ofxSurfingHelpers::CheckFolder(path + "history");
 
 	ofDirectory favs(path + "history");
 	favs.listDir();
@@ -1317,8 +1337,10 @@ void ofxColourLoversHelper::loadHistory()
 void ofxColourLoversHelper::clearHistory()
 {
 	ofLogNotice(__FUNCTION__);
+	
+	ofxSurfingHelpers::CheckFolder(path + "history");
 
-	ofDirectory favs(path + "/history");
+	ofDirectory favs(path + "history");
 	favs.listDir();
 
 	for (int i = 0; i < favs.numFiles(); i++)

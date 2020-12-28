@@ -147,7 +147,7 @@ private:
 
     void refreshPalette();
 
-    bool MODE_fixedSize = true;
+	ofParameter<bool> MODE_fixedSize{ "Fixed Width", false };
 
     ofColor lastColor_clicked;
 
