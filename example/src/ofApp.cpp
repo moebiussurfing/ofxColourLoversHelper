@@ -13,7 +13,7 @@ void ofApp::setup(){
     // receivers pointers
     ColourLoversHelper.setColor_BACK(myColor);
     ColourLoversHelper.setPalette_BACK(myPalette);
-    ColourLoversHelper.setPalette_Name_BACK(myPalette_Name);
+    ColourLoversHelper.setPalette_BACK_Name(myPalette_Name);
 
     // some initiation values..
     myColor = ofColor::white;
