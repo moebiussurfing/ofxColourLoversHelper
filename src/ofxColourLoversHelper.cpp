@@ -253,6 +253,7 @@ void ofxColourLoversHelper::drawImGui()
 		ImGui::Dummy(ImVec2(0.0f, 10));
 
 		//ImGuiColorEditFlags colorEdiFlags = false;
+
 		ImGuiColorEditFlags colorEdiFlags =
 			ImGuiColorEditFlags_NoAlpha |
 			ImGuiColorEditFlags_NoPicker |
@@ -282,7 +283,7 @@ void ofxColourLoversHelper::drawImGui()
 			ImGui::Dummy(ImVec2(0.0f, 10));
 
 			ImGui::Text("Name:"); //ImGui::SameLine();
-			ImGui::Text(lastPaletteName.c_str());
+			ImGui::Text(lastPaletteName.get().c_str());
 
 			ImGui::Dummy(ImVec2(0.0f, 10));
 			
@@ -357,18 +358,17 @@ void ofxColourLoversHelper::drawImGui()
 					}
 					if (bDrawBorder)
 					{
-						ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(1, 1, 1, .60));//white
-						//ImGui::PushStyleColor(ImGuiCol_Border, ImVec4(0, 0, 0, .40));//black
-
-						ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.5f);
-						//ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.5f);
+						ImGui::PushStyleColor(ImGuiCol_Border, color_Pick);
+						ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, linew_Pick);
 
 						//ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, 3.0);
 					}
 
 					//-
 
-					//colored box
+					// colored box
+					
+					//ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, 1.0);
 
 					if (ImGui::ColorButton(name.c_str(),
 						palettes[i].colours[c],
@@ -396,8 +396,8 @@ void ofxColourLoversHelper::drawImGui()
 
 						// 2. pick palette and color
 
-						//lastColor_clicked = palettes[i].colours[c];
 						lastColor_clicked = p.colours[cId];
+						//lastColor_clicked = palettes[i].colours[c];
 
 						// set BACK color clicked
 						if (myColor_BACK != nullptr && MODE_PickColor_BACK)
@@ -414,8 +414,8 @@ void ofxColourLoversHelper::drawImGui()
 						//-
 
 						// 3. set palette
-						//currPalette = i;
 
+						//currPalette = i;
 						currPalette = pId;
 						setPalette(currPalette);
 
@@ -425,12 +425,14 @@ void ofxColourLoversHelper::drawImGui()
 						refreshPalette();
 					}
 
+					//ImGui::PopStyleVar(1);
+
 					//-
 
 					if (bDrawBorder)
 					{
 						ImGui::PopStyleColor();
-						//ImGui::PopStyleVar(2);
+						
 						ImGui::PopStyleVar(1);
 					}
 
@@ -541,9 +543,9 @@ void ofxColourLoversHelper::setup()
 
 	gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
 	gui->addWidgetDown(new ofxUILabel("PALETTE NAME:", OFX_UI_FONT_MEDIUM));
-	lastPaletteName_UI = new ofxUILabel(lastPaletteName, OFX_UI_FONT_SMALL);
+	lastPaletteName_UI = new ofxUILabel(lastPaletteName.get(), OFX_UI_FONT_SMALL);
 	gui->addWidgetDown(lastPaletteName_UI);
-	lastPaletteName_UI->setLabel(lastPaletteName);
+	lastPaletteName_UI->setLabel(lastPaletteName.get());
 
 	gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
 

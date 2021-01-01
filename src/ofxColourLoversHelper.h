@@ -75,6 +75,11 @@ private:
 private:
 	void Changed_ColourLovers(ColourLoveEvent &e);
 
+	//-
+
+	ImVec4 color_Pick{ 1,1,1,0.5 };
+	float linew_Pick = 2.0;
+
 	//--
 
     // API
@@ -170,9 +175,12 @@ private:
     
 	std::string lastSearch;
     std::string lastSearch_PRE = "-1";
+	
+public:
+	ofParameter<std::string> lastPaletteName{ "PaletteName", "" };
+    //std::string lastPaletteName = "";
 
-    std::string lastPaletteName = "";
-
+private:
     void loadFavourites();
     void loadHistory();
     void clearFavourites();
