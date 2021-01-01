@@ -12,6 +12,8 @@
 #define USE_OFX_IM_GUI_EXTERNAL
 //#define USE_OFX_UI
 
+#define BUTTON_HEIGHT 50
+
 //--
 
 
@@ -40,6 +42,8 @@ public:
     void draw();
     void exit();
     void windowResized(int w, int h);
+
+	bool bShowSearch = true;
 
     //--
 
@@ -93,7 +97,7 @@ public:
 	}
 
     //bool bIsEnabled = true;
-    void setKeysEnabled(bool b){
+    void setEnableKeys(bool b){
         //isKeysEnabled = b;
         //
         //if (isKeysEnabled)
