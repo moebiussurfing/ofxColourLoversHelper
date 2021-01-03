@@ -20,6 +20,7 @@
 #define USE_OFX_IM_GUI_EXTERNAL
 //
 #define BUTTON_BIG_HEIGHT 50
+#define BUTTON_SLIM_HEIGHT 10
 //
 //--
 

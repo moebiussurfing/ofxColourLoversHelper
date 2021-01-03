@@ -98,7 +98,7 @@ void ofxColourLoversHelper::drawImGui()
 		float _w = ImGui::GetWindowContentRegionWidth() - 2 * _spc - 10;
 		float _hb = BUTTON_BIG_HEIGHT;
 		int _hhB = 40;//button height
-		if (MODE_Slim)_hhB = 20;
+		if (MODE_Slim)_hhB = BUTTON_SLIM_HEIGHT;
 
 		//-
 
@@ -140,7 +140,7 @@ void ofxColourLoversHelper::drawImGui()
 
 				ofxColourLovers::searchPalettes(textInput_temp1_PRE, amountResults);
 
-				lastSearch = "'" + textInput_temp1_PRE + "'";
+				lastSearch = textInput_temp1_PRE;
 
 				//textInput_temp1_PRE = textInput_temp1 = "";//clear
 			}
@@ -444,7 +444,7 @@ void ofxColourLoversHelper::drawImGui()
 						int cId = ofToInt(seg[2]);
 						ColourLovePalette p = palettes[pId];
 
-						lastPaletteName = "'" + p.title + "'";
+						lastPaletteName = p.title;
 
 #ifdef USE_OFX_UI
 						lastPaletteName_UI->setLabel(lastPaletteName);
@@ -873,7 +873,7 @@ void ofxColourLoversHelper::Changed_Gui(ofxUIEventArgs &e)
 	if (name == "search")
 	{
 		ofxUITextInput *textinput = (ofxUITextInput *)e.widget;
-		lastSearch = "'" + textinput->getTextString() + "'";
+		lastSearch = textinput->getTextString();
 		ofxColourLovers::searchPalettes(textinput->getTextString(), amountResults);
 		ofLogNotice(__FUNCTION__) << "textinput: " << textinput->getTextString();
 	}
@@ -1009,7 +1009,7 @@ void ofxColourLoversHelper::refreshPalette()
 	if (palettes.size() > 0)
 	{
 		p = palettes[currPalette];
-		lastPaletteName = "'" + p.title + "'";
+		lastPaletteName = p.title;
 
 #ifdef USE_OFX_UI
 		lastPaletteName_UI->setLabel(lastPaletteName);
@@ -1017,7 +1017,7 @@ void ofxColourLoversHelper::refreshPalette()
 	}
 
 	//ColourLovePalette p = palettes[currPalette];
-	//lastPaletteName = "'" + p.title + "'";
+	//lastPaletteName = p.title;
 	//lastPaletteName_UI->setLabel(lastPaletteName);
 
 	//-
@@ -1252,7 +1252,7 @@ void ofxColourLoversHelper::Changed_Gui_Lab(ofxUIEventArgs &e)
 
 	ofLogNotice(__FUNCTION__) << name << " " << kind << " " << uid << " colour: " << p.colours[cId] << " name: " << p.title;
 
-	lastPaletteName = "'" + p.title + "'";
+	lastPaletteName = p.title;
 	lastPaletteName_UI->setLabel(lastPaletteName);
 
 	//-
