@@ -7,13 +7,17 @@
 
 //	OPTIONAL
 //
-//	You can choice a gui
-#define USE_OFX_IM_GUI
-#define USE_OFX_IM_GUI_EXTERNAL
+//	You simple gui gui
 //#define USE_OFX_UI
-
-#define BUTTON_HEIGHT 50
-
+//
+// or the coolest ImGui based 
+#define USE_OFX_IM_GUI
+// 
+// and uncomment this line only if you want to handle the ImGui instance out of-the-addon, into ofApp:
+//#define USE_OFX_IM_GUI_EXTERNAL
+//
+#define BUTTON_BIG_HEIGHT 50
+//
 //--
 
 
@@ -71,6 +75,8 @@ private:
 	vector<ofxUIButton *> colourRanges;
 	ofxUILabel * lastPaletteName_UI;
 #endif
+
+	ofDirectory _files;
 
 private:
 	void Changed_ColourLovers(ColourLoveEvent &e);
@@ -149,7 +155,7 @@ public:
     bool MODE_PickPalette_BACK = true;
 
 private:
-    ofParameter<bool> ENABLER_Keys {"keys enabler", true};
+    ofParameter<bool> ENABLER_Keys {"Enable Keys", true};
 	//bool ENABLER_Keys = true;
 
 private:
