@@ -77,6 +77,7 @@ void ofxColourLoversHelper::setVisible(bool b)
 		//setEnableKeys(false);
 	}
 }
+
 #ifdef USE_OFX_IM_GUI
 //--------------------------------------------------------------
 void ofxColourLoversHelper::drawImGui()
@@ -87,36 +88,24 @@ void ofxColourLoversHelper::drawImGui()
 	gui_ImGui.begin();
 #endif
 
-	//ImGui::GetStyle().ItemInnerSpacing.x = 0;
-
-	//-
-
-	float _spc = ImGui::GetStyle().ItemInnerSpacing.x;
-	//float _w = ImGui::GetWindowContentRegionWidth() - _spc;
-	//float _w50 = (_w * 0.5) - (_spc * 0.5);
-	//float _w100 = _w - _spc;
-	//float _h = BUTTON_BIG_HEIGHT;
-	float _w = 200;
-
-	//-
-
-	float _hb = BUTTON_BIG_HEIGHT;
-
-	float _wb = _w;
-	//float _wb = 200;
-	//float _wb = ImGui::GetWindowWidth();
-
-	int _hhB = 40;
-	//int _hhB = _wb / 5;
-
 	//-
 
 	if (ofxImGui::BeginWindow("COLOUR-LOVERS", mainSettings, false))
 	{
+		//-
+
+		float _spc = ImGui::GetStyle().ItemInnerSpacing.x;
+		float _w = ImGui::GetWindowContentRegionWidth() - 2 * _spc - 10;
+		float _hb = BUTTON_BIG_HEIGHT;
+		int _hhB = 40;//button height
+		if (MODE_Slim)_hhB = 20;
+
+		//-
+
 		//bShowSearch = false;
+		//if (ofxImGui::BeginWindow("HTTP SEARCH", mainSettings, &bShowSearch))
+		//if (ofxImGui::BeginTree("HTTP SEARCH", mainSettings))
 		if (ImGui::CollapsingHeader("HTTP SEARCH"))
-			//if (ofxImGui::BeginWindow("HTTP SEARCH", mainSettings, &bShowSearch))
-			//if (ofxImGui::BeginTree("HTTP SEARCH", mainSettings))
 		{
 			//ImGui::Text("COLOUR LOVERS");
 
@@ -199,15 +188,15 @@ void ofxColourLoversHelper::drawImGui()
 
 				lastSearch = textInput_temp3;
 				ofxColourLovers::getPalette(lastSearch);
-		}
+			}
 #endif
 
 			ImGui::Dummy(ImVec2(0.0f, 5));
 
-			//bool MODE_fixedSize_PRE = MODE_fixedSize;
-			//if (ImGui::Checkbox("FIXED WIDTH", &MODE_fixedSize))
+			//bool MODE_fixedSize_PRE = MODE_FixedSize;
+			//if (ImGui::Checkbox("FIXED WIDTH", &MODE_FixedSize))
 			//{
-			//	if (MODE_fixedSize != MODE_fixedSize_PRE)
+			//	if (MODE_FixedSize != MODE_fixedSize_PRE)
 			//	{
 			//		build_Gui_Lab();
 			//	}
@@ -259,7 +248,7 @@ void ofxColourLoversHelper::drawImGui()
 			//-
 
 			//ofxImGui::EndTree(mainSettings);
-	}
+		}
 		//ofxImGui::EndWindow(mainSettings);
 
 		//----
@@ -278,12 +267,12 @@ void ofxColourLoversHelper::drawImGui()
 			//if (ofxImGui::BeginWindow(lastSearch.c_str(), mainSettings, false))
 		{
 
-			if (ImGui::Button("FAVS", ImVec2(_w * 0.5, _hb)))
+			if (ImGui::Button("FAVS", ImVec2(_w * 0.5, 0.5*_hb)))
 			{
 				loadFavourites();
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("HISTORY", ImVec2(_w * 0.5, _hb)))
+			if (ImGui::Button("HISTORY", ImVec2(_w * 0.5, 0.5*_hb)))
 			{
 				loadHistory();
 			}
@@ -294,7 +283,7 @@ void ofxColourLoversHelper::drawImGui()
 
 			ImGui::Dummy(ImVec2(0.0f, 10));
 
-			ImGui::Text("Name:"); //ImGui::SameLine();
+			//ImGui::Text("Name:"); //ImGui::SameLine();
 			ImGui::Text(lastPaletteName.get().c_str());
 
 			ImGui::Dummy(ImVec2(0.0f, 10));
@@ -322,6 +311,13 @@ void ofxColourLoversHelper::drawImGui()
 			}
 			ImGui::Text(s.c_str());
 
+			ImGui::Dummy(ImVec2(0.0f, 5));
+
+			if (ImGui::Button("Randomize", ImVec2(_w * 0.5, _hb * 0.5)))
+			{
+				randomPalette();
+			}
+
 			ImGui::Dummy(ImVec2(0.0f, 10));
 
 			//-
@@ -336,14 +332,17 @@ void ofxColourLoversHelper::drawImGui()
 				}
 				ofxImGui::AddParameter(ENABLER_Keys);
 
-				bool MODE_fixedSize_PRE = MODE_fixedSize;
-				//if (ImGui::Checkbox("Fixed Width", &MODE_fixedSize))
-				if (ofxImGui::AddParameter(MODE_fixedSize))
+				//if (ImGui::Checkbox("Fixed Width", &MODE_FixedSize))
+				bool MODE_fixedSize_PRE = MODE_FixedSize;
+				if (ofxImGui::AddParameter(MODE_FixedSize))
 				{
-					if (MODE_fixedSize != MODE_fixedSize_PRE)
+					if (MODE_FixedSize != MODE_fixedSize_PRE)
 					{
 						build_Gui_Lab();
 					}
+				}
+				if (ofxImGui::AddParameter(MODE_Slim))
+				{
 				}
 
 				ImGui::Dummy(ImVec2(0.0f, 10));
@@ -360,29 +359,48 @@ void ofxColourLoversHelper::drawImGui()
 				// colors in each palette
 				int _sizeP = palettes[i].colours.size();
 
+				////TODO:
+				////check offset..
+				//float _offset = 0;
+				//for (int c = 0; c < _sizeP; c++) {
+				//	_offset += palettes[i].colorWidths[c];
+				//}
+
 				for (int c = 0; c < _sizeP; c++)
 				{
 					if (c != 0) ImGui::SameLine();
 
 					ImGui::PushID(c);
 
-					if (MODE_fixedSize)
+					if (MODE_FixedSize)
 					{
 						// same size for each color
-						_wwB = _wb / _sizeP;
+						_wwB = _w / _sizeP - _spc;
 					}
 					else
 					{
 						// different sizes with original colourLover Palettes
-						_wwB = palettes[i].colorWidths[c] * _w;
+						_wwB = palettes[i].colorWidths[c] * _w - _spc;
 					}
 
-					////TODO:
-					//// adjust better to fit to border..
-					//if (_sizeP % 2 == 0 || _sizeP % 3 == 0)
-					//{
-					//	_wwB = _wwB + _spc / _sizeP;
+					//-
+
+					//////TODO:
+					//////check offset..
+					//if (_offset != 1.0f) {
+					//	if (c == _sizeP - 1) {//add the offset to the last color box
+					//		if (_offset != 1.0f) {
+					//			_wwB = _wwB + _offset;
+					//		}
+					//	}
 					//}
+					////// adjust better to fit to border..
+					////if (_sizeP % 2 == 0)// || _sizeP % 3 == 0)
+					////{
+					////	_wwB = _wwB + (_spc / _sizeP);
+					////}
+
+					//-
 
 					std::string name = ("CL_" + ofToString(i) + "_" + ofToString(c));
 
@@ -483,7 +501,7 @@ void ofxColourLoversHelper::drawImGui()
 			ofxImGui::EndTree(mainSettings);
 		}
 		//ofxImGui::EndWindow(mainSettings);
-}
+	}
 	ofxImGui::EndWindow(mainSettings);
 
 	//-
@@ -574,7 +592,7 @@ void ofxColourLoversHelper::setup()
 
 	int tgSize1 = 10;
 	int tgSize2 = 4;
-	gui->addWidgetDown(new ofxUIToggle("FIXED WIDTHS", MODE_fixedSize, tgSize1, tgSize1, tgSize2));
+	gui->addWidgetDown(new ofxUIToggle("FIXED WIDTHS", MODE_FixedSize, tgSize1, tgSize1, tgSize2));
 	gui->addWidgetDown(new ofxUISpacer(width - xInit, 0));
 
 	gui->addWidgetDown(new ofxUISpacer(width - xInit, 2));
@@ -763,7 +781,7 @@ void ofxColourLoversHelper::build_Gui_Lab()
 		int _sizeP = palettes[i].colours.size();
 		for (int c = 0; c < _sizeP; c++)
 		{
-			if (!MODE_fixedSize)
+			if (!MODE_FixedSize)
 			{
 				// different sizes with original colourLover Palettes
 				currW = palettes[i].colorWidths[c] * w_Gui;
@@ -919,10 +937,10 @@ void ofxColourLoversHelper::Changed_Gui(ofxUIEventArgs &e)
 
 	else if (name == "FIXED WIDTHS")
 	{
-		bool MODE_fixedSize_PRE = MODE_fixedSize;
+		bool MODE_fixedSize_PRE = MODE_FixedSize;
 		ofxUIToggle *toggle = e.getToggle();
-		MODE_fixedSize = toggle->getValue();
-		if (MODE_fixedSize != MODE_fixedSize_PRE)
+		MODE_FixedSize = toggle->getValue();
+		if (MODE_FixedSize != MODE_fixedSize_PRE)
 		{
 			build_Gui_Lab();
 		}
@@ -1078,7 +1096,7 @@ void ofxColourLoversHelper::refreshPalette()
 				btn->setDrawOutline(false);
 			}
 		}
-}
+	}
 #endif
 }
 

@@ -4,17 +4,20 @@
 
 
 //--
-
-//	OPTIONAL
 //
-//	You simple gui gui
+// OPTIONAL
+//
+// You simple gui gui 
+// (outdated but should work)
+//
 //#define USE_OFX_UI
 //
 // or the coolest ImGui based 
 #define USE_OFX_IM_GUI
 // 
-// and uncomment this line only if you want to handle the ImGui instance out of-the-addon, into ofApp:
-//#define USE_OFX_IM_GUI_EXTERNAL
+// and uncomment this line only if you want to handle the ImGui instance 
+// out of-the-addon, and into ofApp instead:
+#define USE_OFX_IM_GUI_EXTERNAL
 //
 #define BUTTON_BIG_HEIGHT 50
 //
@@ -99,6 +102,7 @@ public:
 	bool isVisible() {
 		return bIsVisible;
 	}
+
     void setVisible(bool b);
     void setVisibleSearcher(bool b){
         bSearcherVisible = b;
@@ -106,20 +110,6 @@ public:
         gui->setVisible(bSearcherVisible);
 #endif
 	}
-
-    //bool bIsEnabled = true;
-    void setEnableKeys(bool b){
-        //isKeysEnabled = b;
-        //
-        //if (isKeysEnabled)
-        //{
-        //    addKeysListeners();
-        //}
-        //else
-        //{
-        //    removeKeysListeners();
-        //}
-    }
 
 private:
     bool bSearcherVisible = true;
@@ -154,6 +144,18 @@ public:
     bool MODE_PickColor_BACK = true;//should store in xml..
     bool MODE_PickPalette_BACK = true;
 
+	void setEnableKeys(bool b) {
+		ENABLER_Keys = b;
+		if (b)
+		{
+		    addKeysListeners();
+		}
+		else
+		{
+		    removeKeysListeners();
+		}
+	}
+
 private:
     ofParameter<bool> ENABLER_Keys {"Enable Keys", true};
 	//bool ENABLER_Keys = true;
@@ -162,7 +164,8 @@ private:
 
     void refreshPalette();
 
-	ofParameter<bool> MODE_fixedSize{ "Fixed Width", false };
+	ofParameter<bool> MODE_FixedSize{ "Fixed Width", false };
+	ofParameter<bool> MODE_Slim{ "Slim", false };
 
     ofColor lastColor_clicked;
 
