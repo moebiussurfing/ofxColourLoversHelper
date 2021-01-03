@@ -158,7 +158,6 @@ public:
 
 private:
     ofParameter<bool> ENABLER_Keys {"Enable Keys", true};
-	//bool ENABLER_Keys = true;
 
 private:
 

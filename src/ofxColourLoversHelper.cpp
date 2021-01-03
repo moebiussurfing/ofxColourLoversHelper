@@ -286,6 +286,17 @@ void ofxColourLoversHelper::drawImGui()
 			//ImGui::Text("Name:"); //ImGui::SameLine();
 			ImGui::Text(lastPaletteName.get().c_str());
 
+			ImGui::Dummy(ImVec2(0.0f, 5));
+
+			std::string s;
+			if (_files.numFiles() > 0) {
+				s = ofToString(currPalette) + "/" + ofToString(palettes.size() - 1);
+			}
+			else {
+				s = ofToString("-1/0");
+			}
+			ImGui::Text(s.c_str());
+
 			ImGui::Dummy(ImVec2(0.0f, 10));
 
 			//-
@@ -299,17 +310,6 @@ void ofxColourLoversHelper::drawImGui()
 			{
 				nextPalette();
 			}
-
-			ImGui::Dummy(ImVec2(0.0f, 5));
-
-			std::string s;
-			if (_files.numFiles() > 0) {
-				s = ofToString(currPalette) + "/" + ofToString(palettes.size() - 1);
-			}
-			else {
-				s = ofToString("-1/0");
-			}
-			ImGui::Text(s.c_str());
 
 			ImGui::Dummy(ImVec2(0.0f, 5));
 

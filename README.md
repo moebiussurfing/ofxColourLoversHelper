@@ -27,6 +27,7 @@ Add to your project using ```Project Generator```:
 
 Already included into ```OF_ADDON/libs/```:  
 * ofxColourLovers  
+* ofxHttpUtils
 
 ## Tested systems
 - **Windows10** / **VS2017** / **OF ~0.11**
