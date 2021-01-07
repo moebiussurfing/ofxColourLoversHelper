@@ -3,10 +3,17 @@
 //--------------------------------------------------------------
 ofxColourLoversHelper::ofxColourLoversHelper()
 {
-	ofSetLogLevel(OF_LOG_VERBOSE);
-	ofSetLogLevel("ofxColourLovers", OF_LOG_VERBOSE);
+	//ofSetLogLevel(OF_LOG_VERBOSE);
+	//ofSetLogLevel("ofxColourLovers", OF_LOG_VERBOSE);
 
-	//-
+	//--
+
+	path_Global = "ofxColourLoversHelper/";
+	ofxSurfingHelpers::CheckFolder(path_Global);
+
+	path_AppSettings = path_Global + "ofxColourLoversHelper_Settings.xml";
+
+	//--
 
 	// default settings
 	position = glm::vec2(1000, 10);
@@ -54,8 +61,7 @@ void ofxColourLoversHelper::setVisible(bool b)
 #ifdef USE_OFX_UI
 	if (gui_Lab) gui_Lab->setVisible(bIsVisible);
 	//gui->setVisible(bIsVisible);
-	if (bIsVisible && gui)
-		setVisibleSearcher(bSearcherVisible);
+	if (bIsVisible && gui) setVisibleSearcher(bSearcherVisible);
 #endif
 
 	//-
@@ -97,8 +103,6 @@ void ofxColourLoversHelper::drawImGui()
 		float _spc = ImGui::GetStyle().ItemInnerSpacing.x;
 		float _w = ImGui::GetWindowContentRegionWidth() - 2 * _spc - 10;
 		float _hb = BUTTON_BIG_HEIGHT;
-		int _hhB = 40;//button height
-		if (MODE_Slim)_hhB = BUTTON_SLIM_HEIGHT;
 
 		//-
 
@@ -191,7 +195,7 @@ void ofxColourLoversHelper::drawImGui()
 			}
 #endif
 
-			ImGui::Dummy(ImVec2(0.0f, 5));
+			ImGui::Dummy(ImVec2(0, 5));
 
 			//bool MODE_fixedSize_PRE = MODE_FixedSize;
 			//if (ImGui::Checkbox("FIXED WIDTH", &MODE_FixedSize))
@@ -202,7 +206,7 @@ void ofxColourLoversHelper::drawImGui()
 			//	}
 			//}
 
-			ImGui::Dummy(ImVec2(0.0f, 5));
+			ImGui::Dummy(ImVec2(0, 5));
 
 			//ImGui::Text("Name:");
 			//ImGui::Text(lastPaletteName.c_str());
@@ -213,9 +217,9 @@ void ofxColourLoversHelper::drawImGui()
 
 			if (ImGui::Button("+ FAV", ImVec2(_w * 0.5, _hb)))
 			{
-				ofxSurfingHelpers::CheckFolder(path + "favourites/");
+				ofxSurfingHelpers::CheckFolder(path_Global + "favorites/");
 
-				std::string str = path + "favourites/" + palettes[currPalette].id + ".xml";
+				std::string str = path_Global + "favorites/" + palettes[currPalette].id + ".xml";
 
 				palettes[currPalette].save(str);
 				ofLogNotice(__FUNCTION__) << "saved favorite: " << str;
@@ -227,7 +231,7 @@ void ofxColourLoversHelper::drawImGui()
 				clearFavourites();
 
 				//workflow
-				loadFavourites();
+				loadFavorites();
 			}
 			ImGui::PopItemWidth();
 
@@ -255,9 +259,9 @@ void ofxColourLoversHelper::drawImGui()
 
 		ImGui::Dummy(ImVec2(0.0f, 10));
 
-		//ImGuiColorEditFlags colorEdiFlags = false;
+		//ImGuiColorEditFlags _flags = false;
 
-		ImGuiColorEditFlags colorEdiFlags =
+		ImGuiColorEditFlags _flags =
 			ImGuiColorEditFlags_NoAlpha |
 			ImGuiColorEditFlags_NoPicker |
 			ImGuiColorEditFlags_NoTooltip;
@@ -266,10 +270,9 @@ void ofxColourLoversHelper::drawImGui()
 			//if (ofxImGui::BeginWindow("BROWSE", mainSettings, false))
 			//if (ofxImGui::BeginWindow(lastSearch.c_str(), mainSettings, false))
 		{
-
-			if (ImGui::Button("FAVS", ImVec2(_w * 0.5, 0.5*_hb)))
+			if (ImGui::Button("FAVORITES", ImVec2(_w * 0.5, 0.5*_hb)))
 			{
-				loadFavourites();
+				loadFavorites();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("HISTORY", ImVec2(_w * 0.5, 0.5*_hb)))
@@ -279,14 +282,8 @@ void ofxColourLoversHelper::drawImGui()
 
 			ImGui::Dummy(ImVec2(0.0f, 10));
 
-			ImGui::Text(lastSearch.c_str());
-
-			ImGui::Dummy(ImVec2(0.0f, 10));
-
-			//ImGui::Text("Name:"); //ImGui::SameLine();
-			ImGui::Text(lastPaletteName.get().c_str());
-
-			ImGui::Dummy(ImVec2(0.0f, 5));
+			//ImGui::Text(lastSearch.c_str());
+			//ImGui::Dummy(ImVec2(0.0f, 10));
 
 			std::string s;
 			if (_files.numFiles() > 0) {
@@ -295,18 +292,35 @@ void ofxColourLoversHelper::drawImGui()
 			else {
 				s = ofToString("-1/0");
 			}
-			ImGui::Text(s.c_str());
+
+			std::string ss;
+			ss = lastSearch;
+			//ss = lastSearch + "      " + s;
+
+			ImGui::Text(ss.c_str());
+			//ImGui::Text(s.c_str());
 
 			ImGui::Dummy(ImVec2(0.0f, 10));
 
+			//ImGui::Text("Name:"); //ImGui::SameLine();
+			ImGui::Text(lastPaletteName.get().c_str());
+
+			ImGui::Dummy(ImVec2(0.0f, 5));
+
 			//-
 
-			if (ImGui::Button("PREV", ImVec2(_w * 0.5, _hb)))
+			ImGui::Text(s.c_str());
+
+			ImGui::Dummy(ImVec2(0.0f, 5));
+
+			if (ImGui::Button("Previous", ImVec2(_w * 0.5, _hb)))
 			{
 				prevPalette();
 			}
+
 			ImGui::SameLine();
-			if (ImGui::Button("NEXT", ImVec2(_w * 0.5, _hb)))
+
+			if (ImGui::Button("Next", ImVec2(_w * 0.5, _hb)))
 			{
 				nextPalette();
 			}
@@ -324,19 +338,21 @@ void ofxColourLoversHelper::drawImGui()
 
 			if (ImGui::CollapsingHeader("ADVANCED"))
 			{
-				if (ImGui::Checkbox("Pick Palette", &MODE_PickPalette_BACK))
-				{
-				}
-				if (ImGui::Checkbox("Pick Color", &MODE_PickColor_BACK))
-				{
-				}
+				//if (ImGui::Checkbox("Pick Palette", &MODE_PickPalette_BACK))
+				//{
+				//}
+				//if (ImGui::Checkbox("Pick Color", &MODE_PickColor_BACK))
+				//{
+				//}
+				ofxImGui::AddParameter(MODE_PickPalette_BACK);
+				ofxImGui::AddParameter(MODE_PickColor_BACK);
 				ofxImGui::AddParameter(ENABLER_Keys);
 
 				//if (ImGui::Checkbox("Fixed Width", &MODE_FixedSize))
-				bool MODE_fixedSize_PRE = MODE_FixedSize;
+				bool bPre = MODE_FixedSize;
 				if (ofxImGui::AddParameter(MODE_FixedSize))
 				{
-					if (MODE_FixedSize != MODE_fixedSize_PRE)
+					if (MODE_FixedSize != bPre)
 					{
 						build_Gui_Lab();
 					}
@@ -348,16 +364,62 @@ void ofxColourLoversHelper::drawImGui()
 				ImGui::Dummy(ImVec2(0.0f, 10));
 			}
 
-			//----
+			ImGui::Dummy(ImVec2(0.0f, 10));
 
-			// color boxes
+			ofxImGui::AddParameter(SHOW_BrowserPalettes);
+			ofxImGui::EndTree(mainSettings);
+		}
+		//ofxImGui::EndWindow(mainSettings);
+	}
+	ofxImGui::EndWindow(mainSettings);
+
+	//----
+
+	// palette rows with all color boxes
+
+	//add kit palettes browser
+	if (SHOW_BrowserPalettes)
+	{
+		if (ofxImGui::BeginWindow("LOVER PALETTES", mainSettings))
+		{
+			std::string ss = lastSearch;
+			ImGui::Text(ss.c_str());
+			ImGui::Dummy(ImVec2(0.0f, 5));
+
+			//-
+
+			float _spc = 0;
+			float _spc2 = 6;//spacing between palettes 
+			float _w = ImGui::GetWindowContentRegionWidth();
+			float _hhB;//applyed
+			float _hb;
+
+
+			float linew_Pick = 2.5;
+			ImVec4 color_Pick{ 0,0,0,0.5 };
+			//ImVec4 color_Pick{ 1,1,1,0.5 };
+
+			//-
+
+			ImGuiColorEditFlags _flags =
+				ImGuiColorEditFlags_NoAlpha |
+				ImGuiColorEditFlags_NoPicker |
+				ImGuiColorEditFlags_NoTooltip;
+
+			//-
 
 			for (int i = 0; i < palettes.size(); i++)
 			{
-				int _wwB = 0;
+				ImGui::Dummy(ImVec2(0, _spc2));
 
-				// colors in each palette
-				int _sizeP = palettes[i].colours.size();
+				std::string _name = palettes[i].title;
+				ImGui::Text(_name.c_str());
+
+				//-
+
+				//heights
+				if (MODE_Slim.get()) _hb = BUTTON_SLIM_HEIGHT;
+				else _hb = BUTTON_BIG_HEIGHT;
 
 				////TODO:
 				////check offset..
@@ -366,21 +428,32 @@ void ofxColourLoversHelper::drawImGui()
 				//	_offset += palettes[i].colorWidths[c];
 				//}
 
+				// colors in each palette
+
+				int _sizeP = palettes[i].colours.size();
 				for (int c = 0; c < _sizeP; c++)
 				{
-					if (c != 0) ImGui::SameLine();
+					if (c != 0)
+					{
+						ImGui::SameLine(0, 0);
+						//ImGui::SameLine();
+						//ImGui::SameLine(_spc, _spc);// ?
+					}
+
+					//-
 
 					ImGui::PushID(c);
 
+					int _wwB;
 					if (MODE_FixedSize)
 					{
 						// same size for each color
-						_wwB = _w / _sizeP - _spc;
+						_wwB = (_w / _sizeP) - _spc;
 					}
 					else
 					{
 						// different sizes with original colourLover Palettes
-						_wwB = palettes[i].colorWidths[c] * _w - _spc;
+						_wwB = (palettes[i].colorWidths[c] * _w) - _spc;
 					}
 
 					//-
@@ -408,19 +481,27 @@ void ofxColourLoversHelper::drawImGui()
 
 					// draw border to selected color/palette
 					bool bDrawBorder = false;
-					if (i == currPalette)
+					float _scale = 1.0f;
+					if (i == currPalette)//highlight selected
 					{
 						bDrawBorder = true;
+						if (!MODE_Slim) _scale = 0.45f;
+
+						_hhB = 3 * _hb * _scale;
+					}
+					else
+					{
+						_hhB = 1 * _hb * _scale;
 					}
 					if (bDrawBorder)
 					{
 						ImGui::PushStyleColor(ImGuiCol_Border, color_Pick);
 						ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, linew_Pick);
-
 						//ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, 3.0);
 					}
+					//_hhB = 0.7 * BUTTON_BIG_HEIGHT;//button height
 
-					//----
+					//------------
 
 					// colored box
 
@@ -429,7 +510,7 @@ void ofxColourLoversHelper::drawImGui()
 					if (ImGui::ColorButton(
 						name.c_str(),
 						palettes[i].colours[c],
-						colorEdiFlags,
+						_flags,
 						ImVec2(_wwB, _hhB)))
 					{
 						//-
@@ -497,14 +578,11 @@ void ofxColourLoversHelper::drawImGui()
 					ImGui::PopID();
 				}
 			}
-
-			ofxImGui::EndTree(mainSettings);
 		}
-		//ofxImGui::EndWindow(mainSettings);
+		ofxImGui::EndWindow(mainSettings);
 	}
-	ofxImGui::EndWindow(mainSettings);
 
-	//-
+	//---
 
 #ifndef USE_OFX_IM_GUI_EXTERNAL
 	gui_ImGui.end();
@@ -630,6 +708,20 @@ void ofxColourLoversHelper::setup()
 
 	ofAddListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::Changed_ColourLovers);
 
+	//-
+
+	params.setName("ofxColourLoversHelper");
+	params.add(MODE_PickPalette_BACK);
+	params.add(MODE_PickColor_BACK);
+	params.add(MODE_FixedSize);
+	params.add(MODE_Slim);
+	params.add(ENABLER_Keys);
+	params.add(SHOW_BrowserPalettes);
+	params.add(lastMenuTab);
+	//params.add(lastSearch);
+
+	ofxSurfingHelpers::loadGroup(params, path_AppSettings);
+
 	//----
 
 	// startup
@@ -644,7 +736,10 @@ void ofxColourLoversHelper::setup()
 
 	//-
 
-	loadFavourites();
+	if (lastMenuTab.get() == "FAVORITES") loadFavorites();
+	else if (lastMenuTab.get() == "HISTORY") loadHistory();
+
+	//loadFavorites();
 
 	// auto load first palette of favourites
 	if (palettes.size() > 0)
@@ -710,7 +805,7 @@ void ofxColourLoversHelper::Changed_ColourLovers(ColourLoveEvent &e)
 	// save results into history after succesfuly query search
 	for (int i = 0; i < palettes.size(); i++)
 	{
-		e.palettes[i].save(path + "history/" + e.palettes[i].id + ".xml");
+		e.palettes[i].save(path_Global + "history/" + e.palettes[i].id + ".xml");
 	}
 
 	//return;
@@ -902,7 +997,7 @@ void ofxColourLoversHelper::Changed_Gui(ofxUIEventArgs &e)
 		ofxUIButton *but = e.getButton();
 		if (but->getValue())
 		{
-			std::string str = path + "favourites/" + palettes[currPalette].id + ".xml";
+			std::string str = path_Global + "favorites/" + palettes[currPalette].id + ".xml";
 			palettes[currPalette].save(str);
 			ofLogNotice(__FUNCTION__) << "saved favorite: " << str;
 		}
@@ -914,7 +1009,7 @@ void ofxColourLoversHelper::Changed_Gui(ofxUIEventArgs &e)
 	{
 		ofxUIButton *but = e.getButton();
 		if (but->getValue())
-			loadFavourites();
+			loadFavorites();
 	}
 	else if (name == "HISTORY")
 	{
@@ -1095,8 +1190,8 @@ void ofxColourLoversHelper::refreshPalette()
 			{
 				btn->setDrawOutline(false);
 			}
-		}
-	}
+}
+}
 #endif
 }
 
@@ -1350,24 +1445,26 @@ void ofxColourLoversHelper::Changed_ColourPalette(ofxUIEventArgs &e)
 //-
 
 //--------------------------------------------------------------
-void ofxColourLoversHelper::loadFavourites()
+void ofxColourLoversHelper::loadFavorites()
 {
 	ofLogNotice(__FUNCTION__);
 
-	//ofDirectory _files(path + "favourites");
+	//ofDirectory _files(path_Global + "favorites");
 	_files.reset();
-	_files.open(path + "favourites");
+	_files.open(path_Global + "favorites");
 	_files.listDir();
 	palettes.clear();
 
 	for (int i = 0; i < _files.numFiles(); i++)
 	{
 		ColourLovePalette cp;
-		cp.load(path + "favourites/" + _files.getName(i));
+		cp.load(path_Global + "favorites/" + _files.getName(i));
 		palettes.push_back(cp);
 	}
 
-	lastSearch = "FAVOURITES";
+	lastSearch = "FAVORITES";
+	lastMenuTab = lastSearch;
+
 	//lastSearch_PRE = lastSearch;
 
 	//TODO:
@@ -1386,11 +1483,11 @@ void ofxColourLoversHelper::clearFavourites()
 {
 	ofLogNotice(__FUNCTION__);
 
-	//ofDirectory _files(path + "favourites");
+	//ofDirectory _files(path_Global + "favorites");
 	_files.reset();
-	_files.open(path + "favourites");
+	_files.open(path_Global + "favorites");
 
-	ofxSurfingHelpers::CheckFolder(path + "favourites");
+	ofxSurfingHelpers::CheckFolder(path_Global + "favorites");
 
 	_files.listDir();
 
@@ -1405,22 +1502,24 @@ void ofxColourLoversHelper::loadHistory()
 {
 	ofLogNotice(__FUNCTION__);
 
-	ofxSurfingHelpers::CheckFolder(path + "history");
+	ofxSurfingHelpers::CheckFolder(path_Global + "history");
 
-	//ofDirectory _files(path + "history");
+	//ofDirectory _files(path_Global + "history");
 	_files.reset();
-	_files.open(path + "history");
+	_files.open(path_Global + "history");
 	_files.listDir();
 	palettes.clear();
 
 	for (int i = 0; i < _files.numFiles(); i++)
 	{
 		ColourLovePalette cp;
-		cp.load(path + "history/" + _files.getName(i));
+		cp.load(path_Global + "history/" + _files.getName(i));
 		palettes.push_back(cp);
 	}
 
 	lastSearch = "HISTORY";
+	lastMenuTab = lastSearch;
+
 	//lastSearch_PRE = lastSearch;
 
 	//TODO: 
@@ -1441,11 +1540,11 @@ void ofxColourLoversHelper::clearHistory()
 {
 	ofLogNotice(__FUNCTION__);
 
-	ofxSurfingHelpers::CheckFolder(path + "history");
+	ofxSurfingHelpers::CheckFolder(path_Global + "history");
 
-	//ofDirectory _files(path + "history");
+	//ofDirectory _files(path_Global + "history");
 	_files.reset();
-	_files.open(path + "history");
+	_files.open(path_Global + "history");
 	_files.listDir();
 
 	for (int i = 0; i < _files.numFiles(); i++)
@@ -1583,12 +1682,10 @@ void ofxColourLoversHelper::removeMouseListeners()
 //--------------------------------------------------------------
 void ofxColourLoversHelper::exit()
 {
+	ofxSurfingHelpers::saveGroup(params, path_AppSettings);
 
-}
+	//-
 
-//--------------------------------------------------------------
-ofxColourLoversHelper::~ofxColourLoversHelper()
-{
 	removeKeysListeners();
 	removeMouseListeners();
 
@@ -1601,6 +1698,12 @@ ofxColourLoversHelper::~ofxColourLoversHelper()
 #endif
 
 	ofRemoveListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::Changed_ColourLovers);
+}
+
+//--------------------------------------------------------------
+ofxColourLoversHelper::~ofxColourLoversHelper()
+{
+	exit();
 }
 
 //--------------------------------------------------------------

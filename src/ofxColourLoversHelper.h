@@ -2,7 +2,6 @@
 #pragma once
 #include "ofMain.h"
 
-
 //--
 //
 // OPTIONAL
@@ -20,10 +19,9 @@
 #define USE_OFX_IM_GUI_EXTERNAL
 //
 #define BUTTON_BIG_HEIGHT 50
-#define BUTTON_SLIM_HEIGHT 10
+#define BUTTON_SLIM_HEIGHT 14
 //
 //--
-
 
 #include "ofxSurfingHelpers.h"
 #include "ofxSurfing_ImGui.h"
@@ -51,9 +49,13 @@ public:
     void exit();
     void windowResized(int w, int h);
 
+private:
 	bool bShowSearch = true;
 
     //--
+
+public:
+	ofParameterGroup params;
 
 private:
 #ifdef USE_OFX_IM_GUI
@@ -65,6 +67,8 @@ private:
 
 	std::string textInput_temp1 = "";
 	std::string textInput_temp1_PRE = "-1";
+	
+	ofParameter<bool> SHOW_BrowserPalettes{"Show Browser", true};
 
 	//--
 
@@ -142,8 +146,9 @@ private:
     //----
 
 public:
-    bool MODE_PickColor_BACK = true;//should store in xml..
-    bool MODE_PickPalette_BACK = true;
+	ofParameter<bool> MODE_PickPalette_BACK{ "Pick Palette" ,true };
+	ofParameter<bool> MODE_PickColor_BACK{ "Pick Color" ,true };
+	ofParameter<std::string> lastMenuTab{ "_MenuTabPick" , "" };
 
 	void setEnableKeys(bool b) {
 		ENABLER_Keys = b;
@@ -190,12 +195,14 @@ public:
     //std::string lastPaletteName = "";
 
 private:
-    void loadFavourites();
+    void loadFavorites();
     void loadHistory();
     void clearFavourites();
     void clearHistory();
 
-    std::string path = "colourLovers/";
+	std::string path_Global;
+	std::string path_AppSettings;
+
     ofColor colorMarked;
 
     //---
