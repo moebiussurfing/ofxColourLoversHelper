@@ -69,6 +69,7 @@ private:
 	std::string textInput_temp1_PRE = "-1";
 	
 	ofParameter<bool> SHOW_BrowserPalettes{"Show Browser", true};
+	ofParameter<bool> AutoScroll{ "AutoScroll", true };
 
 	//--
 

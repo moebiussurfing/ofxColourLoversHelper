@@ -131,7 +131,8 @@ void ofxColourLoversHelper::drawImGui()
 				//ofLogNotice(__FUNCTION__) << "InputText:" << ofToString(tab1);
 				//lastSearch_PRE = lastSearch;
 
-				if (textInput_temp1 != textInput_temp1_PRE) {
+				if (textInput_temp1 != textInput_temp1_PRE)
+				{
 					textInput_temp1_PRE = textInput_temp1;
 				}
 			}
@@ -226,24 +227,75 @@ void ofxColourLoversHelper::drawImGui()
 			}
 			ImGui::SameLine();
 
-			if (ImGui::Button("CLEAR FAVS", ImVec2(_w * 0.5, _hb)))
-			{
-				clearFavourites();
+			//--
 
-				//workflow
-				loadFavorites();
+			if (ImGui::Button("CLEAR FAVS", ImVec2(_w * 0.5, _hb)))
+				ImGui::OpenPopup("CLEAR FAVS?");
+			if (ImGui::BeginPopupModal("CLEAR FAVS?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				ImGui::Text("All Favorite palettes will be deleted.\nThis operation cannot be undone!\n\n");
+				ImGui::Separator();
+
+				static bool dont_ask_me_next_timeFavs = false;
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+				ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_timeFavs);
+				ImGui::PopStyleVar();
+
+				if (ImGui::Button("OK", ImVec2(120, 0))) {
+					clearFavourites();
+					//workflow
+					loadFavorites();
+
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::SetItemDefaultFocus();
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+				ImGui::EndPopup();
 			}
+
+			//if (ImGui::Button("CLEAR FAVS", ImVec2(_w * 0.5, _hb)))
+			//{
+			//	clearFavourites();
+			//	//workflow
+			//	loadFavorites();
+			//}
+
 			ImGui::PopItemWidth();
 
 			ImGui::Dummy(ImVec2(0.0f, 5));
 
-			if (ImGui::Button("CLEAR HISTORY", ImVec2(_w, _hb)))
+			if (ImGui::Button("CLEAR HISTORY", ImVec2(_w * 0.5, _hb)))
+				ImGui::OpenPopup("CLEAR HISTORY?");
+			if (ImGui::BeginPopupModal("CLEAR HISTORY?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
-				clearHistory();
+				ImGui::Text("All History will be deleted.\nThis operation cannot be undone!\n\n");
+				ImGui::Separator();
 
-				//workflow
-				loadHistory();
+				static bool dont_ask_me_next_time_History = false;
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+				ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time_History);
+				ImGui::PopStyleVar();
+
+				if (ImGui::Button("OK", ImVec2(120, 0))) {
+					clearHistory();
+					//workflow
+					loadHistory();
+
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::SetItemDefaultFocus();
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+				ImGui::EndPopup();
 			}
+
+			//if (ImGui::Button("CLEAR HISTORY", ImVec2(_w, _hb)))
+			//{
+			//	clearHistory();
+			//	//workflow
+			//	loadHistory();
+			//}
 
 			ImGui::Dummy(ImVec2(0.0f, 5));
 
@@ -280,7 +332,7 @@ void ofxColourLoversHelper::drawImGui()
 				loadHistory();
 			}
 
-			ImGui::Dummy(ImVec2(0.0f, 10));
+			ImGui::Dummy(ImVec2(0, 10));
 
 			//ImGui::Text(lastSearch.c_str());
 			//ImGui::Dummy(ImVec2(0.0f, 10));
@@ -300,18 +352,20 @@ void ofxColourLoversHelper::drawImGui()
 			ImGui::Text(ss.c_str());
 			//ImGui::Text(s.c_str());
 
-			ImGui::Dummy(ImVec2(0.0f, 10));
+			ImGui::Dummy(ImVec2(0, 10));
 
 			//ImGui::Text("Name:"); //ImGui::SameLine();
 			ImGui::Text(lastPaletteName.get().c_str());
 
-			ImGui::Dummy(ImVec2(0.0f, 5));
+			ImGui::Dummy(ImVec2(0, 5));
 
 			//-
 
 			ImGui::Text(s.c_str());
 
-			ImGui::Dummy(ImVec2(0.0f, 5));
+			ImGui::Dummy(ImVec2(0, 5));
+
+			ImGui::PushButtonRepeat(true);
 
 			if (ImGui::Button("Previous", ImVec2(_w * 0.5, _hb)))
 			{
@@ -324,6 +378,8 @@ void ofxColourLoversHelper::drawImGui()
 			{
 				nextPalette();
 			}
+
+			ImGui::PopButtonRepeat();
 
 			ImGui::Dummy(ImVec2(0.0f, 5));
 
@@ -367,6 +423,7 @@ void ofxColourLoversHelper::drawImGui()
 			ImGui::Dummy(ImVec2(0.0f, 10));
 
 			ofxImGui::AddParameter(SHOW_BrowserPalettes);
+			ofxImGui::AddParameter(AutoScroll);
 			ofxImGui::EndTree(mainSettings);
 		}
 		//ofxImGui::EndWindow(mainSettings);
@@ -394,10 +451,10 @@ void ofxColourLoversHelper::drawImGui()
 			float _hhB;//applyed
 			float _hb;
 
-
+			//border style
 			float linew_Pick = 2.5;
 			ImVec4 color_Pick{ 0,0,0,0.5 };
-			//ImVec4 color_Pick{ 1,1,1,0.5 };
+			auto color_Pick32 = IM_COL32(color_Pick.x*255.f, color_Pick.y*255.f, color_Pick.z*255.f, color_Pick.w*255.f);
 
 			//-
 
@@ -410,6 +467,18 @@ void ofxColourLoversHelper::drawImGui()
 
 			for (int i = 0; i < palettes.size(); i++)
 			{
+				//group border
+				auto pos1 = ImGui::GetCursorScreenPos();
+
+				//autoscroll
+				if (i == currPalette)
+				{
+					if (AutoScroll)
+						ImGui::SetScrollHereY(0.5f); // 0.0f:top, 0.5f:center, 1.0f:bottom
+				}
+
+				//-
+
 				ImGui::Dummy(ImVec2(0, _spc2));
 
 				std::string _name = palettes[i].title;
@@ -488,16 +557,19 @@ void ofxColourLoversHelper::drawImGui()
 						if (!MODE_Slim) _scale = 0.45f;
 
 						_hhB = 3 * _hb * _scale;
+
+						ImGui::PushStyleColor(ImGuiCol_Border, color_Pick);
+						ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, linew_Pick);
+						//ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, 3.0);
+						
+						//-
+
+						//group border
+						ImGui::BeginGroup();
 					}
 					else
 					{
 						_hhB = 1 * _hb * _scale;
-					}
-					if (bDrawBorder)
-					{
-						ImGui::PushStyleColor(ImGuiCol_Border, color_Pick);
-						ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, linew_Pick);
-						//ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, 3.0);
 					}
 					//_hhB = 0.7 * BUTTON_BIG_HEIGHT;//button height
 
@@ -571,6 +643,12 @@ void ofxColourLoversHelper::drawImGui()
 					{
 						ImGui::PopStyleColor();
 						ImGui::PopStyleVar(1);
+
+						//group border
+						ImGui::EndGroup();
+						auto pos2 = ImGui::GetCursorScreenPos();
+						float pad = 2.0f;
+						ImGui::GetWindowDrawList()->AddRect(ImVec2(pos1.x - pad, pos1.y), ImVec2(pos1.x + _w + pad, pos2.y + pad), color_Pick32);
 					}
 
 					//-
@@ -717,6 +795,7 @@ void ofxColourLoversHelper::setup()
 	params.add(MODE_Slim);
 	params.add(ENABLER_Keys);
 	params.add(SHOW_BrowserPalettes);
+	params.add(AutoScroll);
 	params.add(lastMenuTab);
 	//params.add(lastSearch);
 
@@ -909,7 +988,7 @@ void ofxColourLoversHelper::build_Gui_Lab()
 			buttonColoursPalette.push_back(btn);
 
 			currX += currW;
-		}
+}
 	}
 
 	gui_Lab->getRect()->setHeight(palettes.size() * (cdim + 4) + startY);
@@ -1078,7 +1157,7 @@ void ofxColourLoversHelper::Changed_Gui(ofxUIEventArgs &e)
 		{
 			ofLogWarning(__FUNCTION__) << "OFX_UI_TEXTINPUT_ON_UNFOCUS";
 			ENABLER_Keys = true;
-		}
+}
 
 		ofLogWarning(__FUNCTION__) << "ENABLER_Keys: " << (ENABLER_Keys ? "TRUE" : "FALSE");
 	}
@@ -1382,7 +1461,7 @@ void ofxColourLoversHelper::Changed_Gui_Lab(ofxUIEventArgs &e)
 	refreshPalette();
 
 	//-
-}
+		}
 #endif
 
 //--------------------------------------------------------------
@@ -1698,7 +1777,7 @@ void ofxColourLoversHelper::exit()
 #endif
 
 	ofRemoveListener(ColourLoveEvent::events, this, &ofxColourLoversHelper::Changed_ColourLovers);
-}
+	}
 
 //--------------------------------------------------------------
 ofxColourLoversHelper::~ofxColourLoversHelper()
