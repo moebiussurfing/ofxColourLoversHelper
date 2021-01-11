@@ -9,7 +9,7 @@ NOTE:
 
 to run this exampe out-of-the-box
 Go to the file ofxColourLoversHelper.h
-And oou must un/comment this lines like this:
+You must un/comment this lines like this:
 
 #define USE_OFX_IM_GUI
 //#define USE_OFX_IM_GUI_EXTERNAL
