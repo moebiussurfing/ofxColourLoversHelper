@@ -390,9 +390,15 @@ void ofxColourLoversHelper::drawImGui()
 
 			ImGui::Dummy(ImVec2(0.0f, 10));
 
+			ofxImGui::AddParameter(SHOW_BrowserPalettes);
+			ofxImGui::AddParameter(AutoScroll);
+			ofxImGui::EndTree(mainSettings);
+
+			ImGui::Dummy(ImVec2(0.0f, 10));
+
 			//-
 
-			if (ImGui::CollapsingHeader("ADVANCED"))
+			if (ImGui::CollapsingHeader("Advanced"))
 			{
 				//if (ImGui::Checkbox("Pick Palette", &MODE_PickPalette_BACK))
 				//{
@@ -419,12 +425,6 @@ void ofxColourLoversHelper::drawImGui()
 
 				ImGui::Dummy(ImVec2(0.0f, 10));
 			}
-
-			ImGui::Dummy(ImVec2(0.0f, 10));
-
-			ofxImGui::AddParameter(SHOW_BrowserPalettes);
-			ofxImGui::AddParameter(AutoScroll);
-			ofxImGui::EndTree(mainSettings);
 		}
 		//ofxImGui::EndWindow(mainSettings);
 	}

@@ -6,17 +6,17 @@
 //
 // OPTIONAL
 //
-// You simple gui gui 
-// (outdated but should work)
+// You can choice between 2 guis: 
 //
-//#define USE_OFX_UI
-//
-// or the coolest ImGui based 
+// Gui 1: the coolest ImGui based 
 #define USE_OFX_IM_GUI
 // 
 // and uncomment this line only if you want to handle the ImGui instance 
 // out of-the-addon, and into ofApp instead:
-#define USE_OFX_IM_GUI_EXTERNAL
+//#define USE_OFX_IM_GUI_EXTERNAL
+//
+// (Gui 2 outdated but should work)
+//#define USE_OFX_UI
 //
 #define BUTTON_BIG_HEIGHT 50
 #define BUTTON_SLIM_HEIGHT 14

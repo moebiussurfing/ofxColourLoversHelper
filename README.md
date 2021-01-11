@@ -12,22 +12,24 @@ I just added some methods to help integrate into my projects/addons, and also sw
 ![image](/readme_images/Capture_ofxImGui.PNG?raw=true "image")  
 
 ## Features
-- Implemented ImGui.
+- Implemented GUI with **ImGui**.  
+- Alternative GUI using the old **ofxUI**  
+
 
 ## Usage
  - Look the examples.
 
 ## Dependencies
 Add to your project using ```Project Generator```:  
-* ofxImGui
+* [ofxImGui] (https://github.com/moebiussurfing/ofxImGui_v5)
 * ofxPoco  
 * ofxXmlSettings
-* ofxSurfingHelpers
-* ofxUI [ not required but implemented]  
+* [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
+* ofxUI [ not required but implemented as GUI alternative to *ImGui* ]  
 
-Already included into ```OF_ADDON/libs/```:  
-* ofxColourLovers  
-* ofxHttpUtils
+Already included into ```OF_ADDON/libs/```. No need to add:  
+* [ofxColourLovers] (https://github.com/borg/ofxColourLovers)  
+* [ofxHttpUtils] (https://github.com/arturoc/ofxHttpUtils)
 
 ## Tested systems
 - **Windows10** / **VS2017** / **OF ~0.11**
@@ -35,7 +37,8 @@ Already included into ```OF_ADDON/libs/```:
 
 ## Author
 Addon by **@moebiusSurfing**  
-*(ManuMolina). 2020.*
+*(ManuMolina). 2020.*  
+Thanks to **borg**, **arturoc** and **MacFurax** for the repositories.  
 
 ## License
 *MIT License.*
