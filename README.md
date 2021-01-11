@@ -21,15 +21,15 @@ I just added some methods to help integrate into my projects/addons, and also sw
 
 ## Dependencies
 Add to your project using ```Project Generator```:  
-* [ofxImGui] (https://github.com/moebiussurfing/ofxImGui_v5)
+* [ofxImGui](https://github.com/moebiussurfing/ofxImGui_v5)
 * ofxPoco  
 * ofxXmlSettings
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
 * ofxUI [ not required but implemented as GUI alternative to *ImGui* ]  
 
 Already included into ```OF_ADDON/libs/```. No need to add:  
-* [ofxColourLovers] (https://github.com/borg/ofxColourLovers)  
-* [ofxHttpUtils] (https://github.com/arturoc/ofxHttpUtils)
+* [ofxColourLovers](https://github.com/borg/ofxColourLovers)  
+* [ofxHttpUtils](https://github.com/arturoc/ofxHttpUtils)
 
 ## Tested systems
 - **Windows10** / **VS2017** / **OF ~0.11**
