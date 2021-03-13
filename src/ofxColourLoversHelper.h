@@ -2,7 +2,7 @@
 #pragma once
 #include "ofMain.h"
 
-//--
+//----
 //
 // OPTIONAL
 //
@@ -12,16 +12,20 @@
 #define USE_OFX_IM_GUI
 // 
 // and uncomment this line only if you want to handle the ImGui instance 
-// out of-the-addon, and into ofApp instead:
-//#define USE_OFX_IM_GUI_EXTERNAL
+// out of-the-addon, ie: into ofApp instead:
+#define USE_OFX_IM_GUI_EXTERNAL
 //
 // (Gui 2 outdated but should work)
 //#define USE_OFX_UI
 //
+#define PANEL_WIDGETS_WIDTH 225
+#define PANEL_WIDGETS_HEIGHT 100
 #define BUTTON_BIG_HEIGHT 50
-#define BUTTON_SLIM_HEIGHT 14
+#define BUTTON_BIG_HEIGHT2 35
+#define BUTTON_SLIM_HEIGHT 20
+//#define BUTTON_SLIM_HEIGHT 14
 //
-//--
+//----
 
 #include "ofxSurfingHelpers.h"
 #include "ofxSurfing_ImGui.h"
@@ -51,6 +55,13 @@ public:
 
 private:
 	bool bShowSearch = true;
+	// shows advancded panels to tweak layout or workflow behaviour
+
+private:
+	ofParameter<bool> bFavorites{ "FAVORITES", false };
+	ofParameter<bool> bHistory{ "HISTORY", false };
+	ofEventListener listener_bFavorites;
+	ofEventListener listener_bHistory;
 
     //--
 
@@ -62,13 +73,15 @@ private:
 #ifndef USE_OFX_IM_GUI_EXTERNAL
 	ofxImGui::Gui gui_ImGui;
 #endif
-	void drawImGui();
+	void drawImGuiMain();
+	void drawImGuiBrowseKits();
+	ofxImGui::Settings mainSettings;
 #endif
 
 	std::string textInput_temp1 = "";
 	std::string textInput_temp1_PRE = "-1";
 	
-	ofParameter<bool> SHOW_BrowserPalettes{"Show Browser", true};
+	ofParameter<bool> SHOW_BrowserPalettes{"Show Palettes", true};
 	ofParameter<bool> AutoScroll{ "AutoScroll", true };
 
 	//--
@@ -92,8 +105,16 @@ private:
 
 	//-
 
-	ImVec4 color_Pick{ 1,1,1,0.5 };
-	float linew_Pick = 2.0;
+	ImVec4 borderLineColor{ 1,1,1,0.5 };
+	float borderLineWidth = 2.0;
+	bool auto_resize1 = true;
+	bool auto_resize2 = false;
+	//bool auto_resize = true;
+	bool bfocus = false;
+	//bool bfocus = true;
+
+public:
+	ofParameter<bool> SHOW_AdvancedLayout{ "Show Advanced", false };
 
 	//--
 
@@ -122,7 +143,7 @@ private:
 
     // colour lovers browsing
 public:
-	void nextPalette();
+	void nextPalette(bool cycled = false);
     void prevPalette();
     void randomPalette();
 
