@@ -38,7 +38,7 @@ Already included into ```OF_ADDON/libs/```. No need to add:
 Addon by **@moebiusSurfing**  
 *(ManuMolina). 2020.*  
 
-Thanks to **@borg**, **@arturoc**, **@MacFurax**and **@Daandelange** for the repositories.  
+Thanks to **@borg**, **@arturoc**, **@MacFurax** and **@Daandelange** for the repositories.  
 
 ## License
 *MIT License.*
