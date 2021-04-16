@@ -1,19 +1,30 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
+void ofApp::update() {
+	// text input verifier
+	bool b = bActiveTextInputLovers;
+	bActiveTextInputLovers = colourLoversHelper.draw();
+	if (b != bActiveTextInputLovers) 
+		ofLogNotice(__FUNCTION__) << "text input : " << (bActiveTextInputLovers?"IN":"OU");
+
+	colourLoversHelper.update();
+}
+
+//--------------------------------------------------------------
 void ofApp::setup(){
     ofSetFrameRate(60);
 	 
 	//-
 
-	ColourLoversHelper.setup();
+	colourLoversHelper.setup();
 
 	//-
 
     // receivers pointers
-    ColourLoversHelper.setColor_BACK(myColor);
-    ColourLoversHelper.setPalette_BACK(myPalette);
-    ColourLoversHelper.setPalette_BACK_Name(myPalette_Name);
+    colourLoversHelper.setColor_BACK(myColor);
+    colourLoversHelper.setPalette_BACK(myPalette);
+    colourLoversHelper.setPalette_BACK_Name(myPalette_Name);
 
     // some initiation values..
     myColor = ofColor::black;
@@ -21,6 +32,13 @@ void ofApp::setup(){
     myPalette[0] = ofColor::white;
     myPalette[1] = ofColor::grey;
     myPalette_Name = "Not Loaded..";
+
+
+	// callback optional to know when preset changed
+	////--------------------------------------------------------------
+	//listener_LoverName = colourLoversHelper.lastPaletteName.newListener([this](std::string &n) {
+	//	ofLogNotice("ofApp:: colourLoversHelper > Name Palette: ") << n;
+	//});
 }
 
 //--------------------------------------------------------------
@@ -68,7 +86,7 @@ void ofApp::drawPalette() { // preview
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    ColourLoversHelper.draw();
+    colourLoversHelper.draw();
 
 	drawPalette();
 }
@@ -76,5 +94,5 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h)
 {
-    ColourLoversHelper.windowResized(w, h);
+    colourLoversHelper.windowResized(w, h);
 }
