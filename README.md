@@ -17,7 +17,7 @@ I just added some methods to help integrate into my projects/addons, and also sw
 
 
 ## Usage
- - Look the examples.
+ - Look the example.
 
 ## Dependencies
 Add to your project using ```Project Generator```:  
