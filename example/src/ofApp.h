@@ -12,7 +12,7 @@ Go to the file ofxColourLoversHelper.h
 You must un/comment this lines like this:
 
 #define USE_OFX_IM_GUI
-//#define USE_OFX_IM_GUI_EXTERNAL
+//#define USE_OFX_IM_GUI_EXTERNAL -> required to enable the one only / local ImGui
 
 */
 
@@ -20,14 +20,19 @@ You must un/comment this lines like this:
 class ofApp : public ofBaseApp {
 public:
 	void setup();
+	void update();
 	void draw();
 	void windowResized(int w, int h);
 
-	ofxColourLoversHelper ColourLoversHelper;
+	ofxColourLoversHelper colourLoversHelper;
 
 	// local palette
 	void drawPalette();
 	std::string myPalette_Name = "";
 	ofColor myColor;
 	vector<ofColor> myPalette;
+
+	//ofEventListener listener_LoverName;
+
+	bool bActiveTextInputLovers;
 };
