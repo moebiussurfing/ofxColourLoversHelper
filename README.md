@@ -20,7 +20,7 @@ I just added some methods to help integrate into my projects/addons, and also sw
 
 ## Dependencies
 Add to your project using ```Project Generator```:  
-* [ofxImGui](https://github.com/moebiussurfing/ofxImGui_v5)
+* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test)
 * ofxPoco  
 * ofxXmlSettings
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
