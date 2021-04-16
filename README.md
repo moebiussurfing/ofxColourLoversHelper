@@ -15,9 +15,8 @@ I just added some methods to help integrate into my projects/addons, and also sw
 - Implemented GUI with **ImGui**.  
 - Alternative GUI using the old **ofxUI**  
 
-
 ## Usage
- - Look the examples.
+ - Look the example.
 
 ## Dependencies
 Add to your project using ```Project Generator```:  
@@ -38,7 +37,8 @@ Already included into ```OF_ADDON/libs/```. No need to add:
 ## Author
 Addon by **@moebiusSurfing**  
 *(ManuMolina). 2020.*  
-Thanks to **borg**, **arturoc** and **MacFurax** for the repositories.  
+
+Thanks to **@borg**, **@arturoc**, **@MacFurax**and **@Daandelange** for the repositories.  
 
 ## License
 *MIT License.*
