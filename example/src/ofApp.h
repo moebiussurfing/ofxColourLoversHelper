@@ -24,6 +24,8 @@ public:
 	void draw();
 	void windowResized(int w, int h);
 
+	//-
+
 	ofxColourLoversHelper colourLoversHelper;
 
 	// local palette
@@ -31,6 +33,8 @@ public:
 	std::string myPalette_Name = "";
 	ofColor myColor;
 	vector<ofColor> myPalette;
+
+	//-
 
 	//ofEventListener listener_LoverName;
 

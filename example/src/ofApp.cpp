@@ -6,9 +6,12 @@ void ofApp::update() {
 	bool b = bActiveTextInputLovers;
 	bActiveTextInputLovers = colourLoversHelper.draw();
 	if (b != bActiveTextInputLovers) 
-		ofLogNotice(__FUNCTION__) << "text input : " << (bActiveTextInputLovers?"IN":"OU");
+		ofLogNotice(__FUNCTION__) << "text input : " << (bActiveTextInputLovers?"IN":"OUT");
 
 	colourLoversHelper.update();
+
+	// keys:
+	// up-down. enter: random
 }
 
 //--------------------------------------------------------------

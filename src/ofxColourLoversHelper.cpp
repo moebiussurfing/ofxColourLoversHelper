@@ -730,7 +730,7 @@ void ofxColourLoversHelper::gui_Kit()
 
 		mainSettings = ofxImGui::Settings();
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDGETS_WIDTH, PANEL_WIDGETS_HEIGHT));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDGETS_WIDTH, PANEL_WIDGETS_HEIGHT/2));
 
 		if (ofxImGui::BeginWindow("LOVER PALETTES", mainSettings, flags))
 		{
@@ -841,7 +841,8 @@ void ofxColourLoversHelper::gui_Kit()
 					if (MODE_FixedSize)
 					{
 						// same size for each color
-						_wwB = (_w / _sizeP) - _spc;
+						//_wwB = (_w / _sizeP) - _spc;
+						_wwB = (_w / _sizeP);
 					}
 					else
 					{
