@@ -1,5 +1,6 @@
 
 #pragma once
+
 #include "ofMain.h"
 
 //----
@@ -31,7 +32,7 @@
 //----
 
 #include "ofxSurfingHelpers.h"
-#include "ofxSurfing_ImGui.h"
+#include "ofxSurfingImGui.h"
 
 #ifdef USE_OFX_UI
 #include "ofxUI.h"
@@ -57,6 +58,7 @@ public:
 	void exit();
 	void windowResized(int w, int h);
 
+
 private:
 	bool bShowSearch = true;
 	// shows advancded panels to tweak layout or workflow behaviour
@@ -80,8 +82,12 @@ public:
 private:
 #ifdef USE_OFX_IM_GUI
 #ifndef USE_OFX_IM_GUI_EXTERNAL
-	ofxImGui::Gui gui_ImGui;
+	ofxImGui::Gui gui;
 #endif
+
+	void setup_ImGui();
+	ImFont* customFont = nullptr;
+
 	void gui_Search();
 	void gui_Main();
 	void gui_Kit();

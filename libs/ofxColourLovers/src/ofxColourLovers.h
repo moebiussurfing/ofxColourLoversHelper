@@ -13,6 +13,7 @@
 #define _ofxColourLovers
 
 #include "ofMain.h"
+
 #include "ofxHttpUtils.h"
 #include "ofxXmlSettings.h"
 #include "ColourCallTypes.h"
@@ -21,9 +22,13 @@
 
 //http://www.colourlovers.com/api
 
+////TODO:
+////BUG: ERROR:
+//#define CL_purl "https://www.colourlovers.com/api/palette/"
+//#define CL_url "https://www.colourlovers.com/api/palettes/top/?showPaletteWidths=1"
+
 #define CL_url "http://www.colourlovers.com/api/palettes/top/?showPaletteWidths=1"
 //http://www.colourlovers.com/api/palettes/top/?lover=andreasborg&showPaletteWidths=1
-
 #define CL_purl "http://www.colourlovers.com/api/palette/"
 
 /*
@@ -69,7 +74,7 @@ public:
 		form.action = url;
 
 
-		ofLogNotice(__FUNCTION__) << "url: " << url;
+		ofLogNotice(__FUNCTION__) << endl << "url: " << url;
 
 		//form.clearFormFields();//clear out old send data
 
@@ -102,7 +107,7 @@ public:
 		url += "&lover=" + lover + "&numResults=" + ofToString(numResults) + "&resultOffset=" + ofToString(resultOffset) + "&orderCol=" + orderCol + "&sortBy=" + sortBy;
 		form.action = url;
 
-		ofLogNotice(__FUNCTION__) << "url: " << url;
+		ofLogNotice(__FUNCTION__) << endl << "url: " << url;
 
 		//form.clearFormFields();//clear out old send data
 
@@ -126,7 +131,7 @@ public:
 	}
 
 	static  void searchPalettes(string keywords, int numResults = 20, int resultOffset = 0, string orderCol = "numVotes", string sortBy = "DESC") {
-		ofLogNotice(__FUNCTION__) << "search: " << keywords << " max: " << numResults;
+		ofLogNotice(__FUNCTION__) << endl << "--------------------------------------------------------------" << endl << "search: " << keywords << " max: " << numResults;
 
 		getSingleton().callType = CL_SEARCH;
 		ofxHttpForm form;//submitting form
@@ -136,6 +141,23 @@ public:
 		url += "&keywords=" + keywords + "&numResults=" + ofToString(numResults) + "&resultOffset=" + ofToString(resultOffset) + "&orderCol=" + orderCol + "&sortBy=" + sortBy;
 		form.action = url;
 
+
+		//TODO:
+		// fixing Cloudfare..
+		// Accept: application / xml
+		// arg1 "Accept"
+		// arg2 "application/xml"
+		//
+		// meterle el header ese de Accept : application / xml
+		// y el User - Agent : [qualquiera de los siguientes]
+		// https ://www.whatismybrowser.com/guides/the-latest-user-agent/firefox?utm_source=whatismybrowsercom&utm_medium=internal&utm_campaign=latest-user-agent-index
+		// por ej : Mozilla / 5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko / 20100101 Firefox / 89.0
+
+		form.addHeaderField("application/xml", "Accept");
+		form.addHeaderField("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0");
+
+		//getSingleton().http.
+		//form.add
 
 		//form.clearFormFields();//clear out old send data
 
@@ -203,7 +225,7 @@ private:
 		//ofLogNotice(__FUNCTION__)<<responseStr<<endl;
 		serverReply.loadFromBuffer(response.responseBody); // parse string
 
-		ofLogNotice(__FUNCTION__) << "response: : " << responseStr;
+		ofLogNotice(__FUNCTION__) << endl << "--------------------------------------------------------------" << endl << "response: : " << responseStr;
 
 		//TODO:
 		if (responseStr == "-1")
@@ -251,7 +273,7 @@ private:
 	}
 
 	static void parsePalettes(ofxXmlSettings &palettes, ColourLoveEvent &palette) {
-		ofLogNotice(__FUNCTION__);
+		ofLogNotice(__FUNCTION__) << endl << "--------------------------------------------------------------" << endl;
 
 		palettes.pushTag("palettes");
 		int numPalettes = palettes.getNumTags("palette");

@@ -91,8 +91,8 @@ void ofxColourLoversHelper::gui_Search()
 {
 	if (MODE_Search)
 	{
-		float ww= PANEL_WIDGETS_WIDTH;
-		float hh = PANEL_WIDGETS_WIDTH/3;
+		float ww = PANEL_WIDGETS_WIDTH;
+		float hh = PANEL_WIDGETS_WIDTH / 3;
 
 		ImGuiWindowFlags flags = auto_resize1 ? ImGuiWindowFlags_AlwaysAutoResize : ImGuiWindowFlags_None;
 		if (!auto_resize1) ImGui::SetWindowSize(ImVec2(ww, hh));
@@ -170,7 +170,7 @@ void ofxColourLoversHelper::gui_Search()
 
 			if (ImGui::Button("SEARCH", ImVec2(_w100, _hb * 2)))
 			{
-				ofLogNotice(__FUNCTION__) << "searchPalettes: " << textInput_temp1_PRE;
+				ofLogNotice(__FUNCTION__) << endl << "--------------------------------------------------------------" << endl << "searchPalettes: " << textInput_temp1_PRE;
 
 				bSearching = true;
 				bSearch = true;
@@ -268,7 +268,7 @@ void ofxColourLoversHelper::gui_Main()
 	//--
 
 	//crash?
-	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh/2));
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(ww, hh / 2));
 
 	//----
 
@@ -631,7 +631,7 @@ void ofxColourLoversHelper::gui_Main()
 			ImGuiColorEditFlags_NoTooltip;
 
 		// macOS
-		if (palettes.size() > 0) 
+		if (palettes.size() > 0)
 		{
 			vector<ofColor> p = palettes[currPalette].colours;
 			//const auto p = palettes[currPalette].colours;
@@ -677,11 +677,11 @@ void ofxColourLoversHelper::gui_Main()
 		}
 
 		//-
-		
+
 		// I prefer to control this toggle on a main app
 		// but we can include it on standalone mode
 #ifndef USE_OFX_IM_GUI_EXTERNAL
-		ofxSurfingHelpers::AddBigToggle(SHOW_AdvancedLayout, _w100, _h/2); 
+		ofxSurfingHelpers::AddBigToggle(SHOW_AdvancedLayout, _w100, _h / 2);
 #endif
 		if (SHOW_AdvancedLayout)
 		{
@@ -709,7 +709,8 @@ void ofxColourLoversHelper::gui_Main()
 						}
 					}
 					if (ofxImGui::AddParameter(MODE_Slim))
-					{}
+					{
+					}
 
 					// layout
 					ImGui::Checkbox("Focus", &bfocus);
@@ -736,7 +737,7 @@ void ofxColourLoversHelper::gui_Kit()
 
 		mainSettings = ofxImGui::Settings();
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDGETS_WIDTH, PANEL_WIDGETS_HEIGHT/2));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowMinSize, ImVec2(PANEL_WIDGETS_WIDTH, PANEL_WIDGETS_HEIGHT / 2));
 
 		if (ofxImGui::BeginWindow("LOVER PALETTES", mainSettings, flags))
 		{
@@ -883,11 +884,11 @@ void ofxColourLoversHelper::gui_Kit()
 
 					if (p == indexExt_PRE)
 					{
-						if (btween) 
+						if (btween)
 						{
 							if (bfocus) _scale = ofMap(alpha, 1, 0, 1.75f, 1.0f, true);
 						}
-						else 
+						else
 						{
 							if (bfocus) _scale = 1.0f;
 						}
@@ -1045,28 +1046,62 @@ void ofxColourLoversHelper::gui_Kit()
 #endif
 
 //--------------------------------------------------------------
+void ofxColourLoversHelper::setup_ImGui()
+{
+	ImGuiConfigFlags flags = ImGuiConfigFlags_DockingEnable;
+	bool bAutoDraw = true;
+	bool bRestore = true;
+	bool bMouse = false;
+	gui.setup(nullptr, bAutoDraw, flags, bRestore, bMouse);
+
+	auto &io = ImGui::GetIO();
+	auto normalCharRanges = io.Fonts->GetGlyphRangesDefault();
+
+	//-
+
+	// font
+	std::string fontName;
+	float fontSizeParam;
+	fontName = "telegrama_render.otf"; //  WARNING: will crash if font not present!
+	fontSizeParam = 11;
+
+	//-
+
+	std::string _path = "assets/fonts/"; // assets folder
+	customFont = gui.addFont(_path + fontName, fontSizeParam, nullptr, normalCharRanges);
+	io.FontDefault = customFont;
+
+	// theme
+	ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
+	//ofxSurfingHelpers::ImGui_ThemeModernDark();
+}
+
+//--------------------------------------------------------------
 void ofxColourLoversHelper::setup()
 {
 	//--
 
+
 #ifndef USE_OFX_IM_GUI_EXTERNAL
 #ifdef USE_OFX_IM_GUI
-	ofxSurfingHelpers::ImGui_FontCustom();
+	setup_ImGui();
 
-	ImGuiConfigFlags flags;
-	flags = ImGuiConfigFlags_DockingEnable;
+	//ofxSurfingHelpers::ImGui_FontCustom();
 
-	//daan fork
-	bool bMouse = false;//false to auto show on window workflow
-	gui_ImGui.setup(nullptr, true, flags, true, bMouse);
+	//ImGuiConfigFlags flags;
+	//flags = ImGuiConfigFlags_DockingEnable;
 
-	//gui_ImGui.setup();
-	ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	ImGui::GetIO().MouseDrawCursor = false;
-	ImGui::GetIO().ConfigWindowsResizeFromEdges = true;
-	ImGui::GetIO().ConfigDockingWithShift = true;
+	////daan fork
+	//bool bMouse = false;//false to auto show on window workflow
+	//gui.setup(nullptr, true, flags, true, bMouse);
 
-	ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
+	////gui.setup();
+	//ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	//ImGui::GetIO().MouseDrawCursor = false;
+	//ImGui::GetIO().ConfigWindowsResizeFromEdges = true;
+	//ImGui::GetIO().ConfigDockingWithShift = true;
+
+	//ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
 #endif
 #endif
 
@@ -1503,15 +1538,20 @@ bool ofxColourLoversHelper::draw()
 	if (bIsVisible)
 	{
 #ifndef USE_OFX_IM_GUI_EXTERNAL
-		gui_ImGui.begin();
+		gui.begin();
 #endif
+
+		ImGui::PushFont(customFont);
 
 		gui_Search();
 		gui_Main();
 		gui_Kit();
 
 #ifndef USE_OFX_IM_GUI_EXTERNAL
-		gui_ImGui.end();
+
+		ImGui::PopFont();
+
+		gui.end();
 #endif
 	}
 	else bCheckMouseOverTextInputLovers = false;
@@ -1699,7 +1739,7 @@ void ofxColourLoversHelper::refreshPalette()
 			//(*myPalette_Name_BACK) = p.title;
 
 			// set BACK palette colors
-			if (myPalette_BACK != nullptr) 
+			if (myPalette_BACK != nullptr)
 			{
 				myPalette_BACK->clear();
 				myPalette_BACK->resize(_sz);
@@ -1759,7 +1799,7 @@ void ofxColourLoversHelper::refreshPalette()
 			{
 				btn->setDrawOutline(false);
 			}
-		}
+}
 	}
 #endif
 }
