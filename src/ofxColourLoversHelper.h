@@ -32,12 +32,15 @@ public:
 	~ofxColourLoversHelper();
 
 	void setup();
-	void update();
-	bool draw();
+	void update(ofEventArgs & args);
+	void draw(ofEventArgs & args);
 	//void draw();
 	void exit();
 	void windowResized(int w, int h);
 
+	bool isTextInputTyping() {
+		return bCheckMouseOverTextInputLovers;
+	}
 
 private:
 	bool bShowSearch = true;
@@ -126,9 +129,9 @@ public:
 
 	// pointers back to 'communicate externally'
 public:
-	void setColor_BACK(ofColor &c);
-	void setPalette_BACK(vector<ofColor> &p);
-	void setPalette_BACK_Name(std::string &n);
+	void setColorPtr(ofColor &c);
+	void setPalettePtr(vector<ofColor> &p);
+	void setPaletteNamePtr(std::string &n);
 	void setPalette_BACK_Refresh(bool &b);
 	void setColor_BACK_Refresh(bool &b);
 
@@ -148,7 +151,7 @@ public:
 	ofParameter<std::string> lastMenuTab_Str{ "_MenuTabPick", "" };
 
 	void setEnableKeys(bool b) {
-		ENABLER_Keys = b;
+		bKeys = b;
 		if (b)
 		{
 			addKeysListeners();
@@ -160,7 +163,7 @@ public:
 	}
 
 private:
-	ofParameter<bool> ENABLER_Keys{ "Enable Keys", true };
+	ofParameter<bool> bKeys{ "Enable Keys", true };
 
 private:
 	ofParameter<bool> MODE_FixedSize{ "Fixed Width", false };

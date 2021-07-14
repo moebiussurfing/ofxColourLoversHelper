@@ -3,6 +3,9 @@
 //--------------------------------------------------------------
 ofxColourLoversHelper::ofxColourLoversHelper()
 {
+	ofAddListener(ofEvents().update, this, &ofxColourLoversHelper::update);
+	ofAddListener(ofEvents().draw, this, &ofxColourLoversHelper::draw);
+
 	//ofSetLogLevel(OF_LOG_VERBOSE);
 	//ofSetLogLevel("ofxColourLovers", OF_LOG_VERBOSE);
 
@@ -169,7 +172,7 @@ void ofxColourLoversHelper::draw_ImGui_Search()
 			float a = ofMap(glm::sin(freq * ofGetFrameNum()), -1, 1, min, max);
 			ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0.5f, 0.0f, 0.0f, a));
 
-			if (ImGui::Button("SEARCH", ImVec2(_w1, _h * 2)))
+			if (ImGui::Button("SEARCH", ImVec2(_w1, _h * 3)))
 			{
 				ofLogNotice(__FUNCTION__) << endl << "--------------------------------------------------------------" << endl << "searchPalettes: " << textInput_temp1_PRE;
 
@@ -273,64 +276,7 @@ void ofxColourLoversHelper::draw_ImGui_Browser()
 	float ww = 200;
 	float hh = PANEL_WIDGETS_HEIGHT;
 
-
 	//----
-
-	// scrollable list
-
-	//ImGui::Dummy(ImVec2(0, 5));
-
-	//if (!bSearch /*&& bFavorites*/)//TODO: showing wrong, the favs names not the serach list (?) 
-
-	if (!bSearch)
-	{
-		if (palettes.size() != 0)
-		{
-			int _i = currPalette;
-
-			ImGui::PushItemWidth(_w1 - 10);
-
-			if (ofxImGuiSurfing::VectorCombo(" ", &_i, pNames))
-			{
-				ofLogNotice(__FUNCTION__) << "_i: " << ofToString(_i);
-
-				if (_i < pNames.size())
-				{
-					currPalette = _i;
-					pName = pNames[_i];
-					ofLogNotice(__FUNCTION__) << "Combo select: " << _i;
-
-					if (pNames.size() > 0 && currPalette < pNames.size())
-					{
-						refreshPalette();
-
-						if (MODE_PickColor_BACK)
-						{
-							// set BACK color clicked
-							if (myColor_BACK != nullptr)
-							{
-								myColor_BACK->set(palettes[currPalette].colours[0]);//auto get first color from palette beacuse there's no color click! just key pressed
-
-								// flag updater color ready
-								if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
-								{
-									(*bUpdated_Color_BACK) = true;
-								}
-							}
-						}
-
-						if (!AutoScroll) AutoScroll = true;
-					}
-				}
-			}
-
-			ImGui::PopItemWidth();
-		}
-	}
-
-	ImGui::Dummy(ImVec2(0, 2));
-
-	//-
 
 	// index/max
 	std::string s;
@@ -344,8 +290,67 @@ void ofxColourLoversHelper::draw_ImGui_Browser()
 	}
 	ImGui::Text(s.c_str());
 
+	//-
+
+	// scrollable list
+	{
+		ImGui::Dummy(ImVec2(0, 2));
+
+		//if (!bSearch /*&& bFavorites*/)//TODO: showing wrong, the favs names not the serach list (?) 
+
+		if (!bSearch)
+		{
+			if (palettes.size() != 0)
+			{
+				int _i = currPalette;
+
+				ImGui::PushItemWidth(_w1 - 10);
+
+				if (ofxImGuiSurfing::VectorCombo(" ", &_i, pNames))
+				{
+					ofLogNotice(__FUNCTION__) << "_i: " << ofToString(_i);
+
+					if (_i < pNames.size())
+					{
+						currPalette = _i;
+						pName = pNames[_i];
+						ofLogNotice(__FUNCTION__) << "Combo select: " << _i;
+
+						if (pNames.size() > 0 && currPalette < pNames.size())
+						{
+							refreshPalette();
+
+							if (MODE_PickColor_BACK)
+							{
+								// set BACK color clicked
+								if (myColor_BACK != nullptr)
+								{
+									myColor_BACK->set(palettes[currPalette].colours[0]);//auto get first color from palette beacuse there's no color click! just key pressed
+
+									// flag updater color ready
+									if (bUpdated_Color_BACK != nullptr && MODE_PickColor_BACK)
+									{
+										(*bUpdated_Color_BACK) = true;
+									}
+								}
+							}
+
+							if (!AutoScroll) AutoScroll = true;
+						}
+					}
+				}
+
+				ImGui::PopItemWidth();
+			}
+		}
+
+		ImGui::Dummy(ImVec2(0, 2));
+	}
+
+	//-
+
 	// name
-	//if (bSearch)
+	if (bSearch)
 	{
 		ImGui::Text(lastPaletteName.get().c_str());
 	}
@@ -474,7 +479,7 @@ void ofxColourLoversHelper::draw_ImGui_Main()
 		//-
 
 		//ofxImGuiSurfing::AddToggleRoundedButton(bGui_Search);
-		ofxImGuiSurfing::AddBigToggle(bGui_Search, _w1, _hh);
+		ofxImGuiSurfing::AddBigToggle(bGui_Search, _w1, _h * 2);
 
 		std::string s;
 		if (lastSearch_Str == "HISTORY" || lastSearch_Str == "FAVORITES") s = " ";
@@ -766,6 +771,8 @@ void ofxColourLoversHelper::draw_ImGui_Main()
 
 		//--
 
+		ofxImGuiSurfing::AddToggleRoundedButton(bKeys);
+
 		// extra
 		ofxImGuiSurfing::AddToggleRoundedButton(guiManager.bExtra);
 		if (guiManager.bExtra)
@@ -805,8 +812,7 @@ void ofxColourLoversHelper::draw_ImGui_Main()
 
 					//ofxImGuiSurfing::AddParameter(MODE_PickPalette_BACK);
 					//ofxImGuiSurfing::AddParameter(MODE_PickColor_BACK);
-					//ofxImGuiSurfing::AddParameter(ENABLER_Keys);
-					ofxImGuiSurfing::AddToggleRoundedButton(ENABLER_Keys);
+					//ofxImGuiSurfing::AddParameter(bKeys);
 
 					if (ImGui::CollapsingHeader("Layout"))
 					{
@@ -1207,7 +1213,7 @@ void ofxColourLoversHelper::setup()
 	params.add(MODE_PickColor_BACK);
 	params.add(MODE_FixedSize);
 	params.add(MODE_Slim);
-	params.add(ENABLER_Keys);
+	params.add(bKeys);
 	params.add(bGui_KitPalettes);
 	params.add(AutoScroll);
 	params.add(lastMenuTab_Str);
@@ -1350,10 +1356,13 @@ void ofxColourLoversHelper::Changed_ColourLovers(ColourLoveEvent &e)
 	//ofLogNotice(__FUNCTION__) << "events  :" << endl << ofToString(e.events);
 	//ofLogNotice(__FUNCTION__) << "xml     :" << endl << ofToString(e.xml);
 
+	// nothing fond on last api query search
+
 	if ((e.palettes.size() <= 0))
 	{
 		ofLogError(__FUNCTION__) << "Size is 0! Return";
 		if (bSearching) bSearching = false;
+		textInput_temp1 = "Nothing Found";
 		return;
 	}
 
@@ -1401,7 +1410,7 @@ void ofxColourLoversHelper::build_Gui_Lab()
 }
 
 //--------------------------------------------------------------
-void ofxColourLoversHelper::update()
+void ofxColourLoversHelper::update(ofEventArgs & args)
 {
 	//bool b = gui->bInsideCanvas;
 	//cout << b << endl;
@@ -1432,7 +1441,7 @@ void ofxColourLoversHelper::update()
 }
 
 //--------------------------------------------------------------
-bool ofxColourLoversHelper::draw()
+void ofxColourLoversHelper::draw(ofEventArgs & args)
 {
 	bCheckMouseOverTextInputLovers = bTextInputActive;
 
@@ -1459,7 +1468,7 @@ bool ofxColourLoversHelper::draw()
 	//    }
 	//}
 
-	return bCheckMouseOverTextInputLovers;
+	//return bCheckMouseOverTextInputLovers;
 }
 
 #ifdef USE_OFX_UI
@@ -1567,25 +1576,25 @@ void ofxColourLoversHelper::Changed_Gui(ofxUIEventArgs &e)
 		{
 			ofLogWarning(__FUNCTION__) << "OFX_UI_TEXTINPUT_ON_FOCUS";
 			//unfocusAllTextInputs(ti);
-			ENABLER_Keys = false;
+			bKeys = false;
 		}
 		else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_LOAD)
 		{
 			ofLogWarning(__FUNCTION__) << "OFX_UI_TEXTINPUT_ON_LOAD";
-			ENABLER_Keys = false;
+			bKeys = false;
 		}
 		else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_ENTER)
 		{
 			ofLogWarning(__FUNCTION__) << "OFX_UI_TEXTINPUT_ON_ENTER";
-			ENABLER_Keys = true;
+			bKeys = true;
 		}
 		else if (ti->getInputTriggerType() == OFX_UI_TEXTINPUT_ON_UNFOCUS)
 		{
 			ofLogWarning(__FUNCTION__) << "OFX_UI_TEXTINPUT_ON_UNFOCUS";
-			ENABLER_Keys = true;
+			bKeys = true;
 		}
 
-		ofLogWarning(__FUNCTION__) << "ENABLER_Keys: " << (ENABLER_Keys ? "TRUE" : "FALSE");
+		ofLogWarning(__FUNCTION__) << "bKeys: " << (bKeys ? "TRUE" : "FALSE");
 	}
 
 	//-
@@ -2083,13 +2092,13 @@ void ofxColourLoversHelper::refreshPalette()
 	// pointers back to 'communicate externally'
 
 	//--------------------------------------------------------------
-	void ofxColourLoversHelper::setColor_BACK(ofColor &c)
+	void ofxColourLoversHelper::setColorPtr(ofColor &c)
 	{
 		myColor_BACK = &c;
 	}
 
 	//--------------------------------------------------------------
-	void ofxColourLoversHelper::setPalette_BACK(vector<ofColor> &p)
+	void ofxColourLoversHelper::setPalettePtr(vector<ofColor> &p)
 	{
 		myPalette_BACK = &p;
 	}
@@ -2107,7 +2116,7 @@ void ofxColourLoversHelper::refreshPalette()
 	}
 
 	//--------------------------------------------------------------
-	void ofxColourLoversHelper::setPalette_BACK_Name(std::string &n)
+	void ofxColourLoversHelper::setPaletteNamePtr(std::string &n)
 	{
 		myPalette_Name_BACK = &n;
 	}
@@ -2115,7 +2124,7 @@ void ofxColourLoversHelper::refreshPalette()
 	//--------------------------------------------------------------
 	void ofxColourLoversHelper::keyPressed(ofKeyEventArgs &eventArgs)
 	{
-		if (ENABLER_Keys && !bCheckMouseOverTextInputLovers)
+		if (bKeys && !bCheckMouseOverTextInputLovers)
 		{
 			const int key = eventArgs.key;
 
@@ -2264,6 +2273,9 @@ void ofxColourLoversHelper::refreshPalette()
 	//--------------------------------------------------------------
 	ofxColourLoversHelper::~ofxColourLoversHelper()
 	{
+		ofRemoveListener(ofEvents().update, this, &ofxColourLoversHelper::update);
+		ofRemoveListener(ofEvents().draw, this, &ofxColourLoversHelper::draw);
+
 		exit();
 	}
 
