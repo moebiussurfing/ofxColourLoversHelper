@@ -9,21 +9,19 @@
 
 #include "ofxColourLovers.h"
 
-
 ofxColourLovers::ofxColourLovers(){
-    ofAddListener(http.newResponseEvent,this,&ofxColourLovers::newResponse);
+    //ofAddListener(http.newResponseEvent,this,&ofxColourLovers::newResponse);
 };
 
 ofxColourLovers::~ofxColourLovers(){
-    if(getSingleton().http.isThreadRunning()){
-        getSingleton().http.stop();
-    }
+    //if(getSingleton().http.isThreadRunning()){
+    //    getSingleton().http.stop();
+    //}
 };
 
 ofxColourLovers & ofxColourLovers::getSingleton(){
     static ofxColourLovers singleton;
     return singleton;
-
 };
 
 

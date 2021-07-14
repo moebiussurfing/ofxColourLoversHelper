@@ -12,10 +12,8 @@
  //extern int stringToHex(string hex);
  //extern void hexToColor(ofColor &col,string hex);
 
-
 ColourLovePalette::ColourLovePalette() {};
 ColourLovePalette::~ColourLovePalette() {};
-
 
 void ColourLovePalette::draw(int x, int y, int w, int h) {
 
@@ -40,7 +38,6 @@ void ColourLovePalette::draw(int x, int y, int w, int h) {
 	ofPopStyle();
 };
 
-
 void ColourLovePalette::sortByWidth() {
 	vector<SortColour> tempSort;
 	for (int i = 0; i < colours.size(); i++) {
@@ -55,23 +52,18 @@ void ColourLovePalette::sortByWidth() {
 	for (int i = 0; i < tempSort.size(); i++) {
 		sortedColours.push_back(colours[tempSort[i].uid]);
 	}
-
 }
-
 
 void ColourLovePalette::save(string fileName) {
 	xml.saveFile(fileName);
 };
-
 
 void ColourLovePalette::load(string fileName) {
 	ofxXmlSettings tmp;
 	tmp.loadFile(fileName);
 	tmp.pushTag("palette");
 	parseXML(tmp);
-
 };
-
 
 void ColourLovePalette::parseXML(ofxXmlSettings &x) {
 
@@ -124,10 +116,8 @@ void ColourLovePalette::parseXML(ofxXmlSettings &x) {
 	xml.addValue("apiUrl", apiUrl);
 
 
-
 	xml.addTag("colors");
 	xml.pushTag("colors");
-
 
 	x.pushTag("colors");
 
@@ -142,15 +132,13 @@ void ColourLovePalette::parseXML(ofxXmlSettings &x) {
 
 			hexToColor(col, hex);
 
-
-
 			colours.push_back(col);
 		}
 	}
+
 	//colors
 	xml.popTag();
 	x.popTag();
-
 
 	string ws = x.getValue("colorWidths", "0.2,0.2,0.2,0.2,0.2");
 	xml.addValue("colorWidths", ws);
@@ -161,13 +149,10 @@ void ColourLovePalette::parseXML(ofxXmlSettings &x) {
 		colorWidths.push_back(ofToFloat(wv[v]));
 	}
 
-
-
 	//palette
 	xml.popTag();
 
 	sortByWidth();
-
 
 	//ofLogNotice(__FUNCTION__) << endl << ofToString(xml);
 }

@@ -1,45 +1,26 @@
 
 #pragma once
+
 #include "ofMain.h"
 
 //----
 //
-// OPTIONAL
-//
-// You can choice between 2 guis: 
-//
-// Gui 1: the coolest ImGui based 
 #define USE_OFX_IM_GUI
 // 
 // and uncomment this line only if you want to handle the ImGui instance 
 // out of-the-addon, ie: into ofApp instead:
-//#define USE_OFX_IM_GUI_EXTERNAL //-> comment required to enable the one only / local ImGui
-//
-// (Gui 2 outdated but should work)
-//#define USE_OFX_UI
-//
-#define PANEL_WIDGETS_WIDTH 250
-#define PANEL_WIDGETS_HEIGHT 100
-#define BUTTON_BIG_HEIGHT 50
-#define BUTTON_BIG_HEIGHT2 35
-#define BUTTON_SLIM_HEIGHT 20
-//#define BUTTON_SLIM_HEIGHT 14
-//
+////#define USE_OFX_IM_GUI_EXTERNAL //-> comment required to enable the one only / local ImGui
+
 #define USE_FLOATING_SEARCH_WINDOW_WORAROUND
 #define MAX_SEARCH_RESULTS 100
 
 //----
 
 #include "ofxSurfingHelpers.h"
-#include "ofxSurfing_ImGui.h"
-
-#ifdef USE_OFX_UI
-#include "ofxUI.h"
-#endif
-
-#ifdef USE_OFX_IM_GUI
-#include "ofxImGui.h"
-#endif
+#include "ofxSurfingImGui.h"
+//#ifdef USE_OFX_IM_GUI
+//#include "ofxImGui.h"
+//#endif
 
 #include "ofxColourLovers.h"
 
@@ -57,12 +38,13 @@ public:
 	void exit();
 	void windowResized(int w, int h);
 
+
 private:
 	bool bShowSearch = true;
 	// shows advancded panels to tweak layout or workflow behaviour
 
 private:
-	ofParameter<bool> MODE_Search{ "API SEARCH", false };
+	ofParameter<bool> bGui_Search{ "API SEARCH", false };
 
 	ofParameter<bool> bFavorites{ "FAVORITES", false };
 	ofParameter<bool> bHistory{ "HISTORY", false };
@@ -79,34 +61,21 @@ public:
 
 private:
 #ifdef USE_OFX_IM_GUI
-#ifndef USE_OFX_IM_GUI_EXTERNAL
-	ofxImGui::Gui gui_ImGui;
-#endif
-	void gui_Search();
-	void gui_Main();
-	void gui_Kit();
-	ofxImGui::Settings mainSettings;
+
+	ofxSurfing_ImGui_Manager guiManager;
+
+	void setup_ImGui();
+	void draw_ImGui_Search();
+	void draw_ImGui_Main();
+	void draw_ImGui_Kit();
+	void draw_ImGui_Browser();
 #endif
 
 	std::string textInput_temp1 = "";
 	std::string textInput_temp1_PRE = "-1";
 
-	ofParameter<bool> SHOW_BrowserPalettes{ "Show Palettes", true };
+	ofParameter<bool> bGui_KitPalettes{ "Kit Palettes", true };
 	ofParameter<bool> AutoScroll{ "AutoScroll", true };
-
-	//--
-
-#ifdef USE_OFX_UI
-	ofxUICanvas *gui;
-	ofxUIScrollableCanvas *gui_Lab;
-	ofxUICanvas *gui_Palette;
-	void Changed_Gui(ofxUIEventArgs &e);
-	void Changed_Gui_Lab(ofxUIEventArgs &e);
-	void Changed_ColourPalette(ofxUIEventArgs &e);
-	vector<ofxUIButton *> buttonColoursPalette;
-	vector<ofxUIButton *> colourRanges;
-	ofxUILabel * lastPaletteName_UI;
-#endif
 
 	ofDirectory _files;
 
@@ -117,11 +86,8 @@ private:
 
 	ImVec4 borderLineColor{ 1,1,1,0.5 };
 	float borderLineWidth = 2.0;
-	bool auto_resize1 = true;
-	bool auto_resize2 = false;
-	//bool auto_resize = true;
+
 	bool bfocus = false;
-	//bool bfocus = true;
 
 public:
 	ofParameter<bool> SHOW_AdvancedLayout{ "Show Advanced", false };
@@ -137,15 +103,12 @@ public:
 
 	void setToggleVisible();
 	bool isVisible() {
-		return bIsVisible;
+		return bGui;
 	}
 
 	void setVisible(bool b);
 	void setVisibleSearcher(bool b) {
 		bSearcherVisible = b;
-#ifdef USE_OFX_UI
-		gui->setVisible(bSearcherVisible);
-#endif
 	}
 
 private:
@@ -155,6 +118,7 @@ private:
 public:
 	void nextPalette(bool cycled = false);
 	void prevPalette();
+
 	void refreshPalette();
 	void randomPalette();
 
@@ -205,7 +169,11 @@ private:
 	ofColor lastColor_clicked;
 
 	int amountResults = (int)MAX_SEARCH_RESULTS;
+	//ofParameter<int> amountResults{ "Amount Results", MAX_SEARCH_RESULTS, 10, 300 };
 
+	ofParameter<int> amnt { "Amount", 20, 10, 200 };
+	ofParameter<int> page { "Page", 0, 0, 10 };
+	
 	//-
 
 	void setPalette(int p);
@@ -238,7 +206,8 @@ private:
 
 	//---
 
-	bool bIsVisible = true;
+	ofParameter<bool> bGui{ "COLOUR-LOVERS", true };
+	//bool bGui = true;
 	bool isKeysEnabled = true;
 
 	glm::vec2 position;
@@ -267,6 +236,4 @@ private:
 public:
 	void keyPressed(ofKeyEventArgs& eventArgs);
 	void keyReleased(ofKeyEventArgs& eventArgs);
-
-
 };
