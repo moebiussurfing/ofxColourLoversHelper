@@ -286,7 +286,7 @@ void ofxColourLoversHelper::gui_Main()
 
 		//-
 
-		ofxSurfingHelpers::AddBigToggle(MODE_Search, _w100, _h);
+		ofxImGuiSurfing::AddBigToggle(MODE_Search, _w100, _h);
 
 		// spinner
 		if (bSearching) ImGui::Text("Searching  %c", "|/-\\"[(int)(ImGui::GetTime() / 0.07f) & 3]);
@@ -396,9 +396,9 @@ void ofxColourLoversHelper::gui_Main()
 
 			// mode selectors
 
-			ofxSurfingHelpers::AddBigToggle(bFavorites, _w50, _hb * 2);
+			ofxImGuiSurfing::AddBigToggle(bFavorites, _w50, _hb * 2);
 			ImGui::SameLine();
-			ofxSurfingHelpers::AddBigToggle(bHistory, _w50, _hb * 2);
+			ofxImGuiSurfing::AddBigToggle(bHistory, _w50, _hb * 2);
 
 			//ofxSurfingHelpers::AddBigToggle(bFavorites, _w33, _hb * 2);
 			//ImGui::SameLine();
@@ -494,7 +494,7 @@ void ofxColourLoversHelper::gui_Main()
 
 				ImGui::Dummy(ImVec2(0, 5));
 
-				ofxSurfingHelpers::AddBigToggle(SHOW_BrowserPalettes, _w100, _hb);
+				ofxImGuiSurfing::AddBigToggle(SHOW_BrowserPalettes, _w100, _hb);
 
 				if (SHOW_AdvancedLayout)
 				{
@@ -681,7 +681,7 @@ void ofxColourLoversHelper::gui_Main()
 		// I prefer to control this toggle on a main app
 		// but we can include it on standalone mode
 #ifndef USE_OFX_IM_GUI_EXTERNAL
-		ofxSurfingHelpers::AddBigToggle(SHOW_AdvancedLayout, _w100, _h / 2);
+		ofxImGuiSurfing::AddBigToggle(SHOW_AdvancedLayout, _w100, _h / 2);
 #endif
 		if (SHOW_AdvancedLayout)
 		{
@@ -1072,7 +1072,7 @@ void ofxColourLoversHelper::setup_ImGui()
 	io.FontDefault = customFont;
 
 	// theme
-	ofxSurfingHelpers::ImGui_ThemeMoebiusSurfing();
+	ofxImGuiSurfing::ImGui_ThemeMoebiusSurfing();
 	//ofxSurfingHelpers::ImGui_ThemeModernDark();
 }
 
