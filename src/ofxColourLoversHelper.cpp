@@ -1347,7 +1347,7 @@ void ofxColourLoversHelper::Changed_ColourLovers(ColourLoveEvent &e)
 
 	ofLogNotice(__FUNCTION__) << "message :" << ofToString(e.message);
 	//ofLogNotice(__FUNCTION__) << "type    :" << ofToString(e.type);
-	////ofLogNotice(__FUNCTION__) << "events  :" << endl << ofToString(e.events);
+	//ofLogNotice(__FUNCTION__) << "events  :" << endl << ofToString(e.events);
 	//ofLogNotice(__FUNCTION__) << "xml     :" << endl << ofToString(e.xml);
 
 	if ((e.palettes.size() <= 0))
@@ -1722,6 +1722,8 @@ void ofxColourLoversHelper::refreshPalette()
 				}
 			}
 		}
+
+		if (!AutoScroll) AutoScroll = true;
 	}
 
 	//--------------------------------------------------------------
