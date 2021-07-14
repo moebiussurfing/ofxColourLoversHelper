@@ -4,39 +4,40 @@ ofxColourLoversHelper
 # Overview
 **ofxColourLoversHelper** is an **openFrameworks** helper addon to handle **ColourLovers** palettes.
  
-The core of this addons is https://github.com/borg/ofxColourLovers.  
+The core of this add-on is https://github.com/borg/ofxColourLovers.  
 Thanks to **@borg**!  
-I just added some methods to help integrate into my projects/addons, and also switched from *ofxUI* to *ofxImGui* user control.
+I just added some methods to help integrate into my projects/addons.  
+Switched from *ofxUI* to *ofxImGui* to better user control.  
+Switched from *ofxHttpUtils* to *ofxHTTP* to fix Colour Lover API changes.  
 
 <!-- ## Screenshot -->
 <!-- ![image](/readme_images/Capture_ofxImGui.PNG?raw=true "image")   -->
+
 ## Screencast
 ![image](/readme_images/ofxColourLoversHelper.gif?raw=true "gif")
 
 ## Features
 - Implemented GUI with **ImGui**.  
+- _ofxUI_ and _ofxHttpUtils_ are now deprecated.
 
 ## Usage
 - Look the example.
 
 ## Dependencies
-Add to your project using ```Project Generator```:  
-* [ofxImGui](https://github.com/Daandelange/ofxImGui/tree/ofParameters-Helpers-Test)
+Add to your project using *PROJECT GENERATOR*:    
+* [ofxImGui](https://github.com/Daandelange/ofxImGui)
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
-* ofxPoco
+* [ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui)  
+* [ofxHTTP](https://github.com/bakercp/ofxHTTP)
 * ofxSSLManager
 * ofxIO
 * ofxMediaType
 * ofxNetworkUtils
-* ofxHTTP
-* ofxSurfingHelpers
-* ofxSurfingImGui
-* ofxXmlSettings
-Already included into ```OF_ADDON/libs/```. No need to add:  
-* [ofxColourLovers](https://github.com/borg/ofxColourLovers)  
+* ofxPoco [OF]
+* ofxXmlSettings [OF]
 
 ## TODO
-- Fix singleton/threading on API search.
+- Fix singleton/threading when API searching...
 
 ## Tested systems
 - **Windows10** / **VS2017** / **OF ~0.11**
@@ -46,6 +47,7 @@ Addon by **@moebiusSurfing**
 *(ManuMolina). 2021.*  
 
 Thanks to **@borg**, **@arturoc**, **@MacFurax** and **@Daandelange** for the repositories.  
+Thanks to **@Kabra** for HTTP POST/GET helping.  
 
 ## License
 *MIT License.*
