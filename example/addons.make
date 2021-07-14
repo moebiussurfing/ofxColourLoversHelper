@@ -1,6 +1,11 @@
 ofxColourLoversHelper
-ofxImGui
 ofxPoco
+ofxSSLManager
+ofxIO
+ofxMediaType
+ofxNetworkUtils
+ofxHTTP
+ofxImGui
 ofxSurfingHelpers
 ofxSurfingImGui
 ofxXmlSettings

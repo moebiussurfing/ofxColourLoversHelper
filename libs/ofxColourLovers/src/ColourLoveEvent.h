@@ -11,6 +11,7 @@
 #define _ColourLoveEvent
 
 #include "ofMain.h"
+
 #include "ofxXmlSettings.h"
 #include "ColourCallTypes.h"
 #include "ColourLovePalette.h"

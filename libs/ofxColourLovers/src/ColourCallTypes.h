@@ -14,12 +14,12 @@
 
 typedef enum ColourCallType{
     CL_GET_TOP_PALETTES,
+    CL_GET_NEW_PALETTES,
+    CL_GET_RANDOM_PALETTE,
     CL_GET_SIMILAR_COLOURS,
     CL_GET_TOP_PALETTES_FOR_LOVER,
     CL_SEARCH,
     CL_GET_PALETTE
 }ColourCallType;
-
-
 
 #endif
