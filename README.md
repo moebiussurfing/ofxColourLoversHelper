@@ -26,15 +26,15 @@ Switched from *ofxHttpUtils* to *ofxHTTP* to fix *Colour Lover API* CloudFlare u
 - Look the example.
 
 ## Dependencies
-Add to your project using *PROJECT GENERATOR*:    
+Add to your project using **PROJECT GENERATOR**:    
 * [ofxImGui](https://github.com/Daandelange/ofxImGui)
 * [ofxSurfingHelpers](https://github.com/moebiussurfing/ofxSurfingHelpers)  
 * [ofxSurfingImGui](https://github.com/moebiussurfing/ofxSurfingImGui)  
 * [ofxHTTP](https://github.com/bakercp/ofxHTTP)
-* ofxSSLManager
-* ofxIO
-* ofxMediaType
-* ofxNetworkUtils
+  * ofxSSLManager
+  * ofxIO
+  * ofxMediaType
+  * ofxNetworkUtils
 * ofxPoco [OF]
 * ofxXmlSettings [OF]
 
@@ -43,7 +43,7 @@ Add to your project using *PROJECT GENERATOR*:
   <p>
 
 - Fix singleton/threading when API searching. [?]
-- Add more API queries like search/save/load by a user or logged. [?]
+- Add more API queries like search/save/load by a logged user. [?]
   </p>
 </details>
 
