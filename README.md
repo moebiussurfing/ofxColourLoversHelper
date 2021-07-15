@@ -7,7 +7,7 @@ An **openFrameworks** helper add-on to handle **ColourLovers** palettes.
 The core of this add-on is https://github.com/borg/ofxColourLovers.  
 Thanks to **@borg**!  
 
-I just added some methods to help integrate into my projects/addons.  
+I just added some methods to help integrate *ColourLovers* into my projects/add-ons.  
 Switched from *ofxUI* to *ofxImGui* and better user control.  
 Switched from *ofxHttpUtils* to *ofxHTTP* to fix *Colour Lover API* CloudFlare updates.  
 
@@ -20,11 +20,11 @@ Switched from *ofxHttpUtils* to *ofxHTTP* to fix *Colour Lover API* CloudFlare u
 ## Features
 - Implemented GUI with **ImGui**.  
 - _ofxUI_ and _ofxHttpUtils_ are now deprecated.
-- Search a keyword, add favorites, historial search, search top palettes, get a random palette, palette previews...etc. 
+- Search a keyword online, add local favorites, historical search, search top palettes, get a random palette, palette previews...etc. 
 - All referenced and hot reloaded to your local (ofApp) palette.
 
 ## Usage
-- Look the example.
+- Look at the example.
 
 ## Dependencies
 Add to your project using **PROJECT GENERATOR**:    
